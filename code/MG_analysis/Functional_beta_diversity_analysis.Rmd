@@ -1,0 +1,444 @@
+---
+title: "Functional beta diveristy analysis"
+output:
+  html_document:
+    df_print: paged
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+
+### PCoA Plots based on pathway-based Bray-Curtis Distance
+```{r}
+
+library(dplyr)
+library(tibble)
+library(readr)
+library(vegan)
+library(ggplot2)
+library(ggrepel)
+library(ape)
+
+
+# Read normalized pathway abundance table
+path_abun_table <- file.path(
+  "../../data/Metagenomics/HUMAnN_func/Normalized_Tables",
+  "merged_pathabundance_relab.tsv"
+)
+
+path_abun <- read.table(
+  path_abun_table,
+  header = TRUE,
+  sep = "\t",
+  comment.char = "",
+  check.names = FALSE
+)
+
+# Rename the first column as "Pathway"
+colnames(path_abun)[1] <- "Pathway"
+
+# Remove UNMAPPED and UNINTEGRATED rows
+select_path_abun <- path_abun %>%
+  filter(!Pathway %in% c("UNMAPPED", "UNINTEGRATED"))
+
+# Remove taxonomically stratified pathway rows
+select_path_abun <- select_path_abun %>%
+  filter(!grepl("\\|", Pathway))
+
+cat("Number of pathways after removing UNMAPPED, UNINTEGRATED, and stratified rows:",
+    nrow(select_path_abun), "\n")
+
+# Remove samples that should be excluded
+select_path_abun <- select_path_abun %>%
+  select(-NW046_5_all_merged_Abundance)
+
+cat("Number of columns after sample removal:", ncol(select_path_abun), "\n")
+
+# Convert to matrix: rows = pathways, columns = samples
+mat_path <- select_path_abun %>%
+  column_to_rownames("Pathway") %>%
+  as.matrix()
+
+# Ensure all values are numeric
+storage.mode(mat_path) <- "numeric"
+
+# Transpose to samples x pathways
+mat_rel <- t(mat_path)
+
+# Calculate pathway prevalence across samples
+prev <- colMeans(mat_rel > 0, na.rm = TRUE)
+
+# Filter pathways by prevalence only
+prev_cut <- 0.10
+keep <- prev >= prev_cut
+
+mat_rel_filt <- mat_rel[, keep, drop = FALSE]
+
+cat("Number of pathways retained after prevalence filtering:",
+    ncol(mat_rel_filt), "\n")
+
+# Calculate Bray-Curtis distance
+dist_bc <- vegdist(mat_rel_filt, method = "bray")
+
+###### Analysis based on Bray-Curtis distance
+
+### PCoA
+pcoa_res <- ape::pcoa(dist_bc)
+
+pcoa_df <- as.data.frame(pcoa_res$vectors[, 1:2])
+colnames(pcoa_df) <- c("PCoA1", "PCoA2")
+pcoa_df$SampleID_in_table <- rownames(pcoa_df)
+
+# Calculate percentage of explained variation using positive eigenvalues only
+pcoa1_lab <- paste0("PCoA1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)")
+pcoa2_lab <- paste0("PCoA2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+
+### Read metadata
+meta_file <- file.path("../../data/metadata", "selected_northwood_map.txt")
+metadata <- read_tsv(meta_file, col_types = cols())
+
+# Extract sample prefix from metadata, e.g. "#SampleID" = "NW001-1" -> "NW001"
+metadata <- metadata %>%
+  mutate(Sample_prefix = sub("-.*$", "", `#SampleID`))
+
+# Extract sample prefix from pathway table column names,
+# e.g. "NW001_3_all_merged_Abundance" -> "NW001"
+pcoa_df <- pcoa_df %>%
+  mutate(Sample_prefix = sub("_.*$", "", SampleID_in_table)) %>%
+  left_join(metadata, by = "Sample_prefix")
+
+# Create simplified sample labels for plotting
+pcoa_df <- pcoa_df %>%
+  mutate(Update_SampleID = sub("_all_merged.*$", "", SampleID_in_table))
+
+filtered_pcoa_df <- pcoa_df
+
+### PCoA plot colored by FIScore
+p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
+  geom_point(size = 2, alpha = 0.8) +
+  geom_text_repel(
+    aes(label = Update_SampleID),
+    size = 3,
+    max.overlaps = 20
+  ) +
+  scale_color_viridis_c(
+    option = "plasma",
+    limits = c(0.3, 0.8),
+    oob = scales::squish
+  ) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+p_pcoa
+
+### Save the figure
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Func_Pathways_PCoA_Plot_BC_distance.jpg")
+# ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+
+```
+
+
+### PCoA Plots based on pathway-based Aitchison Distance
+```{r}
+### Read normalized pathway abundance table and Metadata 
+### as described in the previous section
+
+library(compositions)
+
+### Calculate the Aitchison distance
+# add a small pseudocount
+pseudo <- 1e-6
+mat_rel_pc <- mat_rel_filt + pseudo
+# re-close to composition (optional but recommended)
+mat_rel_pc <- mat_rel_pc / rowSums(mat_rel_pc)
+# CLR transform
+mat_clr <- compositions::clr(mat_rel_pc)
+# Aitchison distance = Euclidean distance on CLR data
+dist_aitchison <- dist(mat_clr, method = "euclidean")
+
+
+###### Analysis based on Aitchison distance
+### PCoA
+pcoa_res <- ape::pcoa(dist_aitchison)
+
+pcoa_df <- as.data.frame(pcoa_res$vectors[, 1:2])
+colnames(pcoa_df) <- c("PCoA1", "PCoA2")
+pcoa_df$SampleID_in_table <- rownames(pcoa_df)
+
+# Calculate percentage of explained variation using positive eigenvalues only
+pcoa1_lab <- paste0("PCoA1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)")
+pcoa2_lab <- paste0("PCoA2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+
+
+# Extract sample prefix from pathway table column names,
+# e.g. "NW001_3_all_merged_Abundance" -> "NW001"
+pcoa_df <- pcoa_df %>%
+  mutate(Sample_prefix = sub("_.*$", "", SampleID_in_table)) %>%
+  left_join(metadata, by = "Sample_prefix")
+
+# Create simplified sample labels for plotting
+pcoa_df <- pcoa_df %>%
+  mutate(Update_SampleID = sub("_all_merged.*$", "", SampleID_in_table))
+
+filtered_pcoa_df <- pcoa_df
+
+### PCoA plot colored by FIScore
+p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
+  geom_point(size = 2, alpha = 0.8) +
+  geom_text_repel(
+    aes(label = Update_SampleID),
+    size = 3,
+    max.overlaps = 20
+  ) +
+  scale_color_viridis_c(
+    option = "plasma",
+    limits = c(0.3, 0.8),
+    oob = scales::squish
+  ) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Aitchison)",
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+p_pcoa
+
+
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Func_Pathways_PCoA_Plot_AT_distance.jpg")
+# ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+
+
+```
+
+
+### PCoA Plots based on gene family-based Bray-Curtis Distance
+```{r}
+library(dplyr)
+library(tibble)
+library(readr)
+library(vegan)
+library(ggplot2)
+library(ggrepel)
+library(ape)
+
+
+# Read CPM-normalized gene family abundance table
+gf_abun_table <- file.path(
+  "../../data/Metagenomics/HUMAnN_func/Normalized_Tables",
+  "merged_genefamilies_cpm.tsv"
+)
+
+gf_abun <- read.table(
+  gf_abun_table,
+  header = TRUE,
+  sep = "\t",
+  comment.char = "",
+  check.names = FALSE
+)
+
+# Rename the first column as "Gene_Family"
+colnames(gf_abun)[1] <- "Gene_Family"
+
+# Remove UNMAPPED and UNINTEGRATED rows
+select_gf_abun <- gf_abun %>%
+  filter(!Gene_Family %in% c("UNMAPPED", "UNINTEGRATED"))
+
+# Remove taxonomically stratified Gene_Family rows
+select_gf_abun <- select_gf_abun %>%
+  filter(!grepl("\\|", Gene_Family))
+
+cat("Number of Gene Families after removing UNMAPPED, UNINTEGRATED, and stratified rows:",
+    nrow(select_gf_abun), "\n")
+
+# Remove samples that should be excluded
+select_gf_abun <- select_gf_abun %>% 
+  select(-`NW046_5_all_merged_Abundance-RPKs`)
+
+cat("Number of columns after sample removal:", ncol(select_gf_abun), "\n")
+
+# Convert to matrix: rows = Gene Families, columns = samples
+mat_gf <- select_gf_abun %>%
+  column_to_rownames("Gene_Family") %>%
+  as.matrix()
+
+# Ensure all values are numeric
+storage.mode(mat_gf) <- "numeric"
+
+# Transpose to samples x Gene Families
+mat_rel <- t(mat_gf)
+
+# Calculate Gene_Family prevalence across samples
+prev <- colMeans(mat_rel > 0, na.rm = TRUE)
+
+# Filter Gene Families by prevalence only
+prev_cut <- 0.10
+keep <- prev >= prev_cut
+
+mat_rel_filt <- mat_rel[, keep, drop = FALSE]
+
+cat("Number of Gene Families retained after prevalence filtering:",
+    ncol(mat_rel_filt), "\n")
+
+# Calculate Bray-Curtis distance
+dist_bc <- vegdist(mat_rel_filt, method = "bray")
+
+###### Analysis based on Bray-Curtis distance
+
+### PCoA
+pcoa_res <- pcoa(dist_bc)
+
+pcoa_df <- as.data.frame(pcoa_res$vectors[, 1:2])
+colnames(pcoa_df) <- c("PCoA1", "PCoA2")
+pcoa_df$SampleID_in_table <- rownames(pcoa_df)
+
+# Calculate percentage of explained variation using positive eigenvalues only
+pcoa1_lab <- paste0("PCoA1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)")
+pcoa2_lab <- paste0("PCoA2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+
+### Read metadata
+meta_file <- file.path("../../data/metadata", "selected_northwood_map.txt")
+metadata <- read_tsv(meta_file, col_types = cols())
+
+# Extract sample prefix from metadata, e.g. "#SampleID" = "NW001-1" -> "NW001"
+metadata <- metadata %>%
+  mutate(Sample_prefix = sub("-.*$", "", `#SampleID`))
+
+# Extract sample prefix from Gene_Family table column names,
+# e.g. "NW001_3_all_merged_Abundance-RPKs" -> "NW001"
+pcoa_df <- pcoa_df %>%
+  mutate(Sample_prefix = sub("_.*$", "", SampleID_in_table)) %>%
+  left_join(metadata, by = "Sample_prefix")
+
+# Create simplified sample labels for plotting
+pcoa_df <- pcoa_df %>%
+  mutate(Update_SampleID = sub("_all_merged.*$", "", SampleID_in_table))
+
+filtered_pcoa_df <- pcoa_df
+
+### PCoA plot colored by FIScore
+p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
+  geom_point(size = 2, alpha = 0.8) +
+  geom_text_repel(
+    aes(label = Update_SampleID),
+    size = 3,
+    max.overlaps = 20
+  ) +
+  scale_color_viridis_c(
+    option = "plasma",
+    limits = c(0.3, 0.8),
+    oob = scales::squish
+  ) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of gene family abundance (Bray-Curtis)",
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+p_pcoa
+
+### Save the figure
+# figure_file <- file.path("../../figures/PCoA_Plots", "Func_GeneFamily_PCoA_BC_distance.jpg")
+# ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+```
+
+
+### PCoA Plots based on gene family-based Aitchison Distance
+```{r}
+### Read normalized pathway abundance table and Metadata 
+### as described in the previous section
+
+library(compositions)
+
+### Calculate the Aitchison distance
+# add a small pseudocount
+pseudo <- 1e-6
+mat_rel_pc <- mat_rel_filt + pseudo
+# re-close to composition (optional but recommended)
+mat_rel_pc <- mat_rel_pc / rowSums(mat_rel_pc)
+# CLR transform
+mat_clr <- compositions::clr(mat_rel_pc)
+# Aitchison distance = Euclidean distance on CLR data
+dist_aitchison <- dist(mat_clr, method = "euclidean")
+
+
+###### Analysis based on Aitchison distance
+### PCoA
+pcoa_res <- ape::pcoa(dist_aitchison)
+
+pcoa_df <- as.data.frame(pcoa_res$vectors[, 1:2])
+colnames(pcoa_df) <- c("PCoA1", "PCoA2")
+pcoa_df$SampleID_in_table <- rownames(pcoa_df)
+
+# Calculate percentage of explained variation using positive eigenvalues only
+pcoa1_lab <- paste0("PCoA1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)")
+pcoa2_lab <- paste0("PCoA2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+
+
+# Extract sample prefix from gene family table column names,
+# e.g. "NW001_3_all_merged_Abundance-RPKs" -> "NW001"
+pcoa_df <- pcoa_df %>%
+  mutate(Sample_prefix = sub("_.*$", "", SampleID_in_table)) %>%
+  left_join(metadata, by = "Sample_prefix")
+
+# Create simplified sample labels for plotting
+pcoa_df <- pcoa_df %>%
+  mutate(Update_SampleID = sub("_all_merged.*$", "", SampleID_in_table))
+
+filtered_pcoa_df <- pcoa_df
+
+### PCoA plot colored by FIScore
+p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
+  geom_point(size = 2, alpha = 0.8) +
+  geom_text_repel(
+    aes(label = Update_SampleID),
+    size = 3,
+    max.overlaps = 20
+  ) +
+  scale_color_viridis_c(
+    option = "plasma",
+    limits = c(0.3, 0.8),
+    oob = scales::squish
+  ) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of gene family abundance (Aitchison)",
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+p_pcoa
+
+# figure_file <- file.path("../../figures/PCoA_Plots", "Func_GeneFamily_PCoA_AT_distance.jpg")
+# ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+```
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
