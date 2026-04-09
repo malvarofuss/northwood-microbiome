@@ -48,25 +48,22 @@ select_path_abun <- select_path_abun %>% select(-NW016_2_2_all_merged_Abundance)
 
 ncol(select_path_abun)
 
-# Filter on the prevalence and abundance of the Pathways
+# Filter on the prevalence (and abundance) of the Pathways
 # Prevalence > 10%, Abundance > 0.1%/0.01%
-# 3.1 转为 matrix：rows=Pathway, cols=Sample
+# Convert into matrix：rows=Pathway, cols=Sample
 mat_path <- select_path_abun %>%
   column_to_rownames("Pathway") %>%
   as.matrix()
-
-# 确保都是数值
 storage.mode(mat_path) <- "numeric"
 
-# 3.2 转为 samples x pathways
+# Matrix: samples x pathways
 mat_samp <- t(mat_path)
 
 mat_rel <- mat_samp
 
-# 3.4 prevalence（出现比例）与平均相对丰度
-prev <- colMeans(mat_rel > 0, na.rm = TRUE)              # 每个 pathway 在多少样本中出现
-mean_rel <- colMeans(mat_rel, na.rm = TRUE)              # 每个 pathway 的平均相对丰度
-
+# Prevalence (and Abundance) filtering
+prev <- colMeans(mat_rel > 0, na.rm = TRUE)              
+mean_rel <- colMeans(mat_rel, na.rm = TRUE)
 prev_cut <- 0.10
 
 keep <- (prev >= prev_cut)
@@ -100,7 +97,7 @@ dist_aitchison <- dist(mat_clr, method = "euclidean")
 # colnames(pcoa_df) <- c("PCoA1", "PCoA2")
 # pcoa_df$SampleID_in_table <- rownames(pcoa_df)
 # 
-# # 解释度（百分比）
+# # Explanation (Percentage)
 # var_exp <- pcoa$eig / sum(pcoa$eig)
 # pcoa1_lab <- paste0("PCoA1 (", round(100 * var_exp[1], 1), "%)")
 # pcoa2_lab <- paste0("PCoA2 (", round(100 * var_exp[2], 1), "%)")
@@ -119,12 +116,12 @@ pcoa2_lab <- paste0("PCoA2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), 
 meta_file <- file.path("../../data/metadata", "selected_northwood_map.txt")
 metadata <- read_tsv(meta_file, col_types = cols())
 
-# 你的 metadata 里是 "#SampleID" 例如 "NW001-1"
+# Extract individual ID from metadata ("#SampleID", "NW001-1")
 metadata <- metadata %>%
   mutate(Sample_prefix = sub("-.*$", "", `#SampleID`))
 head(metadata)
 
-# 你的 pathway 表列名是 "NW001_3_all_merged_Abundance" 这种
+# Extract individual ID from pathway table ("NW001_3_all_merged_Abundance")
 pcoa_df <- pcoa_df %>%
   mutate(Sample_prefix = sub("_.*$", "", SampleID_in_table)) %>%
   left_join(metadata, by = "Sample_prefix")
@@ -456,7 +453,7 @@ nrow(path_merged)
 ### Read in Samples Meta Table
 meta_file <- "../../data/Metadata/selected_northwood_map.txt"
 metadata <- read_tsv(meta_file, col_types = cols())
-# 提取前缀 NW001, NW002 ...
+# Extract individual names: NW001, NW002 ...
 metadata <- metadata %>%
   mutate(Sample_prefix = sub("-.*$", "", `#SampleID`))
 head(metadata)
@@ -468,7 +465,7 @@ path_long <- path_merged %>%
     names_to  = "Sample_col",
     values_to = "Abundance"
   ) %>%
-  # 提取 NW001, NW002 这种前缀
+  # Extract individual names: NW001, NW002 ...
   mutate(Sample_prefix = sub("_.*$", "", Sample_col))
 
 head(path_long)
@@ -634,7 +631,7 @@ dev.off()
 
 ###### Calculate correlations between pathway abundance and individual factors
 corr_list <- lapply(vars, function(v) {
-  # 把 Sex_num, Location_num 这个内部名字映射回更好看的标签
+  # Rename Sex_num, Location_num
   var_label <- dplyr::case_when(
     v == "Sex_num"      ~ "Sex",
     v == "Location_num" ~ "Location",
@@ -699,7 +696,7 @@ table(p_adj_filter_corr_table$variable)
 
 ###### Scatter Plots for pathways
 ### Plots for age-associated pathways
-# 从 corr_table 里筛选 Age 显著的 pathway 名
+# Select significantly age-associated pathways in corr_table
 paths_of_interest <- corr_table %>%
   filter(p_adj < 0.05, variable == "Age") %>%
   pull(Pathway) %>%
@@ -710,7 +707,7 @@ paths_of_interest
 plot_df <- path_meta2 %>%
   filter(Pathway %in% paths_of_interest)
 
-# 为了避免 y 轴太极端，可以视情况加上 log10 转换
+# Log10 transfer
 make_scatter <- function(df, pw_name) {
   safe_name <- pw_name %>%
     str_replace(":.*$", "") 
@@ -739,7 +736,7 @@ for (pw in paths_of_interest) {
   
   df_pw <- plot_df %>% filter(Pathway == pw)
 
-  # 生成安全的文件名：去掉奇怪符号，太长就截断
+  # Generate shorter file name
   safe_name <- pw %>%
     str_replace(":.*$", "") 
 
@@ -762,7 +759,6 @@ for (pw in paths_of_interest) {
 
 ### Analysis with MaAsLin3
 ```{r}
-setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
 
 library(maaslin3)
 
@@ -862,16 +858,16 @@ head(metadata)
 nrow(metadata)
 
 # Matching ID names
-# 1. 提取核心 ID
+# 1. Extract Individual ID
 data_id <- sub("_.*", "", rownames(data_table))
 meta_id <- sub("-.*", "", rownames(metadata))
-# 2. 匹配
+# 2. Matching
 match_idx <- match(meta_id, data_id)
-# 3. 去掉无法匹配的
+# 3. Remove unmatched ID
 keep <- !is.na(match_idx)
 metadata_matched <- metadata[keep, ]
 match_idx <- match_idx[keep]
-# 4. 替换 rownames
+# 4. Replace/Update rownames of the metadata
 rownames(metadata_matched) <- rownames(data_table)[match_idx]
 metadata <- metadata_matched
 head(metadata)
