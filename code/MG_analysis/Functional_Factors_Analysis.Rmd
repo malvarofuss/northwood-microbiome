@@ -1,0 +1,918 @@
+---
+title: "Functional_Factors_Analysis"
+author: "Zhongzhi"
+date: "2026-03-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### PERMANOVA analysis for beta diversity against environmental factors
+```{r}
+### To be modified Note
+#Remove Sample NW046
+#Select one of the three NW016 Sample.
+library(dplyr)
+library(tibble)
+library(readr)
+library(vegan)
+library(ggplot2)
+library(ggrepel)
+library(compositions)
+library(ape)
+
+# Read in Normalized Pathway Abundance
+path_abun_table <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables/", "merged_pathabundance_relab.tsv")
+path_abun <- read.table(path_abun_table, header = TRUE, sep = "\t", comment.char = "")
+
+
+### Remove "Unmapped" and "Unintegrated"
+colnames(path_abun)[1]
+colnames(path_abun)[1] <- "Pathway"
+nrow(path_abun)
+select_path_abun <- path_abun %>% filter(!Pathway %in% c("UNMAPPED", "UNINTEGRATED"))
+
+### Remove pathways with taxonomic annotations
+select_path_abun <- select_path_abun %>% filter (!grepl("\\|", Pathway))
+
+# Total number of the pathways
+nrow(select_path_abun)
+
+# Remove not interested samples (without metadata and multiple sample for one individual)
+ncol(select_path_abun)
+select_path_abun <- select_path_abun %>% select(-NW046_5_all_merged_Abundance)
+select_path_abun <- select_path_abun %>% select(-NW016_2_2_all_merged_Abundance) %>% select(-NW016_5_all_merged_Abundance)
+
+ncol(select_path_abun)
+
+# Filter on the prevalence and abundance of the Pathways
+# Prevalence > 10%, Abundance > 0.1%/0.01%
+# 3.1 转为 matrix：rows=Pathway, cols=Sample
+mat_path <- select_path_abun %>%
+  column_to_rownames("Pathway") %>%
+  as.matrix()
+
+# 确保都是数值
+storage.mode(mat_path) <- "numeric"
+
+# 3.2 转为 samples x pathways
+mat_samp <- t(mat_path)
+
+mat_rel <- mat_samp
+
+# 3.4 prevalence（出现比例）与平均相对丰度
+prev <- colMeans(mat_rel > 0, na.rm = TRUE)              # 每个 pathway 在多少样本中出现
+mean_rel <- colMeans(mat_rel, na.rm = TRUE)              # 每个 pathway 的平均相对丰度
+
+prev_cut <- 0.10
+
+keep <- (prev >= prev_cut)
+
+mat_rel_filt <- mat_rel[, keep, drop = FALSE]
+
+# The number of left pathways
+ncol(mat_rel_filt)
+
+### Calculate the Bray-Curtis distance
+dist_bc <- vegdist(mat_rel_filt, method = "bray")
+
+
+### Calculate the Aitchison distance
+# add a small pseudocount
+pseudo <- 1e-6
+mat_rel_pc <- mat_rel_filt + pseudo
+# re-close to composition (optional but recommended)
+mat_rel_pc <- mat_rel_pc / rowSums(mat_rel_pc)
+# CLR transform
+mat_clr <- clr(mat_rel_pc)
+# Aitchison distance = Euclidean distance on CLR data
+dist_aitchison <- dist(mat_clr, method = "euclidean")
+
+
+
+###### Analysis based on Bray-Curtis distance
+### PCoA Plot
+# pcoa <- cmdscale(dist_bc, k = 2, eig = TRUE)
+# pcoa_df <- as.data.frame(pcoa$points)
+# colnames(pcoa_df) <- c("PCoA1", "PCoA2")
+# pcoa_df$SampleID_in_table <- rownames(pcoa_df)
+# 
+# # 解释度（百分比）
+# var_exp <- pcoa$eig / sum(pcoa$eig)
+# pcoa1_lab <- paste0("PCoA1 (", round(100 * var_exp[1], 1), "%)")
+# pcoa2_lab <- paste0("PCoA2 (", round(100 * var_exp[2], 1), "%)")
+
+
+pcoa_res <- ape::pcoa(dist_bc)
+pcoa_df <- as.data.frame(pcoa_res$vectors[, 1:2])
+colnames(pcoa_df) <- c("PCoA1", "PCoA2")
+pcoa_df$SampleID_in_table <- rownames(pcoa_df)
+
+# Calculate percentage of explained variation using positive eigenvalues only
+pcoa1_lab <- paste0("PCoA1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)")
+pcoa2_lab <- paste0("PCoA2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+
+### Read in metadata
+meta_file <- file.path("../../data/metadata", "selected_northwood_map.txt")
+metadata <- read_tsv(meta_file, col_types = cols())
+
+# 你的 metadata 里是 "#SampleID" 例如 "NW001-1"
+metadata <- metadata %>%
+  mutate(Sample_prefix = sub("-.*$", "", `#SampleID`))
+head(metadata)
+
+# 你的 pathway 表列名是 "NW001_3_all_merged_Abundance" 这种
+pcoa_df <- pcoa_df %>%
+  mutate(Sample_prefix = sub("_.*$", "", SampleID_in_table)) %>%
+  left_join(metadata, by = "Sample_prefix")
+
+
+
+# ### Filtering on PCoA df
+pcoa_df <- pcoa_df %>%
+  mutate(Update_SampleID = sub("_all_merged.*$", "", SampleID_in_table))
+# head(pcoa_df)
+# nrow(pcoa_df)
+# filtered_pcoa_df <- pcoa_df %>% filter(`#SampleID` != "NW046-1")
+# nrow(filtered_pcoa_df)
+# filtered_pcoa_df %>% filter(`#SampleID` == "NW016-1")
+
+filtered_pcoa_df <- pcoa_df
+
+
+
+### PCoA Plot Colored with Sex (Colored based on Score)
+p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
+  geom_point(size = 2, alpha = 0.8) +
+  geom_text_repel(aes(label = Update_SampleID),
+                  size = 3,
+                  max.overlaps = 20) +
+  scale_color_viridis_c(option = "plasma",
+                        limits = c(0.3, 0.8),
+                        oob = scales::squish) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(legend.position = "right",
+        plot.title = element_text(hjust = 0.5, face = "bold"))
+
+p_pcoa
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_labeled_rm_samp.jpg")
+ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+
+
+
+
+
+###### PERMANOVA Analyisis for All Other Factors
+meta <- filtered_pcoa_df %>%
+  distinct(SampleID = SampleID_in_table, Sex, FIRange, FICat, Age, TimeNW, FIScore, Location)
+
+meta <- meta[match(labels(dist_bc), meta$SampleID), ]
+stopifnot(all(meta$SampleID == labels(dist_bc)))
+
+head(meta)
+tail(meta)
+
+
+set.seed(1)
+# Test with FIScore
+adonis_fiscore <- adonis2(dist_bc ~ FIScore, data = meta, permutations = 9999)
+adonis_fiscore
+# Test with Age
+adonis_age <- adonis2(dist_bc ~ Age, data = meta, permutations = 9999)
+adonis_age
+# Test with TimeNW
+adonis_timenw <- adonis2(dist_bc ~ TimeNW, data = meta, permutations = 9999)
+adonis_timenw 
+# Test with Location
+adonis_location <- adonis2(dist_bc ~ Location, data = meta, permutations = 9999)
+adonis_location
+# Test with Sex
+adonis_sex <- adonis2(dist_bc ~ Sex, data = meta, permutations = 9999)
+adonis_sex
+# Test with FICat
+adonis_ficat <- adonis2(dist_bc ~ FICat, data = meta, permutations = 9999)
+adonis_ficat
+e
+
+###### Multiple variates test
+adonis_multi <- adonis2(
+  dist_bc ~ Sex + Age + TimeNW + FIScore + Location,
+  data = meta,
+  permutations = 9999,
+  by = "margin"
+)
+adonis_multi
+
+# Output Results
+res_multi <- as.data.frame(adonis_multi)
+res_multi$Variable <- rownames(res_multi)
+rownames(res_multi) <- NULL
+
+res_multi_out <- res_multi %>%
+  select(Variable, Df, R2, F, `Pr(>F)`)
+
+res_multi_out
+
+res_multi_file_name <- file.path("../../tmp_figures/PCoA_Plots", "pathway_adonis_multi_summary.tsv")
+write.table(res_multi_out, res_multi_file_name,
+            sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+
+# Dispersion Checking
+disp_sex <- betadisper(dist_bc, meta$Sex)
+anova(disp_sex)
+permutest(disp_sex, permutations = 9999)
+
+disp_ficat <- betadisper(dist_bc, meta$FICat)
+anova(disp_ficat)
+permutest(disp_ficat, permutations = 9999)
+
+disp_location <- betadisper(dist_bc, meta$Location)
+anova(disp_location)
+permutest(disp_location, permutations = 9999)
+
+
+### PCOA Plots for factor variables (FICat)
+filtered_pcoa_df <- filtered_pcoa_df %>%
+  mutate(FICat = factor(FICat, levels = sort(unique(FICat))))
+
+r2_ficat <- adonis_ficat$R2[1]
+p_ficat  <- adonis_ficat$`Pr(>F)`[1]
+
+pcoa_ficat <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FICat)) +
+  geom_point(size = 2, alpha = 0.8) +
+  scale_color_viridis_d(option = "plasma", end = 0.95) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    subtitle = sprintf("PERMANOVA (FICat): R² = %.3f, p = %.4g", r2_ficat, p_ficat),
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  stat_ellipse(aes(group = FICat), type = "t", level = 0.95,
+               linewidth = 0.8, show.legend = FALSE) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+pcoa_ficat
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_FICat_grouped_color.jpg")
+ggsave(filename = figure_file, plot = pcoa_ficat, width = 8, height = 6, dpi = 300)
+
+
+### PCOA Plots for factor variables (Location)
+r2_location <- adonis_location$R2[1]
+p_location  <- adonis_location$`Pr(>F)`[1]
+
+pcoa_location <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = Location)) +
+  geom_point(size = 2, alpha = 0.8) +
+  scale_color_viridis_d(option = "plasma", end = 0.95) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    subtitle = sprintf("PERMANOVA (Location): R² = %.3f, p = %.4g", r2_location, p_location),
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  stat_ellipse(aes(group = Location), type = "t", level = 0.95,
+               linewidth = 0.8, show.legend = FALSE) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+pcoa_location
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Location_grouped_color.jpg")
+ggsave(filename = figure_file, plot = pcoa_location, width = 8, height = 6, dpi = 300)
+
+
+### PCOA Plots for factor variables (Sex)
+r2_sex <- adonis_sex$R2[1]
+p_sex  <- adonis_sex$`Pr(>F)`[1]
+
+pcoa_sex <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = Sex)) +
+  geom_point(size = 2, alpha = 0.8) +
+  scale_color_viridis_d(option = "plasma", end = 0.95) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    subtitle = sprintf("PERMANOVA (Sex): R² = %.3f, p = %.4g", r2_sex, p_sex),
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  stat_ellipse(aes(group = Sex), type = "t", level = 0.95,
+               linewidth = 0.8, show.legend = FALSE) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+pcoa_sex
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Sex_grouped_color.jpg")
+ggsave(filename = figure_file, plot = pcoa_sex, width = 8, height = 6, dpi = 300)
+
+
+### PCoA Plots for continuous variables (FIScore)
+r2_fiscore <- adonis_fiscore$R2[1]
+p_fiscore  <- adonis_fiscore$`Pr(>F)`[1]
+
+p_fiscore <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
+  geom_point(size = 2, alpha = 0.8) +
+  scale_color_viridis_c(option = "plasma", end = 0.95) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    subtitle = sprintf("PERMANOVA (FIScore): R² = %.3f, p = %.4g", r2_fiscore, p_fiscore),
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+p_fiscore
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_FIScore_color.jpg")
+ggsave(filename = figure_file, plot = p_fiscore, width = 8, height = 6, dpi = 300)
+
+
+
+### PCoA Plots for continuous variables
+r2_age <- adonis_age$R2[1]
+p_age  <- adonis_age$`Pr(>F)`[1]
+
+pcoa_age <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = Age)) +
+  geom_point(size = 2, alpha = 0.8) +
+  scale_color_viridis_c(option = "plasma", end = 0.95) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    subtitle = sprintf("PERMANOVA (Age): R² = %.3f, p = %.4g", r2_age, p_age),
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+
+pcoa_age
+
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Age_color.jpg")
+ggsave(filename = figure_file, plot = pcoa_age, width = 8, height = 6, dpi = 300)
+
+
+
+
+### PCoA Plots for continuous variables (TimeNW)
+r2_timenw <- adonis_timenw$R2[1]
+p_timenw   <- adonis_timenw$`Pr(>F)`[1]
+
+pcoa_timenw <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = TimeNW)) +
+  geom_point(size = 2, alpha = 0.8) +
+  scale_color_viridis_c(option = "plasma", end = 0.95) +
+  theme_bw(base_size = 12) +
+  labs(
+    title = "PCoA of pathway abundance (Bray-Curtis)",
+    subtitle = sprintf("PERMANOVA (TimeNW): R² = %.3f, p = %.4g", r2_timenw, p_timenw),
+    x = pcoa1_lab,
+    y = pcoa2_lab
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, face = "bold")
+  )
+pcoa_timenw
+
+figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_TimeNW_color.jpg")
+ggsave(filename = figure_file, plot = pcoa_timenw, width = 8, height = 6, dpi = 300)
+
+
+```
+
+
+
+### Study Pathway Relative Abundance against environmental factors
+```{r}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(tibble)
+library(scales)
+library(pheatmap)
+
+### Readin Humann Pathway Abundance Table
+infile <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables", "merged_pathabundance_relab.tsv")
+#outfile <- "summed_path_abundance.out"
+corr_file <- file.path("../../tmp_figures", "pathway_metadata_correlations.tsv")
+
+path_df <- read_tsv(infile) %>% rename(Pathway = `# Pathway`)
+
+
+### New and more direct method to extract the total abundance of each pathway
+head(path_df)
+nrow(path_df)
+
+path_merged <- path_df %>%
+  filter (!grepl("\\|", Pathway))
+head(path_merged)
+nrow(path_merged)
+
+
+# Filter pathway abundance data for pathways exists in at least 1/3 of all MG samples
+sample_cols <- names(path_merged)[-1]
+n_samples <- length(sample_cols)
+min_present <- ceiling(n_samples / 3)
+min_present
+
+path_merged <- path_merged %>%
+  filter(
+    rowSums(across(all_of(sample_cols), ~ .x > 0), na.rm = TRUE) >= min_present
+  )
+nrow(path_merged)
+
+### Output Results
+#write.table(path_merged, outfile, row.names = FALSE, sep = "\t", quote = FALSE)
+
+
+### Read in Samples Meta Table
+meta_file <- "../../data/Metadata/selected_northwood_map.txt"
+metadata <- read_tsv(meta_file, col_types = cols())
+# 提取前缀 NW001, NW002 ...
+metadata <- metadata %>%
+  mutate(Sample_prefix = sub("-.*$", "", `#SampleID`))
+head(metadata)
+nrow(metadata)
+
+path_long <- path_merged %>%
+  pivot_longer(
+    cols      = -Pathway,
+    names_to  = "Sample_col",
+    values_to = "Abundance"
+  ) %>%
+  # 提取 NW001, NW002 这种前缀
+  mutate(Sample_prefix = sub("_.*$", "", Sample_col))
+
+head(path_long)
+nrow(path_long)
+#table(path_long$Pathway)
+#table(path_long$Sample_col)
+
+
+### Remove duplicate NW016 samples in the MG pathway abundance table
+selected_path_long <- path_long %>% filter(Sample_col != "NW016_2_2_all_merged_Abundance") %>% filter(Sample_col != "NW016_5_all_merged_Abundance")
+nrow(selected_path_long)
+
+### Remove the NW046 sample which does not have Metadata
+selected_path_long <- selected_path_long %>% filter(Sample_col != "NW046_5_all_merged_Abundance")
+nrow(selected_path_long)
+
+
+
+### Add metadata to the MG pathway abundance table
+path_meta <- selected_path_long %>% left_join(metadata, by = "Sample_prefix")
+
+# Modification to variables
+path_meta2 <- path_meta %>%
+  mutate(
+    Sex_num = case_when(
+      Sex == "Male"   ~ 1,
+      Sex == "Female" ~ 0,
+      TRUE            ~ NA_real_
+    )
+  ) %>%
+  mutate(
+    Location_num = case_when(
+      Location == "Center"   ~ 1,
+      Location == "Manor" ~ 0,
+      TRUE            ~ NA_real_
+    )
+  )  
+
+vars <- c("Age", "TimeNW", "FIScore", "Sex_num", "FICat", "Location_num")
+binary_vars <- c("Sex", "Location", "FICat")
+
+
+
+###### Calculate pathway differences across binary factors
+binary_list <- lapply(binary_vars, function(v) {
+  path_meta %>%
+    filter(!is.na(.data[[v]]), !is.na(Abundance)) %>%
+    group_by(Pathway) %>%
+    summarise(
+      n = n(),
+      n_group = n_distinct(.data[[v]]),
+      stat = if (
+        n_group[1] == 2
+      ) {
+        suppressWarnings(wilcox.test(Abundance ~ .data[[v]])$statistic)
+      } else {
+        NA_real_
+      },
+      p = if (
+        n_group[1] == 2
+      ) {
+        suppressWarnings(wilcox.test(Abundance ~ .data[[v]])$p.value)
+      } else {
+        NA_real_
+      },
+      .groups = "drop"
+    ) %>%
+    mutate(variable = v, test = "wilcox") %>%
+    select(Pathway, variable, test, n, n_group, stat, p)
+})
+
+test_table_binary <- bind_rows(binary_list)
+test_table_binary <- test_table_binary %>%
+  group_by(variable) %>%
+  mutate(p_adj = p.adjust(p, method = "fdr")) %>%
+  ungroup()
+
+
+head(test_table_binary)
+
+table(test_table_binary$variable)
+filtered_test_table_binary <- test_table_binary %>% filter(p_adj < 0.05)
+nrow(filtered_test_table_binary)
+# filtered_test_table_binary <- test_table_binary %>% filter(p < 0.01)
+# nrow(filtered_test_table_binary)
+
+table_file <- file.path("../../tmp_figures", "pathway_metadata_binary_test.tsv")
+write_tsv(test_table_binary, table_file)
+
+
+
+###### Heatmap plot for pathways with significant changes across locations
+loc_sig_pathways <- filtered_test_table_binary %>%
+  filter(variable == "Location") %>%
+  pull(Pathway) %>%
+  unique()
+
+# Extract pathway abundance matrix
+heatmap_df <- selected_path_long %>%
+  filter(Pathway %in% loc_sig_pathways)
+
+heatmap_df <- heatmap_df %>%
+  select(Pathway, Sample_col, Abundance) %>%
+  pivot_wider(
+    names_from = Sample_col,
+    values_from = Abundance
+  )
+
+heatmap_mat <- heatmap_df %>%
+  column_to_rownames("Pathway") %>%
+  as.matrix()
+
+storage.mode(heatmap_mat) <- "numeric"
+
+# Prepare sample annotation using metadata
+sample_anno <- data.frame(
+  SampleID_in_table = colnames(heatmap_mat),
+  Sample_prefix = sub("_.*$", "", colnames(heatmap_mat))
+) %>%
+  left_join(metadata %>% select(Sample_prefix, Location), by = "Sample_prefix")
+
+annotation_col <- sample_anno %>%
+  select(Location)
+rownames(annotation_col) <- sample_anno$SampleID_in_table
+annotation_col <- annotation_col[colnames(heatmap_mat), , drop = FALSE]
+
+# Simplify column names in the heatmap matrix
+new_colnames <- sub("_all_merged_Abundance.*$", "", colnames(heatmap_mat))
+colnames(heatmap_mat) <- new_colnames
+rownames(annotation_col) <- new_colnames
+
+# Optional annotation colors
+ann_colors <- list(
+  Location = c(
+    Center = "#1f78b4",
+    Manor = "#33a02c"
+  )
+)
+
+
+### Draw and save heatmap
+figure_file <- file.path("../../tmp_figures/", "Location_Pathways_heatmap.jpg")
+jpeg(filename = figure_file, width = 8, height = 6, units = "in", res = 300)
+
+pheatmap(
+  heatmap_mat,
+  scale = "row",
+  annotation_col = annotation_col,
+  annotation_colors = ann_colors,
+  cluster_rows = TRUE,
+  cluster_cols = TRUE,
+  show_rownames = TRUE,
+  show_colnames = TRUE,
+  fontsize_row = 8,
+  fontsize_col = 7,
+  main = "Significant pathways associated with Location\n(Row Z-score)"
+)
+#print(loc_path_heatmap)
+
+dev.off()
+
+
+
+###### Calculate correlations between pathway abundance and individual factors
+corr_list <- lapply(vars, function(v) {
+  # 把 Sex_num, Location_num 这个内部名字映射回更好看的标签
+  var_label <- dplyr::case_when(
+    v == "Sex_num"      ~ "Sex",
+    v == "Location_num" ~ "Location",
+    TRUE ~ v
+  )
+  
+  path_meta2 %>%
+    group_by(Pathway) %>%
+    summarise(
+      n = sum(!is.na(Abundance) & !is.na(.data[[v]])),
+      cor = ifelse(
+        n >= 3,
+        suppressWarnings(cor(Abundance, .data[[v]],
+                             method = "spearman",
+                             use = "complete.obs")),
+        NA_real_
+      ),
+      p = ifelse(
+        n >= 3,
+        suppressWarnings(cor.test(Abundance, .data[[v]],
+                                  method = "spearman",
+                                  exact = FALSE)$p.value),
+        NA_real_
+      ),
+      .groups = "drop"
+    ) %>%
+    mutate(variable = var_label) %>%
+    select(Pathway, variable, n, cor, p)
+})
+
+corr_table <- bind_rows(corr_list)
+head(corr_table)
+table(corr_table$variable)
+
+### FDR adjust
+corr_table <- corr_table %>%
+  group_by(variable) %>%
+  mutate(p_adj = p.adjust(p, method = "fdr")) %>%
+  ungroup()
+
+# ### Output correlation results
+# write_tsv(corr_table, corr_file)
+
+
+### Quick Sta
+#corr_table <- read.table(corr_file, header = TRUE, sep = "\t")
+#p-adj filter
+nrow(corr_table %>% filter(p_adj < 0.05))
+p_adj_filter_corr_table <- corr_table %>% filter(p_adj < 0.05)
+table(p_adj_filter_corr_table$variable)
+
+# #p value filter
+# nrow(corr_table %>% filter(p < 0.01))
+# p_filter_corr_table <- corr_table %>% filter(p < 0.01)
+# table(p_filter_corr_table$variable)
+
+
+
+
+
+
+
+###### Scatter Plots for pathways
+### Plots for age-associated pathways
+# 从 corr_table 里筛选 Age 显著的 pathway 名
+paths_of_interest <- corr_table %>%
+  filter(p_adj < 0.05, variable == "Age") %>%
+  pull(Pathway) %>%
+  unique()
+
+paths_of_interest
+
+plot_df <- path_meta2 %>%
+  filter(Pathway %in% paths_of_interest)
+
+# 为了避免 y 轴太极端，可以视情况加上 log10 转换
+make_scatter <- function(df, pw_name) {
+  safe_name <- pw_name %>%
+    str_replace(":.*$", "") 
+
+  ggplot(df, aes(x = Age, y = Abundance)) +  
+    geom_point(size = 2, alpha = 0.5) +
+    geom_smooth(method = "lm", se = TRUE, color = "red") +
+    scale_y_continuous(labels = label_scientific()) +
+    theme_bw(base_size = 12) +
+    theme(
+      panel.grid = element_blank(),
+      plot.title = element_text(face = "bold", hjust = 0.5),
+      axis.title = element_text(face = "bold"),
+      axis.text = element_text(color = "black")
+    ) +
+    labs(
+      title = safe_name,
+      x = "Age",
+      y = "Pathway relative abundance"
+    )
+}
+
+
+
+for (pw in paths_of_interest) {
+  
+  df_pw <- plot_df %>% filter(Pathway == pw)
+
+  # 生成安全的文件名：去掉奇怪符号，太长就截断
+  safe_name <- pw %>%
+    str_replace(":.*$", "") 
+
+  p <- make_scatter(df_pw, pw)
+  
+  figure_file <- file.path("../../tmp_figures", paste0("Age_vs_", safe_name, ".jpg"))
+
+  ggsave(
+    filename = figure_file,
+    plot     = p,
+    width    = 5,
+    height   = 4,
+    dpi      = 300
+  )
+}
+
+```
+
+
+
+### Analysis with MaAsLin3
+```{r}
+setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
+
+library(maaslin3)
+
+# ### Read in HUMANn pathway abundance table
+# #data_table_name <- system.file("extdata", "HMP2_taxonomy.tsv", package = "maaslin3")
+# #data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func", "nursing_house_humman_cov30_path_abundance.out")
+# data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables", "merged_pathabundance_relab.tsv")
+# 
+# org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1)
+# nrow(org_data_table)
+# clean_data_table <- org_data_table[!grepl("\\|", rownames(org_data_table)), ]
+# nrow(clean_data_table)
+# # clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNMAPPED", "UNINTEGRATED"), ]
+# nrow(clean_data_table)
+# data_table <- t(clean_data_table)
+# 
+# # Remove Duplicate Samples and Sample without metadata
+# data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all_merged_Abundance", "NW016_5_all_merged_Abundance", "NW046_5_all_merged_Abundance"), ]
+# data_table[1:5, 1:5]
+# nrow(data_table)
+
+
+
+# ### Read in HUMANn gene family abundance table
+# data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func", "nursing_house_humman_cov30_gene_families_anno.out")
+# org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, check.names = FALSE)
+# nrow(org_data_table)
+# clean_data_table <- org_data_table[!grepl("\\|", rownames(org_data_table)), ]
+# nrow(clean_data_table)
+# data_table <- t(clean_data_table)
+# 
+# # Remove Duplicate Samples and Sample without metadata
+# data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all_merged_Abundance-RPKs", "NW016_5_all_merged_Abundance-RPKs", "NW046_5_all_merged_Abundance-RPKs"), ]
+# data_table[1:5, 1:5]
+# nrow(data_table)
+# ncol(data_table)
+# # Remove column(gene family) with non-zero values in <10% rows(samples)
+# nonzero_counts <- colSums(data_table != 0)
+# threshold <- ceiling(0.8 * nrow(data_table))
+# data_table<- data_table[, nonzero_counts >= threshold]
+# ncol(data_table)
+
+
+
+### Read in MetaPhlAn taxa abundance table
+data_table_name <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
+org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, comment.char = "#")
+nrow(org_data_table)
+
+# Select rows with species level annotation
+clean_data_table <- org_data_table[
+  grepl("\\|s__", rownames(org_data_table)) &
+  !grepl("\\|t__", rownames(org_data_table)),
+]
+
+# # Select rows with genus level annotation
+# clean_data_table <- org_data_table[
+#   grepl("\\|g__", rownames(org_data_table)) &
+#   !grepl("\\|s__", rownames(org_data_table)),
+# ]
+
+# # Select rows with family level annotation
+# clean_data_table <- org_data_table[
+#   grepl("\\|f__", rownames(org_data_table)) &
+#   !grepl("\\|g__", rownames(org_data_table)),
+# ]
+
+# # Select rows with phylum level annotation
+# clean_data_table <- org_data_table[
+#   grepl("\\|p__", rownames(org_data_table)) &
+#   !grepl("\\|c__", rownames(org_data_table)),
+# ]
+
+nrow(clean_data_table)
+data_table <- t(clean_data_table)
+
+# Remove Duplicate Samples and Sample without metadata
+data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all", "NW016_5_all", "NW046_5_all"), ]
+colnames(data_table) <- sub(".*\\|s__", "", colnames(data_table))
+# colnames(data_table) <- sub(".*\\|g__", "", colnames(data_table))
+# colnames(data_table) <- sub(".*\\|f__", "", colnames(data_table))
+# colnames(data_table) <- sub(".*\\|p__", "", colnames(data_table))
+
+
+data_table[1:5, 1:5]
+nrow(data_table)
+ncol(data_table)
+
+
+### Read in metadata table
+# metadata_name <- system.file("extdata", "HMP2_metadata.tsv", package = "maaslin3")
+metadata_name <- file.path("../../data/Metadata", "selected_northwood_map.txt")
+org_metadata <- read.csv(metadata_name, sep = '\t', row.names = 1)
+# Remove sample without metadata
+metadata <- org_metadata[!rownames(org_metadata) %in% c("NW046-1"), ]
+head(metadata)
+nrow(metadata)
+
+# Matching ID names
+# 1. 提取核心 ID
+data_id <- sub("_.*", "", rownames(data_table))
+meta_id <- sub("-.*", "", rownames(metadata))
+# 2. 匹配
+match_idx <- match(meta_id, data_id)
+# 3. 去掉无法匹配的
+keep <- !is.na(match_idx)
+metadata_matched <- metadata[keep, ]
+match_idx <- match_idx[keep]
+# 4. 替换 rownames
+rownames(metadata_matched) <- rownames(data_table)[match_idx]
+metadata <- metadata_matched
+head(metadata)
+
+
+
+### Factor the categorical variables in metadata
+metadata$Sex <- 
+  factor(metadata$Sex, levels = c('Male', 'Female'))
+
+metadata$Location <- 
+  factor(metadata$Location, levels = c('Manor', 'Center'))
+
+metadata$FICat <- 
+  factor(metadata$FICat, levels = c('3', '4'))
+
+# Check dataframes
+data_table[1:5, 1:5]
+metadata[1:5, ]
+
+
+### Running MaAsLin3
+set.seed(1)
+fit_out <- maaslin3(input_data = data_table,
+                    input_metadata = metadata,
+                    output = 'MaAsLin3_test_output',
+                    formula = '~ Sex + Age +
+                        TimeNW + FIScore + Location',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
