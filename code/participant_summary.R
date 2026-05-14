@@ -82,9 +82,11 @@ write_tsv(frailty_results, "results/frailty_glm.tsv")
 ## Figures ----
 
 # Bar chart of associations
-diseases <- c("anemia", "arthritis", "atherosclerosis", "copd", "dementia",
-              "depression", "diabetes", "dyslipidemia", "hypertension",
-              "hypothyroidism", "osteoporosis", "renal_disease")
+diseases <- c(
+  "anemia", "arthritis", "atherosclerosis", "copd", "dementia",
+  "depression", "diabetes", "dyslipidemia", "hypertension",
+  "hypothyroidism", "osteoporosis", "renal_disease"
+)
 
 frailty_associations_figure <- frailty_results %>%
   mutate(type = ifelse(term %in% diseases, "Comorbidity", "Medication")) %>%
@@ -101,7 +103,6 @@ frailty_associations_figure <- frailty_results %>%
     label_pos = ifelse(estimate >= 0, estimate + 0.02, estimate - 0.02),
     v_just = ifelse(estimate >= 0, 0.5, 1)
   ) %>%
-
   ggplot(aes(x = term, y = estimate, fill = type)) +
   geom_bar(stat = "identity", color = "black", linewidth = 0.1) +
   scale_fill_manual(values = c("Comorbidity" = "#FFF68F", "Medication" = "#BC8F8F")) +
@@ -119,11 +120,12 @@ frailty_associations_figure <- frailty_results %>%
     title = NULL,
     subtitle = NULL,
     x = NULL,
-    y = "Effect size",
+    y = "Estimate (FI)",
     fill = NULL
   )
 
 ggsave(
-  "results/frailty_associations.pdf",
+  "results/Main1_Frailty_Associations.pdf",
   frailty_associations_figure,
-  width = 6, height = 3)
+  width = 6, height = 3
+)
