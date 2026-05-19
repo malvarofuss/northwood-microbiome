@@ -5,6 +5,8 @@ set.seed(0509)
 
 library(tidyverse)
 library(rstatix)
+library(GGally)
+library(patchwork)
 
 participants <- read_tsv("data/metadata/patient_data.tsv") %>%
   filter(SubjectID != "NW046") # Missing metadata
@@ -58,6 +60,97 @@ participants %>%
   wilcox_test(TimeNW ~ Sex)
 participants %>%
   wilcox_test(FIScore ~ Sex)
+
+# Figure S1: Participant Baseline Characteristics & Sex Differences ----
+
+# Custom correlation function to show r and p
+cor_func <- function(data, mapping, size = 4, ...) {
+  x <- eval_data_col(data, mapping$x)
+  y <- eval_data_col(data, mapping$y)
+  test <- cor.test(x, y)
+
+  r_val <- round(test$estimate, 2)
+  p_val <- test$p.value
+  p_text <- if (p_val < 0.001) "p < 0.001" else paste0("p = ", format.pval(p_val, digits = 3))
+
+  display_text <- paste0("r = ", r_val, "\n", p_text)
+
+  ggplot(data = data.frame()) +
+    annotate("text", x = 0.5, y = 0.5, label = display_text, size = size) +
+    theme_void()
+}
+
+# Custom function for lower triangle to show points and smooth
+lower_func <- function(data, mapping, ...) {
+  ggplot(data = data, mapping = mapping) +
+    geom_point(alpha = 0.4, size = 1, color = "grey30") +
+    geom_smooth(method = "lm", color = "black", fill = "black", alpha = 0.2, linewidth = 0.5)
+}
+
+# Prepare data with lowercase names for plotting
+plot_data <- participants %>%
+  rename(age = Age, sex = Sex, res_time = TimeNW, fi_score = FIScore)
+
+# Panel A: Correlation Matrix
+cor_theme <- theme_classic() +
+  theme(
+    strip.background = element_rect(fill = "#f0f0f0"),
+    strip.text = element_text(face = "bold", size = 11),
+    panel.border = element_rect(colour = "black", fill = NA, linewidth = 0.5)
+  )
+
+panel_a <- ggpairs(
+  plot_data %>% select(age, res_time, fi_score),
+  columnLabels = c("Age", "Residence Time", "Frailty (FI)"),
+  upper = list(continuous = wrap(cor_func, size = 4)),
+  lower = list(continuous = wrap(lower_func)),
+  diag = list(continuous = wrap("densityDiag", fill = "gray50", alpha = 0.4))
+) + cor_theme
+
+# Panel B: Box plots by Sex
+create_sex_boxplot <- function(data, var, ylabel) {
+  stat_test <- data %>%
+    wilcox_test(as.formula(paste(var, "~ sex"))) %>%
+    add_significance()
+
+  ggplot(data, aes(x = sex, y = !!sym(var), fill = sex)) +
+    geom_boxplot(outlier.shape = NA, alpha = 0.7, width = 0.5) +
+    geom_jitter(width = 0.15, alpha = 0.4, size = 1.5) +
+    labs(x = NULL, y = ylabel) +
+    annotate("text",
+      x = 1.5, y = max(data[[var]], na.rm = TRUE) * 1.05,
+      label = paste0("p = ", format.pval(stat_test$p, digits = 3)),
+      size = 4, fontface = "italic"
+    ) +
+    scale_fill_manual(values = c("Female" = "#BC8F8F", "Male" = "#2E8B57")) +
+    theme_classic() +
+    theme(
+      legend.position = "none",
+      plot.title = element_text(size = 12, face = "bold"),
+      axis.title.y = element_text(size = 10),
+      axis.text.x = element_text(size = 10, face = "bold")
+    )
+}
+
+p_age <- create_sex_boxplot(plot_data, "age", "Age (years)")
+p_res <- create_sex_boxplot(plot_data, "res_time", "Residence time (years)")
+p_fi <- create_sex_boxplot(plot_data, "fi_score", "FI")
+
+panel_b <- (p_age / p_res / p_fi)
+
+# Combine and Save
+fig_1_composite <- wrap_elements(ggmatrix_gtable(panel_a)) + panel_b +
+  plot_layout(widths = c(1.8, 1)) +
+  plot_annotation(
+    tag_levels = "A",
+    theme = theme(
+      plot.title = element_text(size = 18, face = "bold", hjust = 0.5),
+      plot.subtitle = element_text(size = 14, hjust = 0.5, color = "grey30")
+    )
+  )
+
+ggsave("results/Supp1_participants_baseline_vars.pdf", fig_1_composite, width = 12, height = 8)
+
 
 # Frailty associations (FIScore only)
 run_frailty_glm <- function(data) {
