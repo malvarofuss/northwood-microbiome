@@ -182,6 +182,42 @@ diseases <- c(
 )
 
 frailty_associations_figure <- frailty_results %>%
+  mutate(term_clean = case_when(
+    term == "copd" ~ "COPD",
+    term == "insulin" ~ "Insulin",
+    term == "iron_supplements" ~ "Iron supplements",
+    term == "renal_disease" ~ "Renal disease",
+    term == "dementia" ~ "Dementia",
+    term == "metformin" ~ "Metformin",
+    term == "atherosclerosis" ~ "Atherosclerosis",
+    term == "arthritis" ~ "Arthritis",
+    term == "ccbs" ~ "Calcium channel blockers",
+    term == "acetaminophen" ~ "Acetaminophen",
+    term == "nitrates" ~ "Nitrates",
+    term == "benzodiazepines" ~ "Benzodiazepines",
+    term == "statins" ~ "Statins",
+    term == "diabetes" ~ "Diabetes",
+    term == "diuretics" ~ "Diuretics",
+    term == "ppis" ~ "Proton pump inhibitors",
+    term == "laxatives" ~ "Laxatives",
+    term == "aaps" ~ "Atypical antipsychotics",
+    term == "anemia" ~ "Anemia",
+    term == "hypertension" ~ "Hypertension",
+    term == "levothyroxine" ~ "Levothyroxine",
+    term == "dyslipidemia" ~ "Dyslipidemia",
+    term == "depression" ~ "Depression",
+    term == "tcas" ~ "Tricyclic antidepressants",
+    term == "hypothyroidism" ~ "Hypothyroidism",
+    term == "antiplatelets" ~ "Antiplatelets",
+    term == "osteoporosis" ~ "Osteoporosis",
+    term == "beta_blockers" ~ "Beta blockers",
+    term == "vitb12" ~ "Vitamin B12",
+    term == "vitd" ~ "Vitamin D",
+    term == "ace_inhibitors" ~ "ACE inhibitors",
+    term == "ssris" ~ "SSRIs",
+    term == "opioids" ~ "Opioids",
+    TRUE ~ term
+  )) %>%
   mutate(type = ifelse(term %in% diseases, "Comorbidity", "Medication")) %>%
   mutate(p_signif = case_when(
     p_value < 0.001 ~ "***",
@@ -190,13 +226,13 @@ frailty_associations_figure <- frailty_results %>%
     TRUE ~ ""
   )) %>%
   # Order by estimate descending
-  mutate(term = fct_reorder(term, estimate, .desc = TRUE)) %>%
+  mutate(term_clean = fct_reorder(term_clean, estimate, .desc = TRUE)) %>%
   # Position labels slightly above or below the bars
   mutate(
     label_pos = ifelse(estimate >= 0, estimate + 0.02, estimate - 0.02),
     v_just = ifelse(estimate >= 0, 0.5, 1)
   ) %>%
-  ggplot(aes(x = term, y = estimate, fill = type)) +
+  ggplot(aes(x = term_clean, y = estimate, fill = type)) +
   geom_bar(stat = "identity", color = "black", linewidth = 0.1) +
   scale_fill_manual(values = c("Comorbidity" = "#FFF68F", "Medication" = "#BC8F8F")) +
   geom_text(aes(y = label_pos, label = p_signif, vjust = v_just), size = 3) +
