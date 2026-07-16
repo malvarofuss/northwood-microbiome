@@ -29,11 +29,14 @@ path_abun_table <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tab
 path_abun <- read.table(path_abun_table, header = TRUE, sep = "\t", comment.char = "")
 
 
-### Remove "Unmapped" and "Unintegrated"
+### Remove "Unmapped" And/OR "Unintegrated"
 colnames(path_abun)[1]
 colnames(path_abun)[1] <- "Pathway"
 nrow(path_abun)
-select_path_abun <- path_abun %>% filter(!Pathway %in% c("UNMAPPED", "UNINTEGRATED"))
+# # Remove both "Unmapped" and "Unintegrated"
+# select_path_abun <- path_abun %>% filter(!Pathway %in% c("UNMAPPED", "UNINTEGRATED"))
+# Only remove both "Unmapped"
+select_path_abun <- path_abun %>% filter(!Pathway %in% c("UNMAPPED"))
 
 ### Remove pathways with taxonomic annotations
 select_path_abun <- select_path_abun %>% filter (!grepl("\\|", Pathway))
@@ -103,7 +106,8 @@ dist_aitchison <- dist(mat_clr, method = "euclidean")
 # pcoa2_lab <- paste0("PCoA2 (", round(100 * var_exp[2], 1), "%)")
 
 
-pcoa_res <- ape::pcoa(dist_bc)
+###### Analysis based on Aitchison distance
+pcoa_res <- ape::pcoa(dist_aitchison)
 pcoa_df <- as.data.frame(pcoa_res$vectors[, 1:2])
 colnames(pcoa_df) <- c("PCoA1", "PCoA2")
 pcoa_df$SampleID_in_table <- rownames(pcoa_df)
@@ -141,7 +145,7 @@ filtered_pcoa_df <- pcoa_df
 
 
 
-### PCoA Plot Colored with Sex (Colored based on Score)
+### PCoA Plot Colored with Sex (Colored based on FIScore)
 p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
   geom_point(size = 2, alpha = 0.8) +
   geom_text_repel(aes(label = Update_SampleID),
@@ -152,7 +156,8 @@ p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
                         oob = scales::squish) +
   theme_bw(base_size = 12) +
   labs(
-    title = "PCoA of pathway abundance (Bray-Curtis)",
+    #title = "PCoA of pathway abundance (Bray-Curtis)",
+    title = "PCoA of pathway abundance (Aitchison)",
     x = pcoa1_lab,
     y = pcoa2_lab
   ) +
@@ -161,14 +166,17 @@ p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
 
 p_pcoa
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_labeled_rm_samp.jpg")
-ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_labeled_rm_samp.jpg")
+# ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
 
 
 
 
 
 ###### PERMANOVA Analyisis for All Other Factors
+### Analysis based on Aitchison distance instead of Bray-Curtis distance
+dist_bc <- dist_aitchison
+
 meta <- filtered_pcoa_df %>%
   distinct(SampleID = SampleID_in_table, Sex, FIRange, FICat, Age, TimeNW, FIScore, Location)
 
@@ -198,9 +206,9 @@ adonis_sex
 # Test with FICat
 adonis_ficat <- adonis2(dist_bc ~ FICat, data = meta, permutations = 9999)
 adonis_ficat
-e
 
-###### Multiple variates test
+
+###### Multiple variable test
 adonis_multi <- adonis2(
   dist_bc ~ Sex + Age + TimeNW + FIScore + Location,
   data = meta,
@@ -349,7 +357,7 @@ ggsave(filename = figure_file, plot = p_fiscore, width = 8, height = 6, dpi = 30
 
 
 
-### PCoA Plots for continuous variables
+### PCoA Plots for continuous variables (Age)
 r2_age <- adonis_age$R2[1]
 p_age  <- adonis_age$`Pr(>F)`[1]
 
@@ -759,26 +767,57 @@ for (pw in paths_of_interest) {
 
 ### Analysis with MaAsLin3
 ```{r}
-
+library(dplyr)
 library(maaslin3)
 
-# ### Read in HUMANn pathway abundance table
-# #data_table_name <- system.file("extdata", "HMP2_taxonomy.tsv", package = "maaslin3")
-# #data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func", "nursing_house_humman_cov30_path_abundance.out")
-# data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables", "merged_pathabundance_relab.tsv")
-# 
-# org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1)
-# nrow(org_data_table)
-# clean_data_table <- org_data_table[!grepl("\\|", rownames(org_data_table)), ]
-# nrow(clean_data_table)
-# # clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNMAPPED", "UNINTEGRATED"), ]
-# nrow(clean_data_table)
-# data_table <- t(clean_data_table)
-# 
-# # Remove Duplicate Samples and Sample without metadata
-# data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all_merged_Abundance", "NW016_5_all_merged_Abundance", "NW046_5_all_merged_Abundance"), ]
-# data_table[1:5, 1:5]
-# nrow(data_table)
+### Read in HUMANn pathway abundance table
+data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables", "merged_pathabundance_relab.tsv")
+
+# data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func/", "nursing_house_humman_cov30_path_abundance.out")
+
+org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1)
+nrow(org_data_table)
+clean_data_table <- org_data_table[!grepl("\\|", rownames(org_data_table)), ]
+nrow(clean_data_table)
+
+# Remove "UNMAPPED" only
+clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNMAPPED"), ]
+
+# # Remove "UNINTEGRATED" only
+# clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNINTEGRATED"), ]
+
+# # Remove "UNMAPPED" and "UNINTEGRATED"
+# clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNMAPPED", "UNINTEGRATED"), ]
+
+# # Update pathway names for better visualization
+# rownames(clean_data_table) <- sub(":.*", "", rownames(clean_data_table))
+
+nrow(clean_data_table)
+data_table <- t(clean_data_table)
+ncol(data_table)
+
+
+### Filtering on Pathway Prevalence
+# Calculate pathway prevalence across samples
+prev <- colMeans(data_table > 0, na.rm = TRUE)
+
+# Keep pathways with prevalence > 0.1
+prev_cut <- 0.10
+keep_pathways <- prev > prev_cut
+length(keep_pathways)
+length(unique(keep_pathways))
+
+# Filter pathways
+data_table <- data_table[, keep_pathways, drop = FALSE]
+
+# Check number of retained pathways
+ncol(data_table)
+
+
+# Remove Duplicate Samples and Sample without metadata
+data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all_merged_Abundance", "NW016_5_all_merged_Abundance", "NW046_5_all_merged_Abundance"), ]
+data_table[1:5, 1:5]
+nrow(data_table)
 
 
 
@@ -803,53 +842,52 @@ library(maaslin3)
 
 
 
-### Read in MetaPhlAn taxa abundance table
-data_table_name <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
-org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, comment.char = "#")
-nrow(org_data_table)
-
-# Select rows with species level annotation
-clean_data_table <- org_data_table[
-  grepl("\\|s__", rownames(org_data_table)) &
-  !grepl("\\|t__", rownames(org_data_table)),
-]
-
-# # Select rows with genus level annotation
+# ### Read in MetaPhlAn taxa abundance table
+# data_table_name <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
+# org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, comment.char = "#")
+# nrow(org_data_table)
+# 
+# # Select rows with species level annotation
 # clean_data_table <- org_data_table[
-#   grepl("\\|g__", rownames(org_data_table)) &
-#   !grepl("\\|s__", rownames(org_data_table)),
+#   grepl("\\|s__", rownames(org_data_table)) &
+#   !grepl("\\|t__", rownames(org_data_table)),
 # ]
-
+# 
+# # # Select rows with genus level annotation
+# # clean_data_table <- org_data_table[
+# #   grepl("\\|g__", rownames(org_data_table)) &
+# #   !grepl("\\|s__", rownames(org_data_table)),
+# # ]
+# 
 # # Select rows with family level annotation
 # clean_data_table <- org_data_table[
 #   grepl("\\|f__", rownames(org_data_table)) &
 #   !grepl("\\|g__", rownames(org_data_table)),
 # ]
-
-# # Select rows with phylum level annotation
-# clean_data_table <- org_data_table[
-#   grepl("\\|p__", rownames(org_data_table)) &
-#   !grepl("\\|c__", rownames(org_data_table)),
-# ]
-
-nrow(clean_data_table)
-data_table <- t(clean_data_table)
-
-# Remove Duplicate Samples and Sample without metadata
-data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all", "NW016_5_all", "NW046_5_all"), ]
-colnames(data_table) <- sub(".*\\|s__", "", colnames(data_table))
-# colnames(data_table) <- sub(".*\\|g__", "", colnames(data_table))
+# 
+# # # Select rows with phylum level annotation
+# # clean_data_table <- org_data_table[
+# #   grepl("\\|p__", rownames(org_data_table)) &
+# #   !grepl("\\|c__", rownames(org_data_table)),
+# # ]
+# 
+# nrow(clean_data_table)
+# data_table <- t(clean_data_table)
+# 
+# # Remove Duplicate Samples and Sample without metadata
+# data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all", "NW016_5_all", "NW046_5_all"), ]
+# # colnames(data_table) <- sub(".*\\|s__", "", colnames(data_table))
+# # # colnames(data_table) <- sub(".*\\|g__", "", colnames(data_table))
 # colnames(data_table) <- sub(".*\\|f__", "", colnames(data_table))
-# colnames(data_table) <- sub(".*\\|p__", "", colnames(data_table))
-
-
-data_table[1:5, 1:5]
-nrow(data_table)
-ncol(data_table)
+# # # colnames(data_table) <- sub(".*\\|p__", "", colnames(data_table))
+# 
+# 
+# data_table[1:5, 1:5]
+# nrow(data_table)
+# ncol(data_table)
 
 
 ### Read in metadata table
-# metadata_name <- system.file("extdata", "HMP2_metadata.tsv", package = "maaslin3")
 metadata_name <- file.path("../../data/Metadata", "selected_northwood_map.txt")
 org_metadata <- read.csv(metadata_name, sep = '\t', row.names = 1)
 # Remove sample without metadata
@@ -871,6 +909,700 @@ match_idx <- match_idx[keep]
 rownames(metadata_matched) <- rownames(data_table)[match_idx]
 metadata <- metadata_matched
 head(metadata)
+# Rename the FIScore column into FI
+metadata <- metadata %>%
+  rename(FI = FIScore)
+metadata <- metadata %>%
+  mutate(
+    Location = recode(Location, "Center" = "Centre")
+  )
+
+
+### Factor the categorical variables in metadata
+metadata$Sex <- 
+  factor(metadata$Sex, levels = c('Male', 'Female'))
+
+# metadata$Location <- 
+#   factor(metadata$Location, levels = c('Manor', 'Center'))
+
+metadata$Location <- 
+  factor(metadata$Location, levels = c('Manor', 'Centre'))
+
+metadata$FICat <- 
+  factor(metadata$FICat, levels = c('3', '4'))
+
+# Check dataframes
+data_table[1:5, 1:5]
+metadata[1:5, ]
+tail(metadata)
+
+
+
+
+# ### Running MaAsLin3
+# set.seed(1)
+# fit_out <- maaslin3(input_data = data_table,
+#                     input_metadata = metadata,
+#                     output = 'MaAsLin3_pathway_rm_unmap_test_output',
+#                     formula = '~ Sex + Age +
+#                         TimeNW + FIScore + Location',
+#                     normalization = 'TSS',
+#                     transform = 'LOG',
+#                     coef_plot_vars = c("Age", "FIScore"),
+#                     heatmap_vars = c("TimeNW", "Location Center", "Sex Female"),
+#                     augment = TRUE,
+#                     standardize = TRUE,
+#                     max_significance = 0.1,
+#                     median_comparison_abundance = TRUE,
+#                     median_comparison_prevalence = FALSE,
+#                     max_pngs = 250,
+#                     cores = 4)
+
+
+### Running MaAsLin3 (Updated)
+set.seed(1)
+fit_out <- maaslin3(input_data = data_table,
+                    input_metadata = metadata,
+                    output = 'MaAsLin3_pathway_rm_unmap_top15_output',
+                    #output = 'MaAsLin3_MG_family_update_output',
+                    formula = '~ Sex + Age +
+                        TimeNW + FI + Location',
+                    summary_plot_first_n = 15,
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    coef_plot_vars = c("Age", "Location Centre"),
+                    heatmap_vars = c("FI", "TimeNW", "Sex Female"),
+                    augment = TRUE,
+                    standardize = TRUE,
+                    #max_significance = 0.05,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+```
+
+
+
+### Refined plots of associations between pathway abundance and age (Based on MaAsLin3 results)
+```{r}
+library(dplyr)
+library(tidyr)
+library(readr)
+library(stringr)
+library(ggplot2)
+library(ggrepel)
+library(tibble)
+
+### Read in MaAsLin3 significant table
+# maaslin_file <- file.path("MaAsLin3_pathway_rm_unmap_test_output", "significant_results.tsv")
+maaslin_file <- file.path("MaAsLin3_pathway_rm_unmap_top35_output", "significant_results.tsv")
+maaslin_table <- read_tsv(maaslin_file, col_types = cols())
+
+# Check column names if needed
+# colnames(maaslin_table)
+
+selected_maaslin_table <- maaslin_table %>%
+  #filter(metadata == "Age", qval_joint < 0.01)
+  filter(metadata == "Age", qval_joint < 0.1)
+
+selected_pathway <- unique(selected_maaslin_table$feature)
+selected_pathway
+
+
+### Read in sample metadata
+metadata_file <- file.path("../../data/Metadata", "selected_northwood_map.txt")
+metadata_table <- read_tsv(metadata_file, col_types = cols())
+
+metadata_table <- metadata_table %>%
+  rename(Sample = `#SampleID`) %>%
+  select(Sample, Age, Sex, TimeNW, FIScore, Location)
+head(metadata_table)
+
+
+### Read in pathway abundance data
+org_path_abun_file <- file.path(
+  "../../data/Metagenomics/HUMAnN_func/Normalized_Tables",
+  "merged_pathabundance_relab.tsv"
+)
+
+org_path_abun_table <- read.table(
+  org_path_abun_file,
+  header = TRUE,
+  sep = "\t",
+  comment.char = "",
+  quote = "",
+  check.names = FALSE
+)
+
+colnames(org_path_abun_table)[1] <- "Pathway"
+
+### Remove stratified rows and unwanted rows
+path_abun_merged <- org_path_abun_table %>%
+  filter(!grepl("\\|", Pathway)) %>%
+  filter(!Pathway %in% c("UNMAPPED"))
+
+head(path_abun_merged)
+nrow(path_abun_merged)
+
+
+### Re-close abundance data after removing "UNMAPPED"
+mat_path <- path_abun_merged %>%
+  column_to_rownames("Pathway") %>%
+  as.matrix()
+
+storage.mode(mat_path) <- "numeric"
+
+# sample x pathway
+mat_rel <- t(mat_path)
+
+# re-close after removing UNMAPPED
+mat_rel <- mat_rel / rowSums(mat_rel)
+
+# convert back to data frame
+org_path_abun <- as.data.frame(mat_rel)
+org_path_abun$Sample_raw <- rownames(org_path_abun)
+
+
+### Rename pathway and select pathways
+### Build pathway annotation table directly from the original pathway names
+pathway_name_map <- path_abun_merged %>%
+  distinct(Pathway) %>%
+  transmute(
+    Pathway_full = Pathway,
+    ### Set shorter version of the pathway names
+    # Pathway_short = ifelse(
+    #   str_detect(Pathway, ":"),
+    #   str_remove(Pathway, ":.*$"),
+    #   Pathway
+    # )
+    Pathway_short = Pathway
+  )
+
+head(pathway_name_map)
+
+### Match selected pathway IDs to full pathway names in abundance table
+selected_pathway_full <- pathway_name_map %>%
+  filter(Pathway_short %in% selected_pathway) %>%
+  pull(Pathway_full)
+
+selected_pathway_full
+length(selected_pathway_full)
+
+# Keep only selected pathways
+select_path_abun <- org_path_abun %>%
+  select(Sample_raw, all_of(selected_pathway_full))
+
+### Remove excluded samples
+samples_to_remove <- c(
+  "NW016_2_2_all_merged_Abundance",
+  "NW016_5_all_merged_Abundance",
+  "NW046_5_all_merged_Abundance"
+)
+
+select_path_abun <- select_path_abun %>%
+  filter(!Sample_raw %in% samples_to_remove)
+
+### Convert table into long table
+path_abun_long <- select_path_abun %>%
+  pivot_longer(
+    cols = -Sample_raw,
+    names_to = "Pathway_full",
+    values_to = "Abundance"
+  )
+
+# Update sample names in the long table
+# Remove the ends of "_all_merged_Abundance" in the sample names
+path_abun_long <- path_abun_long %>%
+  mutate(
+    Sample = Sample_raw %>%
+      str_remove("_all_merged_Abundance$")
+  ) %>%
+  mutate(
+    Sample = str_replace_all(Sample, "_", "-")
+  )
+
+### Add short pathway names for cleaner plot titles
+path_abun_long <- path_abun_long %>%
+  left_join(pathway_name_map, by = "Pathway_full")
+
+head(path_abun_long)
+
+
+### Mapping metadata (Age) to pathway abundance results
+# Add Individual ID
+path_abun_long <- path_abun_long %>%
+  mutate(
+    Individual = str_extract(Sample, "^[^-]+")
+  )
+
+# Individual-level Age metadata
+metadata_age_table <- metadata_table %>%
+  mutate(
+    Individual = str_extract(Sample, "^[^-]+")
+  ) %>%
+  group_by(Individual) %>%
+  summarise(
+    Age = first(Age),
+    .groups = "drop"
+  )
+
+# Join Age
+path_abun_meta <- path_abun_long %>%
+  left_join(metadata_age_table, by = "Individual")
+
+head(path_abun_meta)
+
+
+
+### Scatter plots for pathway abundance against Age
+# pwy <- "UNINTEGRATED"
+# pwy <- "DTDPRHAMSYN-PWY"
+
+outdir <- "../../tmp_figures/MaAsLin3_Age_Pathway"
+dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
+
+plot_list <- lapply(unique(path_abun_meta$Pathway_short), function(pwy) {
+  
+  df_sub <- path_abun_meta %>%
+    filter(Pathway_short == pwy, !is.na(Age), !is.na(Abundance))
+  
+  if (nrow(df_sub) < 3) return(NULL)
+  
+  cor_res <- suppressWarnings(
+    cor.test(df_sub$Age, df_sub$Abundance, method = "spearman", exact = FALSE)
+  )
+  
+  pseudo <- 1e-6
+  
+  df_sub <- df_sub %>%
+    mutate(Log10_Abundance = log10(Abundance + pseudo))
+  
+  cor_label <- paste0(
+    "Spearman \u03C1 = ", round(cor_res$estimate, 3),
+    "\nP = ", signif(cor_res$p.value, 3)
+  )
+  
+  p <- ggplot(df_sub, aes(x = Age, y = Log10_Abundance)) +
+    geom_point(size = 2.5, alpha = 0.8) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 0.8) +
+    annotate(
+      "text",
+      x = Inf, y = Inf,
+      label = cor_label,
+      hjust = 1.05, vjust = 1.2,
+      size = 4
+    ) +
+    labs(
+      title = str_wrap(pwy, width = 50),
+      x = "Age (years)",
+      y = expression(Log[10] * " relative pathway abundance")
+    ) +
+    theme_bw(base_size = 15) +
+    theme(
+      plot.title = element_text(face = "bold", hjust = 0.5, size = 15),
+      axis.title = element_text(face = "bold"),
+      axis.text = element_text(color = "black"),
+      plot.margin = margin(8, 12, 8, 8)
+    )
+
+  ### Saving Figures
+  outdir <- "../../tmp_figures/MaAsLin3_Age_Pathway"
+
+  safe_name <- gsub("[^A-Za-z0-9_\\-]", "_", pwy)
+
+  ggsave(
+    filename = file.path(outdir, paste0(safe_name, "_Age_scatter.jpg")),
+    plot = p,
+    width = 6,
+    height = 6,
+    units = "in"
+  )
+  
+  return(p)
+  
+})
+
+plot_list <- plot_list[!sapply(plot_list, is.null)]
+names(plot_list) <- unique(path_abun_meta$Pathway_short)[seq_along(plot_list)]
+
+# Example
+plot_list[[1]]
+
+
+```
+
+
+
+### Refined plots of associations between pathway abundance and age (Focused on interested pathways)
+```{r}
+library(dplyr)
+library(tidyr)
+library(readr)
+library(stringr)
+library(ggplot2)
+library(ggrepel)
+library(tibble)
+
+# # SCFA-related Pathways
+# selected_pathway <- c("CENTFERM-PWY", "PWY-5676", "PWY-5677", "P108-PWY", "PWY-8086", "P124-PWY", "FERMENTATION-PWY")
+
+# # Vitamin synthesis Pathways
+# selected_pathway <- c("1CMET2-PWY", "FOLSYN-PWY", "PWY-3841", "BIOTIN-BIOSYNTHESIS-PWY", "PWY-5005", "COBALSYN-PWY", "COA-PWY", "PANTO-PWY", "PANTOSYN-PWY", "NAD-BIOSYNTHESIS-II")
+
+# Inflammation-related Pathways
+selected_pathway <- c("LPSSYN-PWY", "KDO-NAGLIPASYN-PWY", "NAGLIPASYN-PWY", "LIPA-CORESYN-PWY", "OANTIGEN-PWY", "PEPTIDOGLYCANSYN-PWY", "PWY-6385", "PWY-6387", "PWY-6471", "AEROBACTINSYN-PWY", "COLANSYN-PWY", "LIPASYN-PWY")
+
+
+
+
+
+### Read in sample metadata
+metadata_file <- file.path("../../data/Metadata", "selected_northwood_map.txt")
+metadata_table <- read_tsv(metadata_file, col_types = cols())
+
+metadata_table <- metadata_table %>%
+  rename(Sample = `#SampleID`) %>%
+  select(Sample, Age, Sex, TimeNW, FIScore, Location)
+head(metadata_table)
+
+
+### Read in pathway abundance data
+org_path_abun_file <- file.path(
+  "../../data/Metagenomics/HUMAnN_func/Normalized_Tables",
+  "merged_pathabundance_relab.tsv"
+)
+
+org_path_abun_table <- read.table(
+  org_path_abun_file,
+  header = TRUE,
+  sep = "\t",
+  comment.char = "",
+  quote = "",
+  check.names = FALSE
+)
+
+colnames(org_path_abun_table)[1] <- "Pathway"
+
+### Remove stratified rows and unwanted rows
+path_abun_merged <- org_path_abun_table %>%
+  filter(!grepl("\\|", Pathway)) %>%
+  filter(!Pathway %in% c("UNMAPPED"))
+
+head(path_abun_merged)
+nrow(path_abun_merged)
+
+
+### Re-close abundance data after removing "UNMAPPED"
+mat_path <- path_abun_merged %>%
+  column_to_rownames("Pathway") %>%
+  as.matrix()
+
+storage.mode(mat_path) <- "numeric"
+
+# sample x pathway
+mat_rel <- t(mat_path)
+
+# re-close after removing UNMAPPED
+mat_rel <- mat_rel / rowSums(mat_rel)
+
+# convert back to data frame
+org_path_abun <- as.data.frame(mat_rel)
+org_path_abun$Sample_raw <- rownames(org_path_abun)
+
+
+### Rename pathway and select pathways
+### Build pathway annotation table directly from the original pathway names
+pathway_name_map <- path_abun_merged %>%
+  distinct(Pathway) %>%
+  transmute(
+    Pathway_full = Pathway,
+    Pathway_short = ifelse(
+      str_detect(Pathway, ":"),
+      str_remove(Pathway, ":.*$"),
+      Pathway
+    )
+  )
+
+head(pathway_name_map)
+
+### Match selected pathway IDs to full pathway names in abundance table
+selected_pathway_full <- pathway_name_map %>%
+  filter(Pathway_short %in% selected_pathway) %>%
+  pull(Pathway_full)
+
+selected_pathway_full
+length(selected_pathway_full)
+
+# Keep only selected pathways
+select_path_abun <- org_path_abun %>%
+  select(Sample_raw, all_of(selected_pathway_full))
+
+### Remove excluded samples
+samples_to_remove <- c(
+  "NW016_2_2_all_merged_Abundance",
+  "NW016_5_all_merged_Abundance",
+  "NW046_5_all_merged_Abundance"
+)
+
+select_path_abun <- select_path_abun %>%
+  filter(!Sample_raw %in% samples_to_remove)
+
+### Convert table into long table
+path_abun_long <- select_path_abun %>%
+  pivot_longer(
+    cols = -Sample_raw,
+    names_to = "Pathway_full",
+    values_to = "Abundance"
+  )
+
+# Update sample names in the long table
+# Remove the ends of "_all_merged_Abundance" in the sample names
+path_abun_long <- path_abun_long %>%
+  mutate(
+    Sample = Sample_raw %>%
+      str_remove("_all_merged_Abundance$")
+  ) %>%
+  mutate(
+    Sample = str_replace_all(Sample, "_", "-")
+  )
+
+### Add short pathway names for cleaner plot titles
+path_abun_long <- path_abun_long %>%
+  left_join(pathway_name_map, by = "Pathway_full")
+
+head(path_abun_long)
+
+
+### Mapping metadata (Age) to pathway abundance results
+# Add Individual ID
+path_abun_long <- path_abun_long %>%
+  mutate(
+    Individual = str_extract(Sample, "^[^-]+")
+  )
+
+# Individual-level Age metadata
+metadata_age_table <- metadata_table %>%
+  mutate(
+    Individual = str_extract(Sample, "^[^-]+")
+  ) %>%
+  group_by(Individual) %>%
+  summarise(
+    Age = first(Age),
+    .groups = "drop"
+  )
+
+# Join Age
+path_abun_meta <- path_abun_long %>%
+  left_join(metadata_age_table, by = "Individual")
+
+head(path_abun_meta)
+
+
+
+### Scatter plots for pathway abundance against Age
+# pwy <- "UNINTEGRATED"
+# pwy <- "DTDPRHAMSYN-PWY"
+
+outdir <- "../../tmp_figures/Interested_Age_Pathways"
+dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
+
+plot_list <- lapply(unique(path_abun_meta$Pathway_short), function(pwy) {
+  
+  df_sub <- path_abun_meta %>%
+    filter(Pathway_short == pwy, !is.na(Age), !is.na(Abundance))
+  
+  if (nrow(df_sub) < 3) return(NULL)
+  
+  cor_res <- suppressWarnings(
+    cor.test(df_sub$Age, df_sub$Abundance, method = "spearman", exact = FALSE)
+  )
+  
+  pseudo <- 1e-6
+  
+  df_sub <- df_sub %>%
+    mutate(Log10_Abundance = log10(Abundance + pseudo))
+  
+  cor_label <- paste0(
+    "Spearman \u03C1 = ", round(cor_res$estimate, 3),
+    "\nP = ", signif(cor_res$p.value, 3)
+  )
+  
+  p <- ggplot(df_sub, aes(x = Age, y = Log10_Abundance)) +
+    geom_point(size = 2.5, alpha = 0.8) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 0.8) +
+    annotate(
+      "text",
+      x = Inf, y = Inf,
+      label = cor_label,
+      hjust = 1.05, vjust = 1.2,
+      size = 4
+    ) +
+    labs(
+      title = str_wrap(pwy, width = 45),
+      x = "Age (years)",
+      y = expression(Log[10] * " relative pathway abundance")
+    ) +
+    theme_bw(base_size = 15) +
+    theme(
+      plot.title = element_text(face = "bold", hjust = 0.5, size = 15),
+      axis.title = element_text(face = "bold"),
+      axis.text = element_text(color = "black"),
+      plot.margin = margin(8, 12, 8, 8)
+    )
+
+  ### Saving Figures
+  outdir <- "../../tmp_figures/Interested_Age_Pathways"
+
+  safe_name <- gsub("[^A-Za-z0-9_\\-]", "_", pwy)
+
+  ggsave(
+    filename = file.path(outdir, paste0(safe_name, "_Age_scatter.jpg")),
+    plot = p,
+    width = 6,
+    height = 6,
+    units = "in"
+  )
+  
+  return(p)
+  
+})
+
+plot_list <- plot_list[!sapply(plot_list, is.null)]
+names(plot_list) <- unique(path_abun_meta$Pathway_short)[seq_along(plot_list)]
+
+# Example
+plot_list[[1]]
+
+
+```
+
+
+
+### Study associations between drugs/medication results and pathway/taxa abundance
+```{r}
+library(dplyr)
+library(maaslin3)
+
+# ### Read in HUMANn pathway abundance table
+# data_table_name <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables", "merged_pathabundance_relab.tsv")
+# 
+# 
+# org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1)
+# nrow(org_data_table)
+# clean_data_table <- org_data_table[!grepl("\\|", rownames(org_data_table)), ]
+# nrow(clean_data_table)
+# 
+# # Remove "UNMAPPED" only
+# clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNMAPPED"), ]
+# 
+# # # Remove "UNINTEGRATED" only
+# # clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNINTEGRATED"), ]
+# 
+# # # Remove "UNMAPPED" and "UNINTEGRATED"
+# # clean_data_table <- clean_data_table[!rownames(clean_data_table) %in% c("UNMAPPED", "UNINTEGRATED"), ]
+# 
+# # Update pathway names for better visualization
+# rownames(clean_data_table) <- sub(":.*", "", rownames(clean_data_table))
+# 
+# nrow(clean_data_table)
+# data_table <- t(clean_data_table)
+# ncol(data_table)
+# 
+# 
+# ### Filtering on Pathway Prevalence
+# # Calculate pathway prevalence across samples
+# prev <- colMeans(data_table > 0, na.rm = TRUE)
+# 
+# # Keep pathways with prevalence > 0.1
+# prev_cut <- 0.10
+# keep_pathways <- prev > prev_cut
+# 
+# # Filter pathways
+# data_table <- data_table[, keep_pathways, drop = FALSE]
+# 
+# # Check number of retained pathways
+# ncol(data_table)
+# 
+# 
+# # Remove Duplicate Samples and Sample without metadata
+# data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all_merged_Abundance", "NW016_5_all_merged_Abundance", "NW046_5_all_merged_Abundance"), ]
+# data_table[1:5, 1:5]
+# nrow(data_table)
+
+
+
+
+
+### Read in MetaPhlAn taxa abundance table
+data_table_name <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
+org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, comment.char = "#")
+nrow(org_data_table)
+
+# # Select rows with species level annotation
+# clean_data_table <- org_data_table[
+#   grepl("\\|s__", rownames(org_data_table)) &
+#   !grepl("\\|t__", rownames(org_data_table)),
+# ]
+
+# Select rows with genus level annotation
+clean_data_table <- org_data_table[
+  grepl("\\|g__", rownames(org_data_table)) &
+  !grepl("\\|s__", rownames(org_data_table)),
+]
+
+# # Select rows with family level annotation
+# clean_data_table <- org_data_table[
+#   grepl("\\|f__", rownames(org_data_table)) &
+#   !grepl("\\|g__", rownames(org_data_table)),
+# ]
+
+# # Select rows with phylum level annotation
+# clean_data_table <- org_data_table[
+#   grepl("\\|p__", rownames(org_data_table)) &
+#   !grepl("\\|c__", rownames(org_data_table)),
+# ]
+
+nrow(clean_data_table)
+data_table <- t(clean_data_table)
+
+# Remove Duplicate Samples and Sample without metadata
+data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all", "NW016_5_all", "NW046_5_all"), ]
+# colnames(data_table) <- sub(".*\\|s__", "", colnames(data_table))
+colnames(data_table) <- sub(".*\\|g__", "", colnames(data_table))
+# colnames(data_table) <- sub(".*\\|f__", "", colnames(data_table))
+# colnames(data_table) <- sub(".*\\|p__", "", colnames(data_table))
+
+
+data_table[1:5, 1:5]
+nrow(data_table)
+ncol(data_table)
+
+
+### Read in metadata table
+metadata_name <- file.path("../../data/Metadata", "patients_master_metadata.txt")
+org_metadata <- read.csv(metadata_name, sep = '\t', row.names = 1)
+# Remove sample without metadata
+metadata <- org_metadata[!rownames(org_metadata) %in% c("NW046"), ]
+head(metadata)
+nrow(metadata)
+
+# Matching ID names
+# 1. Extract Individual ID
+data_id <- sub("_.*", "", rownames(data_table))
+meta_id <- rownames(metadata)
+# 2. Matching
+match_idx <- match(meta_id, data_id)
+match_idx
+# 3. Remove unmatched ID
+keep <- !is.na(match_idx)
+metadata_matched <- metadata[keep, ]
+match_idx <- match_idx[keep]
+# 4. Replace/Update rownames of the metadata
+rownames(metadata_matched) <- rownames(data_table)[match_idx]
+metadata <- metadata_matched
+head(metadata)
+head(data_table)
 
 
 
@@ -881,21 +1613,58 @@ metadata$Sex <-
 metadata$Location <- 
   factor(metadata$Location, levels = c('Manor', 'Center'))
 
-metadata$FICat <- 
-  factor(metadata$FICat, levels = c('3', '4'))
+
+
+### Factor the categorical variables in medication columns in the metadata
+binary_vars <- c(
+  "anemia", "arthritis", "atherosclerosis", "copd", "dementia",
+  "depression", "diabetes", "dyslipidemia", "hypertension",
+  "hypothyroidism", "osteoporosis", "renal_disease",
+  "ace_inhibitors", "acetaminophen", "aaps", "benzodiazepines",
+  "beta_blockers", "antiplatelets", "ccbs", "diuretics", "insulin",
+  "iron_supplements", "laxatives", "levothyroxine", "metformin",
+  "nitrates", "opioids", "ppis", "ssris", "statins", "tcas",
+  "vitb12", "vitd"
+)
+
+metadata <- metadata %>%
+  mutate(
+    across(
+      all_of(binary_vars),
+      ~ factor(.x, levels = c(0, 1))
+    )
+  )
 
 # Check dataframes
 data_table[1:5, 1:5]
 metadata[1:5, ]
 
 
-### Running MaAsLin3
+### Running MaAsLin3 against diseases
+# formula = '~ Sex + Age + TimeNW + FIScore + Location',
+
+# set.seed(1)
+# fit_out <- maaslin3(input_data = data_table,
+#                     input_metadata = metadata,
+#                     output = 'MaAsLin3_pathway_rm_unmap_disease_with_meta_output',
+#                     formula = '~ Sex + Age + TimeNW + FIScore + Location + anemia + arthritis + atherosclerosis + copd + dementia + depression + diabetes + dyslipidemia + hypertension + hypothyroidism + osteoporosis + renal_disease',
+#                     normalization = 'TSS',
+#                     transform = 'LOG',
+#                     augment = TRUE,
+#                     standardize = TRUE,
+#                     max_significance = 0.1,
+#                     median_comparison_abundance = TRUE,
+#                     median_comparison_prevalence = FALSE,
+#                     max_pngs = 250,
+#                     cores = 4)
+
+
 set.seed(1)
 fit_out <- maaslin3(input_data = data_table,
                     input_metadata = metadata,
-                    output = 'MaAsLin3_test_output',
-                    formula = '~ Sex + Age +
-                        TimeNW + FIScore + Location',
+                    #output = 'MaAsLin3_pathway_rm_unmap_disease_with_age_output',
+                    output = 'MaAsLin3_MG_genus_disease_without_metadata_output',
+                    formula = '~ anemia + arthritis + atherosclerosis + copd + dementia + depression + diabetes + dyslipidemia + hypertension + hypothyroidism + osteoporosis + renal_disease',
                     normalization = 'TSS',
                     transform = 'LOG',
                     augment = TRUE,
@@ -907,7 +1676,45 @@ fit_out <- maaslin3(input_data = data_table,
                     cores = 4)
 
 
+### Running MaAsLin3 against medicine
+set.seed(1)
+fit_out <- maaslin3(input_data = data_table,
+                    input_metadata = metadata,
+                    # output = 'MaAsLin3_pathway_rm_unmap_medicine_with_age_output',
+                    output = 'MaAsLin3_MG_genus_medicine_without_metadata_output',
+                    formula = '~ ace_inhibitors + acetaminophen + aaps + benzodiazepines + beta_blockers + antiplatelets + ccbs + diuretics + insulin + iron_supplements + laxatives + levothyroxine + metformin + nitrates + opioids + ppis + ssris + statins + tcas + vitb12 + vitd',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+
+### Running MaAsLin3 against metadata
+set.seed(1)
+fit_out <- maaslin3(input_data = data_table,
+                    input_metadata = metadata,
+                    #output = 'MaAsLin3_pathway_rm_unmap_with_meta_output',
+                    output = 'MaAsLin3_MG_genus_metadata_output',
+                    formula = '~ Sex + Age + TimeNW + FIScore + Location',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
 ```
+
+
+
 
 
 

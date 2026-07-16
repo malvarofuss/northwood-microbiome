@@ -8,11 +8,10 @@ output:
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
-
+                          
 
 ### PCoA Plots based on pathway-based Bray-Curtis Distance
 ```{r}
-
 library(dplyr)
 library(tibble)
 library(readr)
@@ -39,9 +38,13 @@ path_abun <- read.table(
 # Rename the first column as "Pathway"
 colnames(path_abun)[1] <- "Pathway"
 
-# Remove UNMAPPED and UNINTEGRATED rows
+# # Remove both UNMAPPED and UNINTEGRATED rows
+# select_path_abun <- path_abun %>%
+#   filter(!Pathway %in% c("UNMAPPED", "UNINTEGRATED"))
+
+# Remove both only UNMAPPED rows
 select_path_abun <- path_abun %>%
-  filter(!Pathway %in% c("UNMAPPED", "UNINTEGRATED"))
+  filter(!Pathway %in% c("UNMAPPED"))
 
 # Remove taxonomically stratified pathway rows
 select_path_abun <- select_path_abun %>%
@@ -52,7 +55,9 @@ cat("Number of pathways after removing UNMAPPED, UNINTEGRATED, and stratified ro
 
 # Remove samples that should be excluded
 select_path_abun <- select_path_abun %>%
-  select(-NW046_5_all_merged_Abundance)
+  select(-NW046_5_all_merged_Abundance) %>% 
+  select(-NW016_2_2_all_merged_Abundance) %>% 
+  select(-NW016_5_all_merged_Abundance)
 
 cat("Number of columns after sample removal:", ncol(select_path_abun), "\n")
 
