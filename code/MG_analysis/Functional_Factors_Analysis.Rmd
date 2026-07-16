@@ -166,8 +166,8 @@ p_pcoa <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)) +
 
 p_pcoa
 
-# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_labeled_rm_samp.jpg")
-# ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
+figure_file <- file.path("../../results/MG_results", "Pathways_PCoA_Plot_labeled_rm_samp.jpg")
+ggsave(filename = figure_file, plot = p_pcoa, width = 8, height = 6, dpi = 300)
 
 
 
@@ -227,7 +227,7 @@ res_multi_out <- res_multi %>%
 
 res_multi_out
 
-res_multi_file_name <- file.path("../../tmp_figures/PCoA_Plots", "pathway_adonis_multi_summary.tsv")
+res_multi_file_name <- file.path("../../results/MG_results", "pathway_adonis_multi_summary.tsv")
 write.table(res_multi_out, res_multi_file_name,
             sep = "\t", quote = FALSE, row.names = FALSE)
 
@@ -273,8 +273,8 @@ pcoa_ficat <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FICat))
 
 pcoa_ficat
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_FICat_grouped_color.jpg")
-ggsave(filename = figure_file, plot = pcoa_ficat, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_FICat_grouped_color.jpg")
+# ggsave(filename = figure_file, plot = pcoa_ficat, width = 8, height = 6, dpi = 300)
 
 
 ### PCOA Plots for factor variables (Location)
@@ -300,8 +300,8 @@ pcoa_location <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = Loca
 
 pcoa_location
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Location_grouped_color.jpg")
-ggsave(filename = figure_file, plot = pcoa_location, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Location_grouped_color.jpg")
+# ggsave(filename = figure_file, plot = pcoa_location, width = 8, height = 6, dpi = 300)
 
 
 ### PCOA Plots for factor variables (Sex)
@@ -327,8 +327,8 @@ pcoa_sex <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = Sex)) +
 
 pcoa_sex
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Sex_grouped_color.jpg")
-ggsave(filename = figure_file, plot = pcoa_sex, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Sex_grouped_color.jpg")
+# ggsave(filename = figure_file, plot = pcoa_sex, width = 8, height = 6, dpi = 300)
 
 
 ### PCoA Plots for continuous variables (FIScore)
@@ -352,8 +352,8 @@ p_fiscore <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = FIScore)
 
 p_fiscore
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_FIScore_color.jpg")
-ggsave(filename = figure_file, plot = p_fiscore, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_FIScore_color.jpg")
+# ggsave(filename = figure_file, plot = p_fiscore, width = 8, height = 6, dpi = 300)
 
 
 
@@ -379,8 +379,8 @@ pcoa_age <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = Age)) +
 pcoa_age
 
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Age_color.jpg")
-ggsave(filename = figure_file, plot = pcoa_age, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_Age_color.jpg")
+# ggsave(filename = figure_file, plot = pcoa_age, width = 8, height = 6, dpi = 300)
 
 
 
@@ -405,15 +405,15 @@ pcoa_timenw <- ggplot(filtered_pcoa_df, aes(x = PCoA1, y = PCoA2, color = TimeNW
   )
 pcoa_timenw
 
-figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_TimeNW_color.jpg")
-ggsave(filename = figure_file, plot = pcoa_timenw, width = 8, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/PCoA_Plots", "Pathways_PCoA_Plot_TimeNW_color.jpg")
+# ggsave(filename = figure_file, plot = pcoa_timenw, width = 8, height = 6, dpi = 300)
 
 
 ```
 
 
 
-### Study Pathway Relative Abundance against environmental factors
+### Study Pathway Relative Abundance against environmental factors (Replaced by the following analsyis with MaAsLin3)
 ```{r}
 library(dplyr)
 library(readr)
@@ -427,7 +427,7 @@ library(pheatmap)
 ### Readin Humann Pathway Abundance Table
 infile <- file.path("../../data/Metagenomics/HUMAnN_func/Normalized_Tables", "merged_pathabundance_relab.tsv")
 #outfile <- "summed_path_abundance.out"
-corr_file <- file.path("../../tmp_figures", "pathway_metadata_correlations.tsv")
+corr_file <- file.path("../../results/MG_results/Func_Pathways_results", "pathway_metadata_correlations.tsv")
 
 path_df <- read_tsv(infile) %>% rename(Pathway = `# Pathway`)
 
@@ -560,7 +560,7 @@ nrow(filtered_test_table_binary)
 # filtered_test_table_binary <- test_table_binary %>% filter(p < 0.01)
 # nrow(filtered_test_table_binary)
 
-table_file <- file.path("../../tmp_figures", "pathway_metadata_binary_test.tsv")
+table_file <- file.path("../../results/MG_results/Func_Pathways_results", "pathway_metadata_binary_test.tsv")
 write_tsv(test_table_binary, table_file)
 
 
@@ -614,9 +614,9 @@ ann_colors <- list(
 )
 
 
-### Draw and save heatmap
-figure_file <- file.path("../../tmp_figures/", "Location_Pathways_heatmap.jpg")
-jpeg(filename = figure_file, width = 8, height = 6, units = "in", res = 300)
+# ### Draw and save heatmap
+# figure_file <- file.path("../../tmp_figures/", "Location_Pathways_heatmap.jpg")
+# jpeg(filename = figure_file, width = 8, height = 6, units = "in", res = 300)
 
 pheatmap(
   heatmap_mat,
@@ -633,7 +633,7 @@ pheatmap(
 )
 #print(loc_path_heatmap)
 
-dev.off()
+# dev.off()
 
 
 
@@ -963,11 +963,10 @@ tail(metadata)
 set.seed(1)
 fit_out <- maaslin3(input_data = data_table,
                     input_metadata = metadata,
-                    output = 'MaAsLin3_pathway_rm_unmap_top15_output',
-                    #output = 'MaAsLin3_MG_family_update_output',
+                    output = '../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output',
                     formula = '~ Sex + Age +
                         TimeNW + FI + Location',
-                    summary_plot_first_n = 15,
+                    #summary_plot_first_n = 15,
                     normalization = 'TSS',
                     transform = 'LOG',
                     coef_plot_vars = c("Age", "Location Centre"),
@@ -984,7 +983,7 @@ fit_out <- maaslin3(input_data = data_table,
 
 
 
-### Refined plots of associations between pathway abundance and age (Based on MaAsLin3 results)
+### Refined plots of associations between pathway abundance and age (Based on MaAsLin3 results, replaced by the following section on refined plots)
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -995,8 +994,7 @@ library(ggrepel)
 library(tibble)
 
 ### Read in MaAsLin3 significant table
-# maaslin_file <- file.path("MaAsLin3_pathway_rm_unmap_test_output", "significant_results.tsv")
-maaslin_file <- file.path("MaAsLin3_pathway_rm_unmap_top35_output", "significant_results.tsv")
+maaslin_file <- file.path("../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output", "significant_results.tsv")
 maaslin_table <- read_tsv(maaslin_file, col_types = cols())
 
 # Check column names if needed
@@ -1159,7 +1157,7 @@ head(path_abun_meta)
 # pwy <- "UNINTEGRATED"
 # pwy <- "DTDPRHAMSYN-PWY"
 
-outdir <- "../../tmp_figures/MaAsLin3_Age_Pathway"
+outdir <- "../../results/MG_results/Func_Pathways_results/MaAsLin3_Age_Pathway"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 plot_list <- lapply(unique(path_abun_meta$Pathway_short), function(pwy) {
@@ -1207,7 +1205,7 @@ plot_list <- lapply(unique(path_abun_meta$Pathway_short), function(pwy) {
     )
 
   ### Saving Figures
-  outdir <- "../../tmp_figures/MaAsLin3_Age_Pathway"
+  #outdir <- "../../tmp_figures/MaAsLin3_Age_Pathway"
 
   safe_name <- gsub("[^A-Za-z0-9_\\-]", "_", pwy)
 
@@ -1234,7 +1232,7 @@ plot_list[[1]]
 
 
 
-### Refined plots of associations between pathway abundance and age (Focused on interested pathways)
+### Refined plots of associations between pathway abundance and age (Focused on interested pathways from MaAsLin3 results)
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -1252,8 +1250,6 @@ library(tibble)
 
 # Inflammation-related Pathways
 selected_pathway <- c("LPSSYN-PWY", "KDO-NAGLIPASYN-PWY", "NAGLIPASYN-PWY", "LIPA-CORESYN-PWY", "OANTIGEN-PWY", "PEPTIDOGLYCANSYN-PWY", "PWY-6385", "PWY-6387", "PWY-6471", "AEROBACTINSYN-PWY", "COLANSYN-PWY", "LIPASYN-PWY")
-
-
 
 
 
@@ -1404,7 +1400,7 @@ head(path_abun_meta)
 # pwy <- "UNINTEGRATED"
 # pwy <- "DTDPRHAMSYN-PWY"
 
-outdir <- "../../tmp_figures/Interested_Age_Pathways"
+outdir <- "../../results/MG_results/Func_Pathways_results/Interested_Age_Pathways"
 dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
 plot_list <- lapply(unique(path_abun_meta$Pathway_short), function(pwy) {
@@ -1452,7 +1448,7 @@ plot_list <- lapply(unique(path_abun_meta$Pathway_short), function(pwy) {
     )
 
   ### Saving Figures
-  outdir <- "../../tmp_figures/Interested_Age_Pathways"
+  #outdir <- "../../tmp_figures/Interested_Age_Pathways"
 
   safe_name <- gsub("[^A-Za-z0-9_\\-]", "_", pwy)
 
@@ -1479,7 +1475,7 @@ plot_list[[1]]
 
 
 
-### Study associations between drugs/medication results and pathway/taxa abundance
+### Study associations between drugs/medication results and pathway/taxa abundance (No figures were shown in the manuscripts)
 ```{r}
 library(dplyr)
 library(maaslin3)
@@ -1568,6 +1564,7 @@ data_table <- t(clean_data_table)
 
 # Remove Duplicate Samples and Sample without metadata
 data_table <- data_table[!rownames(data_table) %in% c("NW016_2_2_all", "NW016_5_all", "NW046_5_all"), ]
+# Select for analysis at different taxa levels
 # colnames(data_table) <- sub(".*\\|s__", "", colnames(data_table))
 colnames(data_table) <- sub(".*\\|g__", "", colnames(data_table))
 # colnames(data_table) <- sub(".*\\|f__", "", colnames(data_table))

@@ -1,0 +1,205 @@
+2026-07-16 12:57:33.901287 INFO::Writing function arguments to log file
+2026-07-16 12:57:33.904355 DEBUG::Function arguments
+2026-07-16 12:57:33.905771 DEBUG::Output folder: ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output
+2026-07-16 12:57:33.907823 DEBUG::Formula: ~ Sex + Age +
+                        TimeNW + FI + Location
+2026-07-16 12:57:33.908901 DEBUG::Fixed effects:
+2026-07-16 12:57:33.909857 DEBUG::Reference:
+2026-07-16 12:57:33.911 DEBUG::Random effects:
+2026-07-16 12:57:33.911975 DEBUG::Group effects:
+2026-07-16 12:57:33.9129 DEBUG::Ordered effects:
+2026-07-16 12:57:33.91381 DEBUG::Strata effects:
+2026-07-16 12:57:33.914784 DEBUG::Min Abundance: 0.000000
+2026-07-16 12:57:33.916108 DEBUG::Min Prevalence: 0.000000
+2026-07-16 12:57:33.917089 DEBUG::Max Prevalence: 1.010000
+2026-07-16 12:57:33.918701 DEBUG::Zero Threshold: 0.000000
+2026-07-16 12:57:33.920213 DEBUG::Min variance: 0.000000
+2026-07-16 12:57:33.921602 DEBUG::Max significance: 0.100000
+2026-07-16 12:57:33.922979 DEBUG::Normalization: TSS
+2026-07-16 12:57:33.924654 DEBUG::Transform: LOG
+2026-07-16 12:57:33.926106 DEBUG::Correction method: BH
+2026-07-16 12:57:33.927733 DEBUG::Standardize: TRUE
+2026-07-16 12:57:33.928798 DEBUG::Abundance median comparison: TRUE
+2026-07-16 12:57:33.92981 DEBUG::Prevalence median comparison: FALSE
+2026-07-16 12:57:33.930949 DEBUG::Abundance median comparison threshold: 0
+2026-07-16 12:57:33.931962 DEBUG::Prevalence median comparison threshold: 0
+2026-07-16 12:57:33.933231 DEBUG::Subtract median: FALSE
+2026-07-16 12:57:33.934947 DEBUG::Warn prevalence: TRUE
+2026-07-16 12:57:33.936582 DEBUG::Small random effects: FALSE
+2026-07-16 12:57:33.937983 DEBUG::Augment: TRUE
+2026-07-16 12:57:33.939308 DEBUG::Evaluate only:
+2026-07-16 12:57:33.940664 DEBUG::Cores: 4
+2026-07-16 12:57:33.942074 DEBUG::Balanced Summary plot: FALSE
+2026-07-16 12:57:33.943456 INFO::Verifying options selected are valid
+2026-07-16 12:57:33.945982 WARNING::Input is a matrix,
+                        passing through as.data.frame() .
+2026-07-16 12:57:33.950929 INFO::Determining format of input files
+2026-07-16 12:57:33.953844 INFO::Input format is data samples as rows and metadata samples as rows
+2026-07-16 12:57:33.955951 DEBUG::A total of 46 samples were found in both the data and metadata
+2026-07-16 12:57:33.957039 DEBUG::Reordering data/metadata to use same sample ordering
+2026-07-16 12:57:33.961612 INFO::Running selected normalization method: TSS
+2026-07-16 12:57:34.323301 INFO::Creating output feature tables folder
+2026-07-16 12:57:34.326718 INFO::Writing normalized data to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/features/data_norm.tsv
+2026-07-16 12:57:34.38051 INFO::Filter data based on min abundance, min prevalence, and max prevalence
+2026-07-16 12:57:34.382615 INFO::Total samples in data: 46
+2026-07-16 12:57:34.385805 INFO::Min samples required with min abundance for a feature not to be filtered: 0.000000
+2026-07-16 12:57:34.38883 INFO::Max samples allowed with min abundance for a feature not to be filtered: 46.460000
+2026-07-16 12:57:34.449806 INFO::Total filtered features: 0
+2026-07-16 12:57:34.453891 INFO::Filtered feature names from abundance, min prevalence, and max prevalence filtering:
+2026-07-16 12:57:34.484073 INFO::Total features filtered by non-zero variance filtering: 0
+2026-07-16 12:57:34.491928 INFO::Filtered feature names from variance filtering:
+2026-07-16 12:57:34.49714 INFO::Writing filtered data to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/features/filtered_data.tsv
+2026-07-16 12:57:34.567575 INFO::Running selected transform method: LOG
+2026-07-16 12:57:34.582595 INFO::Writing normalized, filtered, transformed data to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/features/data_transformed.tsv
+2026-07-16 12:57:34.642061 INFO::Factor detected for categorial metadata 'Sex'. Using as-is.
+2026-07-16 12:57:34.645214 INFO::Factor detected for categorial metadata 'Location'. Using as-is.
+2026-07-16 12:57:34.648076 INFO::Applying z-score to standardize continuous metadata
+2026-07-16 12:57:34.660299 INFO::Running the linear model component
+2026-07-16 12:57:34.668465 INFO::Creating cluster of 4 R processes
+2026-07-16 12:57:55.761006 DEBUG::Object: augment, Size: 56
+2026-07-16 12:57:55.763484 DEBUG::Object: cluster, Size: 6136
+2026-07-16 12:57:55.765567 DEBUG::Object: cores, Size: 56
+2026-07-16 12:57:55.76808 DEBUG::Object: correction, Size: 112
+2026-07-16 12:57:55.770712 DEBUG::Object: extract_out, Size: 2256
+2026-07-16 12:57:55.772908 DEBUG::Object: feature_specific_covariate, Size: 0
+2026-07-16 12:57:55.774992 DEBUG::Object: feature_specific_covariate_name, Size: 0
+2026-07-16 12:57:55.777321 DEBUG::Object: feature_specific_covariate_record, Size: 0
+2026-07-16 12:57:55.780412 DEBUG::Object: features, Size: 235016
+2026-07-16 12:57:55.783121 DEBUG::Object: formula, Size: 1848
+2026-07-16 12:57:55.785655 DEBUG::Object: fun_list, Size: 58768
+2026-07-16 12:57:55.788351 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 12:57:55.791455 DEBUG::Object: groups, Size: 48
+2026-07-16 12:57:55.794727 DEBUG::Object: median_comparison, Size: 56
+2026-07-16 12:57:55.796892 DEBUG::Object: median_comparison_threshold, Size: 56
+2026-07-16 12:57:55.798879 DEBUG::Object: metadata, Size: 20184
+2026-07-16 12:57:55.801006 DEBUG::Object: model, Size: 112
+2026-07-16 12:57:55.802956 DEBUG::Object: model_function, Size: 8864
+2026-07-16 12:57:55.804674 DEBUG::Object: ordereds, Size: 48
+2026-07-16 12:57:55.806637 DEBUG::Object: random_effects_formula, Size: 0
+2026-07-16 12:57:55.808853 DEBUG::Object: ranef_function, Size: 0
+2026-07-16 12:57:55.811152 DEBUG::Object: save_models, Size: 56
+2026-07-16 12:57:55.81291 DEBUG::Object: small_random_effects, Size: 56
+2026-07-16 12:57:55.814497 DEBUG::Object: strata, Size: 48
+2026-07-16 12:57:55.815979 DEBUG::Object: subtract_median, Size: 56
+2026-07-16 12:57:55.817461 DEBUG::Object: summary_function, Size: 49424
+2026-07-16 12:57:55.819007 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 12:58:05.788079 INFO::Performing tests against medians
+2026-07-16 12:58:19.610229 INFO::Counting total values for each feature
+2026-07-16 12:58:19.700089 INFO::Running the logistic model component
+2026-07-16 12:58:19.735857 INFO::Creating cluster of 4 R processes
+2026-07-16 12:58:38.701736 DEBUG::Object: augment, Size: 56
+2026-07-16 12:58:38.705127 DEBUG::Object: cluster, Size: 6136
+2026-07-16 12:58:38.707904 DEBUG::Object: cores, Size: 56
+2026-07-16 12:58:38.710769 DEBUG::Object: correction, Size: 112
+2026-07-16 12:58:38.71388 DEBUG::Object: extract_out, Size: 2256
+2026-07-16 12:58:38.716777 DEBUG::Object: feature_specific_covariate, Size: 0
+2026-07-16 12:58:38.719634 DEBUG::Object: feature_specific_covariate_name, Size: 0
+2026-07-16 12:58:38.723611 DEBUG::Object: feature_specific_covariate_record, Size: 0
+2026-07-16 12:58:38.72787 DEBUG::Object: features, Size: 211552
+2026-07-16 12:58:38.731349 DEBUG::Object: formula, Size: 1848
+2026-07-16 12:58:38.734509 DEBUG::Object: fun_list, Size: 70920
+2026-07-16 12:58:38.737928 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 12:58:38.741527 DEBUG::Object: groups, Size: 48
+2026-07-16 12:58:38.744833 DEBUG::Object: median_comparison, Size: 56
+2026-07-16 12:58:38.748027 DEBUG::Object: median_comparison_threshold, Size: 56
+2026-07-16 12:58:38.751538 DEBUG::Object: metadata, Size: 20184
+2026-07-16 12:58:38.755321 DEBUG::Object: model, Size: 120
+2026-07-16 12:58:38.758128 DEBUG::Object: model_function, Size: 21016
+2026-07-16 12:58:38.761005 DEBUG::Object: ordereds, Size: 48
+2026-07-16 12:58:38.763708 DEBUG::Object: random_effects_formula, Size: 0
+2026-07-16 12:58:38.766226 DEBUG::Object: ranef_function, Size: 0
+2026-07-16 12:58:38.769014 DEBUG::Object: save_models, Size: 56
+2026-07-16 12:58:38.771114 DEBUG::Object: small_random_effects, Size: 56
+2026-07-16 12:58:38.775145 DEBUG::Object: strata, Size: 48
+2026-07-16 12:58:38.777916 DEBUG::Object: subtract_median, Size: 56
+2026-07-16 12:58:38.781287 DEBUG::Object: summary_function, Size: 49424
+2026-07-16 12:58:38.78424 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 12:58:55.696477 INFO::Counting total values for each feature
+2026-07-16 12:58:55.766765 INFO::Re-running abundances for warn_prevalence
+2026-07-16 12:58:55.770473 INFO::Running selected normalization method: TSS
+2026-07-16 12:58:55.799998 INFO::Running selected transform method: LOG
+2026-07-16 12:58:55.825886 INFO::Creating cluster of 4 R processes
+2026-07-16 12:59:13.07139 DEBUG::Object: augment, Size: 56
+2026-07-16 12:59:13.073366 DEBUG::Object: cluster, Size: 6136
+2026-07-16 12:59:13.075496 DEBUG::Object: cores, Size: 56
+2026-07-16 12:59:13.077599 DEBUG::Object: correction, Size: 112
+2026-07-16 12:59:13.079825 DEBUG::Object: extract_out, Size: 2256
+2026-07-16 12:59:13.0821 DEBUG::Object: feature_specific_covariate, Size: 0
+2026-07-16 12:59:13.083761 DEBUG::Object: feature_specific_covariate_name, Size: 0
+2026-07-16 12:59:13.085332 DEBUG::Object: feature_specific_covariate_record, Size: 0
+2026-07-16 12:59:13.087489 DEBUG::Object: features, Size: 235016
+2026-07-16 12:59:13.089523 DEBUG::Object: formula, Size: 1848
+2026-07-16 12:59:13.091813 DEBUG::Object: fun_list, Size: 58768
+2026-07-16 12:59:13.094148 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 12:59:13.096058 DEBUG::Object: groups, Size: 48
+2026-07-16 12:59:13.097865 DEBUG::Object: median_comparison, Size: 56
+2026-07-16 12:59:13.100471 DEBUG::Object: median_comparison_threshold, Size: 56
+2026-07-16 12:59:13.102601 DEBUG::Object: metadata, Size: 20184
+2026-07-16 12:59:13.104615 DEBUG::Object: model, Size: 112
+2026-07-16 12:59:13.106916 DEBUG::Object: model_function, Size: 8864
+2026-07-16 12:59:13.108414 DEBUG::Object: ordereds, Size: 48
+2026-07-16 12:59:13.109855 DEBUG::Object: random_effects_formula, Size: 0
+2026-07-16 12:59:13.111238 DEBUG::Object: ranef_function, Size: 0
+2026-07-16 12:59:13.112533 DEBUG::Object: save_models, Size: 56
+2026-07-16 12:59:13.113873 DEBUG::Object: small_random_effects, Size: 56
+2026-07-16 12:59:13.115249 DEBUG::Object: strata, Size: 48
+2026-07-16 12:59:13.11659 DEBUG::Object: subtract_median, Size: 56
+2026-07-16 12:59:13.117999 DEBUG::Object: summary_function, Size: 49424
+2026-07-16 12:59:13.119604 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 12:59:22.918085 INFO::Creating fits folder
+2026-07-16 12:59:22.924703 INFO::Writing residuals to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/fits/residuals_linear.rds
+2026-07-16 12:59:22.948317 INFO::Writing fitted values to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/fits/fitted_linear.rds
+2026-07-16 12:59:22.969728 INFO::Writing residuals to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/fits/residuals_logistic.rds
+2026-07-16 12:59:23.017896 INFO::Writing fitted values to file ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/fits/fitted_logistic.rds
+2026-07-16 12:59:23.068855 INFO::Writing all the results to file (ordered 
+            by increasing individual q-values): ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/all_results.tsv
+2026-07-16 12:59:23.252961 INFO::Writing the significant results without errors (those which have joint q-values less than or equal to the threshold of 0.100000 ) to file (ordered by increasing individual q-values): ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/significant_results.tsv
+2026-07-16 12:59:23.2667 INFO::Creating output figures folder
+2026-07-16 12:59:23.280462 INFO::Writing summary plot of significant
+                        results to file: ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/figures/summary_plot.pdf
+2026-07-16 12:59:29.714155 INFO::Writing association plots (one for each significant association) to output folder: ../../results/MG_results/Func_Pathways_results/MaAsLin3_pathway_rm_unmap_metadata_output/figures
+2026-07-16 12:59:29.722281 INFO::Plotting associations from most to least significant, grouped by metadata
+2026-07-16 12:59:29.734235 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs DTDPRHAMSYN-PWY: dTDP-&beta;-L-rhamnose biosynthesis
+2026-07-16 12:59:30.014378 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6123: inosine-5'-phosphate biosynthesis I
+2026-07-16 12:59:30.146344 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6124: inosine-5'-phosphate biosynthesis II
+2026-07-16 12:59:30.287868 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs UNINTEGRATED
+2026-07-16 12:59:30.425564 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs HISTSYN-PWY: L-histidine biosynthesis
+2026-07-16 12:59:30.557194 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs NONMEVIPP-PWY: methylerythritol phosphate pathway I
+2026-07-16 12:59:30.801506 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-3841: folate transformations II (plants)
+2026-07-16 12:59:30.983742 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-5686: UMP biosynthesis I
+2026-07-16 12:59:31.130013 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-7221: guanosine ribonucleotides de novo biosynthesis
+2026-07-16 12:59:31.250233 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-7790: UMP biosynthesis II
+2026-07-16 12:59:31.376046 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-7791: UMP biosynthesis III
+2026-07-16 12:59:31.675587 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs COA-PWY-1: superpathway of coenzyme A biosynthesis III (mammals)
+2026-07-16 12:59:31.872054 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6121: 5-aminoimidazole ribonucleotide biosynthesis I
+2026-07-16 12:59:32.509491 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6163: chorismate biosynthesis from 3-dehydroquinate
+2026-07-16 12:59:32.788354 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6386: UDP-N-acetylmuramoyl-pentapeptide biosynthesis II (lysine-containing)
+2026-07-16 12:59:33.105026 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs 1CMET2-PWY: folate transformations III (E. coli)
+2026-07-16 12:59:33.348985 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs COA-PWY: coenzyme A biosynthesis I (prokaryotic)
+2026-07-16 12:59:33.496312 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-5695: inosine 5'-phosphate degradation
+2026-07-16 12:59:33.650383 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6385: peptidoglycan biosynthesis III (mycobacteria)
+2026-07-16 12:59:33.772512 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-6387: UDP-N-acetylmuramoyl-pentapeptide biosynthesis I (meso-diaminopimelate containing)
+2026-07-16 12:59:33.873085 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-7851: coenzyme A biosynthesis II (eukaryotic)
+2026-07-16 12:59:34.027141 INFO::Creating scatter plot for continuous 
+                        data (linear), Age vs PWY-7953: UDP-N-acetylmuramoyl-pentapeptide biosynthesis III (meso-diaminopimelate containing)

@@ -1,0 +1,1027 @@
+Pathway	variable	test	n	n_group	stat	p	p_adj
+1CMET2-PWY: folate transformations III (E. coli)	Sex	wilcox	46	2	210	0.4166186525866639	0.993662521341229
+ALLANTOINDEG-PWY: superpathway of allantoin degradation in yeast	Sex	wilcox	46	2	320	0.06292414893587858	0.993662521341229
+ANAEROFRUCAT-PWY: homolactic fermentation	Sex	wilcox	46	2	294	0.28809843958385656	0.993662521341229
+ANAGLYCOLYSIS-PWY: glycolysis III (from glucose)	Sex	wilcox	46	2	296	0.26790332477152684	0.993662521341229
+ARG+POLYAMINE-SYN: superpathway of arginine and polyamine biosynthesis	Sex	wilcox	46	2	272	0.5693922650801067	0.993662521341229
+ARGININE-SYN4-PWY: L-ornithine biosynthesis II	Sex	wilcox	46	2	204	0.34287193745221867	0.993662521341229
+ARGSYN-PWY: L-arginine biosynthesis I (via L-ornithine)	Sex	wilcox	46	2	245	0.9820407374658929	0.993662521341229
+ARGSYNBSUB-PWY: L-arginine biosynthesis II (acetyl cycle)	Sex	wilcox	46	2	255	0.8570704439237055	0.993662521341229
+ARO-PWY: chorismate biosynthesis I	Sex	wilcox	46	2	274	0.5427953558171662	0.993662521341229
+ASPASN-PWY: superpathway of L-aspartate and L-asparagine biosynthesis	Sex	wilcox	46	2	242	0.9282518935855415	0.993662521341229
+AST-PWY: L-arginine degradation II (AST pathway)	Sex	wilcox	46	2	292	0.27366177916899204	0.993662521341229
+BIOTIN-BIOSYNTHESIS-PWY: biotin biosynthesis I	Sex	wilcox	46	2	213	0.45667942538304707	0.993662521341229
+BRANCHED-CHAIN-AA-SYN-PWY: superpathway of branched chain amino acid biosynthesis	Sex	wilcox	46	2	239	0.8747820620801647	0.993662521341229
+CALVIN-PWY: Calvin-Benson-Bassham cycle	Sex	wilcox	46	2	284	0.40373014062325624	0.993662521341229
+CENTFERM-PWY: pyruvate fermentation to butanoate	Sex	wilcox	46	2	262	0.7326758349115788	0.993662521341229
+CITRULBIO-PWY: L-citrulline biosynthesis	Sex	wilcox	46	2	151	0.029562678718260293	0.993662521341229
+COA-PWY-1: superpathway of coenzyme A biosynthesis III (mammals)	Sex	wilcox	46	2	222	0.5886326522264319	0.993662521341229
+COA-PWY: coenzyme A biosynthesis I (prokaryotic)	Sex	wilcox	46	2	198	0.277878731809931	0.993662521341229
+COBALSYN-PWY: superpathway of adenosylcobalamin salvage from cobinamide I	Sex	wilcox	46	2	233	0.769731669244644	0.993662521341229
+COLANSYN-PWY: colanic acid building blocks biosynthesis	Sex	wilcox	46	2	245	0.9820407374658929	0.993662521341229
+COMPLETE-ARO-PWY: superpathway of aromatic amino acid biosynthesis	Sex	wilcox	46	2	261	0.752565181612852	0.993662521341229
+DAPLYSINESYN-PWY: L-lysine biosynthesis I	Sex	wilcox	46	2	321	0.09237623219976879	0.993662521341229
+DARABCATK12-PWY: D-arabinose degradation I	Sex	wilcox	46	2	256	0.8186501930757824	0.993662521341229
+DENOVOPURINE2-PWY: superpathway of purine nucleotides de novo biosynthesis II	Sex	wilcox	46	2	257	0.7989106851324237	0.993662521341229
+DTDPRHAMSYN-PWY: dTDP-&beta;-L-rhamnose biosynthesis	Sex	wilcox	46	2	200	0.2985629848462722	0.993662521341229
+FAO-PWY: fatty acid &beta;-oxidation I (generic)	Sex	wilcox	46	2	285	0.35953293190570673	0.993662521341229
+FASYN-ELONG-PWY: fatty acid elongation -- saturated	Sex	wilcox	46	2	241	0.9103814591258214	0.993662521341229
+FERMENTATION-PWY: mixed acid fermentation	Sex	wilcox	46	2	230	0.7185965342636842	0.993662521341229
+FOLSYN-PWY: superpathway of tetrahydrofolate biosynthesis and salvage	Sex	wilcox	46	2	255	0.85455862389406545	0.993662521341229
+FUC-RHAMCAT-PWY: superpathway of fucose and rhamnose degradation	Sex	wilcox	46	2	263	0.7157639731819642	0.993662521341229
+FUCCAT-PWY: fucose degradation	Sex	wilcox	46	2	290	0.3314274497703078	0.993662521341229
+GALACT-GLUCUROCAT-PWY: superpathway of hexuronide and hexuronate degradation	Sex	wilcox	46	2	331	0.055919671345356664	0.993662521341229
+GALACTARDEG-PWY: D-galactarate degradation I	Sex	wilcox	46	2	270	0.6000552476717691	0.993662521341229
+GALACTITOLCAT-PWY: galactitol degradation	Sex	wilcox	46	2	249	0.9623507049861337	0.993662521341229
+GALACTUROCAT-PWY: D-galacturonate degradation I	Sex	wilcox	46	2	327	0.06834255268050664	0.993662521341229
+GLCMANNANAUT-PWY: superpathway of N-acetylglucosamine, N-acetylmannosamine and N-acetylneuraminate degradation	Sex	wilcox	46	2	234	0.7870092926463929	0.993662521341229
+GLUCARDEG-PWY: D-glucarate degradation I	Sex	wilcox	46	2	270	0.5993312284026234	0.993662521341229
+GLUCARGALACTSUPER-PWY: superpathway of D-glucarate and D-galactarate degradation	Sex	wilcox	46	2	270	0.6000552476717691	0.993662521341229
+GLUCONEO-PWY: gluconeogenesis I	Sex	wilcox	46	2	317	0.11177902376906573	0.993662521341229
+GLUCOSE1PMETAB-PWY: glucose and glucose-1-phosphate degradation	Sex	wilcox	46	2	269	0.6141987965288676	0.993662521341229
+GLUCUROCAT-PWY: superpathway of &beta;-D-glucuronosides degradation	Sex	wilcox	46	2	343	0.027830942195331693	0.993662521341229
+GLUDEG-I-PWY: GABA shunt	Sex	wilcox	46	2	308	0.16462365985035993	0.993662521341229
+GLUTORN-PWY: L-ornithine biosynthesis I	Sex	wilcox	46	2	257	0.8218660848334578	0.993662521341229
+GLYCOCAT-PWY: glycogen degradation I	Sex	wilcox	46	2	201	0.3057413195776405	0.993662521341229
+GLYCOGENSYNTH-PWY: glycogen biosynthesis I (from ADP-D-Glucose)	Sex	wilcox	46	2	302	0.21312337546001225	0.993662521341229
+GLYCOL-GLYOXDEG-PWY: superpathway of glycol metabolism and degradation	Sex	wilcox	46	2	256	0.8250189811207783	0.993662521341229
+GLYCOLYSIS-E-D: superpathway of glycolysis and the Entner-Doudoroff pathway	Sex	wilcox	46	2	338	0.0374205924500458	0.993662521341229
+GLYCOLYSIS: glycolysis I (from glucose 6-phosphate)	Sex	wilcox	46	2	266	0.668665758963498	0.993662521341229
+GLYOXYLATE-BYPASS: glyoxylate cycle	Sex	wilcox	46	2	314	0.12473954364315622	0.993662521341229
+GOLPDLCAT-PWY: superpathway of glycerol degradation to 1,3-propanediol	Sex	wilcox	46	2	266	0.668665758963498	0.993662521341229
+HEME-BIOSYNTHESIS-II-1: heme b biosynthesis V (aerobic)	Sex	wilcox	46	2	306.5	0.1696098260306011	0.993662521341229
+HEME-BIOSYNTHESIS-II: heme b biosynthesis I (aerobic)	Sex	wilcox	46	2	274	0.538872181363172	0.993662521341229
+HEMESYN2-PWY: heme b biosynthesis II (oxygen-independent)	Sex	wilcox	46	2	256	0.8394289695592305	0.993662521341229
+HEXITOLDEGSUPER-PWY: superpathway of hexitol degradation (bacteria)	Sex	wilcox	46	2	246	1	1
+HISDEG-PWY: L-histidine degradation I	Sex	wilcox	46	2	194	0.23943418896481827	0.993662521341229
+HISTSYN-PWY: L-histidine biosynthesis	Sex	wilcox	46	2	250	0.9461578078477684	0.993662521341229
+HOMOSER-METSYN-PWY: L-methionine biosynthesis I	Sex	wilcox	46	2	277	0.4909385833820097	0.993662521341229
+HSERMETANA-PWY: L-methionine biosynthesis III	Sex	wilcox	46	2	273	0.5578795412431055	0.993662521341229
+ILEUSYN-PWY: L-isoleucine biosynthesis I (from threonine)	Sex	wilcox	46	2	240	0.8925552786399716	0.993662521341229
+KDO-NAGLIPASYN-PWY: superpathway of (Kdo)2-lipid A biosynthesis	Sex	wilcox	46	2	273	0.5014175198319206	0.993662521341229
+KETOGLUCONMET-PWY: ketogluconate metabolism	Sex	wilcox	46	2	309	0.1433794398455611	0.993662521341229
+LACTOSECAT-PWY: lactose and galactose degradation I	Sex	wilcox	46	2	235.5	0.8111384274233466	0.993662521341229
+MET-SAM-PWY: superpathway of S-adenosyl-L-methionine biosynthesis	Sex	wilcox	46	2	279	0.4624991435142947	0.993662521341229
+METH-ACETATE-PWY: methanogenesis from acetate	Sex	wilcox	46	2	265	0.6851634680424354	0.993662521341229
+METHGLYUT-PWY: superpathway of methylglyoxal degradation	Sex	wilcox	46	2	290	0.3253243366413533	0.993662521341229
+METSYN-PWY: superpathway of L-homoserine and L-methionine biosynthesis	Sex	wilcox	46	2	277	0.4909385833820097	0.993662521341229
+NAD-BIOSYNTHESIS-II: NAD salvage pathway III (to nicotinamide riboside)	Sex	wilcox	46	2	196	0.25095702835987754	0.993662521341229
+NAGLIPASYN-PWY: lipid IVA biosynthesis (E. coli)	Sex	wilcox	46	2	216.5	0.5019930118128972	0.993662521341229
+NONMEVIPP-PWY: methylerythritol phosphate pathway I	Sex	wilcox	46	2	269	0.6201293953262279	0.993662521341229
+NONOXIPENT-PWY: pentose phosphate pathway (non-oxidative branch) I	Sex	wilcox	46	2	286	0.3786647849499849	0.993662521341229
+OANTIGEN-PWY: O-antigen building blocks biosynthesis (E. coli)	Sex	wilcox	46	2	308	0.16676821273227954	0.993662521341229
+ORNDEG-PWY: superpathway of ornithine degradation	Sex	wilcox	46	2	291.5	0.29630937092609594	0.993662521341229
+P105-PWY: TCA cycle IV (2-oxoglutarate decarboxylase)	Sex	wilcox	46	2	256	0.8368966674186831	0.993662521341229
+P108-PWY: pyruvate fermentation to propanoate I	Sex	wilcox	46	2	282	0.4024514683052046	0.993662521341229
+P122-PWY: heterolactic fermentation	Sex	wilcox	46	2	298	0.18008024992973	0.993662521341229
+P124-PWY: Bifidobacterium shunt	Sex	wilcox	46	2	335	0.02497024226877045	0.993662521341229
+P125-PWY: superpathway of (R,R)-butanediol biosynthesis	Sex	wilcox	46	2	244	0.9593642260319892	0.993662521341229
+P161-PWY: acetylene degradation (anaerobic)	Sex	wilcox	46	2	252	0.9093797325920012	0.993662521341229
+P164-PWY: purine nucleobases degradation I (anaerobic)	Sex	wilcox	46	2	286	0.37477911439797174	0.993662521341229
+P185-PWY: formaldehyde assimilation III (dihydroxyacetone cycle)	Sex	wilcox	46	2	215	0.4797569015349109	0.993662521341229
+P221-PWY: octane oxidation	Sex	wilcox	46	2	269.5	0.560725405065041	0.993662521341229
+P23-PWY: reductive TCA cycle I	Sex	wilcox	46	2	324	0.04648891741466101	0.993662521341229
+P4-PWY: superpathway of L-lysine, L-threonine and L-methionine biosynthesis I	Sex	wilcox	46	2	306	0.1717894329231284	0.993662521341229
+P41-PWY: pyruvate fermentation to acetate and (S)-lactate I	Sex	wilcox	46	2	283	0.4166186525866639	0.993662521341229
+P42-PWY: incomplete reductive TCA cycle	Sex	wilcox	46	2	232	0.752565181612852	0.993662521341229
+P441-PWY: superpathway of N-acetylneuraminate degradation	Sex	wilcox	46	2	273	0.5578795412431055	0.993662521341229
+P461-PWY: hexitol fermentation to lactate, formate, ethanol and acetate	Sex	wilcox	46	2	245	0.9818434135839641	0.993662521341229
+PANTO-PWY: phosphopantothenate biosynthesis I	Sex	wilcox	46	2	189	0.19675857013083128	0.993662521341229
+PANTOSYN-PWY: superpathway of coenzyme A biosynthesis I (bacteria)	Sex	wilcox	46	2	193	0.23042617989806957	0.993662521341229
+PENTOSE-P-PWY: pentose phosphate pathway	Sex	wilcox	46	2	269	0.6201293953262279	0.993662521341229
+PEPTIDOGLYCANSYN-PWY: peptidoglycan biosynthesis I (meso-diaminopimelate containing)	Sex	wilcox	46	2	246	0.9999999999999999	1
+PHOSLIPSYN-PWY: superpathway of phospholipid biosynthesis I (bacteria)	Sex	wilcox	46	2	273	0.5578795412431055	0.993662521341229
+POLYAMINSYN3-PWY: superpathway of polyamine biosynthesis II	Sex	wilcox	46	2	291	0.30817103344465513	0.993662521341229
+POLYAMSYN-PWY: superpathway of polyamine biosynthesis I	Sex	wilcox	46	2	274	0.5389097393416722	0.993662521341229
+POLYISOPRENSYN-PWY: polyisoprenoid biosynthesis (E. coli)	Sex	wilcox	46	2	245	0.9818434135839641	0.993662521341229
+PPGPPMET-PWY: ppGpp metabolism	Sex	wilcox	46	2	241	0.909251396244505	0.993662521341229
+PRPP-PWY: superpathway of histidine, purine, and pyrimidine biosynthesis	Sex	wilcox	46	2	265	0.6465481258574897	0.993662521341229
+PWY-1042: glycolysis IV	Sex	wilcox	46	2	273	0.5578795412431055	0.993662521341229
+PWY-1269: CMP-3-deoxy-D-manno-octulosonate biosynthesis	Sex	wilcox	46	2	196	0.25817145787895296	0.993662521341229
+PWY-1861: formaldehyde assimilation II (assimilatory RuMP Cycle)	Sex	wilcox	46	2	261	0.7499997678587189	0.993662521341229
+PWY-241: C4 photosynthetic carbon assimilation cycle, NADP-ME type	Sex	wilcox	46	2	272	0.5693922650801067	0.993662521341229
+PWY-2941: L-lysine biosynthesis II	Sex	wilcox	46	2	295	0.277878731809931	0.993662521341229
+PWY-2942: L-lysine biosynthesis III	Sex	wilcox	46	2	215	0.4845204482597142	0.993662521341229
+PWY-3001: superpathway of L-isoleucine biosynthesis I	Sex	wilcox	46	2	211	0.4297414455805982	0.993662521341229
+PWY-3841: folate transformations II (plants)	Sex	wilcox	46	2	253	0.8925552786399716	0.993662521341229
+PWY-4041: &gamma;-glutamyl cycle	Sex	wilcox	46	2	310	0.1530989933444178	0.993662521341229
+PWY-4984: urea cycle	Sex	wilcox	46	2	176	0.11177902376906573	0.993662521341229
+PWY-5005: biotin biosynthesis II	Sex	wilcox	46	2	253	0.8906523221519094	0.993662521341229
+PWY-5022: 4-aminobutanoate degradation V	Sex	wilcox	46	2	308	0.16133548892374847	0.993662521341229
+PWY-5030: L-histidine degradation III	Sex	wilcox	46	2	225	0.6361422005442208	0.993662521341229
+PWY-5097: L-lysine biosynthesis VI	Sex	wilcox	46	2	244	0.9640903770305866	0.993662521341229
+PWY-5100: pyruvate fermentation to acetate and lactate II	Sex	wilcox	46	2	270	0.6042908948775337	0.993662521341229
+PWY-5103: L-isoleucine biosynthesis III	Sex	wilcox	46	2	244	0.9640903770305866	0.993662521341229
+PWY-5104: L-isoleucine biosynthesis IV	Sex	wilcox	46	2	300	0.21096956860266905	0.993662521341229
+PWY-5121: superpathway of geranylgeranyl diphosphate biosynthesis II (via MEP)	Sex	wilcox	46	2	240	0.8925552786399716	0.993662521341229
+PWY-5130: 2-oxobutanoate degradation I	Sex	wilcox	46	2	231	0.7328027411925038	0.993662521341229
+PWY-5136: fatty acid &beta;-oxidation II (plant peroxisome)	Sex	wilcox	46	2	278	0.4802455292706943	0.993662521341229
+PWY-5138: fatty acid &beta;-oxidation IV (unsaturated, even number)	Sex	wilcox	46	2	295	0.24294931325040373	0.993662521341229
+PWY-5154: L-arginine biosynthesis III (via N-acetyl-L-citrulline)	Sex	wilcox	46	2	166	0.06834255268050664	0.993662521341229
+PWY-5188: tetrapyrrole biosynthesis I (from glutamate)	Sex	wilcox	46	2	244	0.9640903770305866	0.993662521341229
+PWY-5189: tetrapyrrole biosynthesis II (from glycine)	Sex	wilcox	46	2	295	0.2714059068154964	0.993662521341229
+PWY-5345: superpathway of L-methionine biosynthesis (by sulfhydrylation)	Sex	wilcox	46	2	259	0.7842412948737579	0.993662521341229
+PWY-5347: superpathway of L-methionine biosynthesis (transsulfuration)	Sex	wilcox	46	2	278	0.4766026760822766	0.993662521341229
+PWY-5367: petroselinate biosynthesis	Sex	wilcox	46	2	271	0.5783100704630045	0.993662521341229
+PWY-5384: sucrose degradation IV (sucrose phosphorylase)	Sex	wilcox	46	2	297	0.25817145787895296	0.993662521341229
+PWY-5484: glycolysis II (from fructose 6-phosphate)	Sex	wilcox	46	2	259	0.7870092926463929	0.993662521341229
+PWY-5497: purine nucleobases degradation II (anaerobic)	Sex	wilcox	46	2	298	0.24868214504722114	0.993662521341229
+PWY-5505: L-glutamate and L-glutamine biosynthesis	Sex	wilcox	46	2	302.5	0.20656696135138392	0.993662521341229
+PWY-561: superpathway of glyoxylate cycle and fatty acid degradation	Sex	wilcox	46	2	295	0.2572587577086115	0.993662521341229
+PWY-5656: mannosylglycerate biosynthesis I	Sex	wilcox	46	2	270	0.5758223278161443	0.993662521341229
+PWY-5659: GDP-mannose biosynthesis	Sex	wilcox	46	2	227	0.668665758963498	0.993662521341229
+PWY-5667: CDP-diacylglycerol biosynthesis I	Sex	wilcox	46	2	283	0.4166186525866639	0.993662521341229
+PWY-5675: nitrate reduction V (assimilatory)	Sex	wilcox	46	2	291	0.30817103344465513	0.993662521341229
+PWY-5676: acetyl-CoA fermentation to butanoate II	Sex	wilcox	46	2	291	0.320227549861369	0.993662521341229
+PWY-5686: UMP biosynthesis I	Sex	wilcox	46	2	262	0.7355176012322131	0.993662521341229
+PWY-5690: TCA cycle II (plants and fungi)	Sex	wilcox	46	2	253.5	0.8754592940391397	0.993662521341229
+PWY-5695: inosine 5'-phosphate degradation	Sex	wilcox	46	2	197	0.26790332477152684	0.993662521341229
+PWY-5723: Rubisco shunt	Sex	wilcox	46	2	294	0.2763527623095939	0.993662521341229
+PWY-5747: 2-methylcitrate cycle II	Sex	wilcox	46	2	288	0.29625215416495715	0.993662521341229
+PWY-5837: 2-carboxy-1,4-naphthoquinol biosynthesis	Sex	wilcox	46	2	233	0.7671056016228726	0.993662521341229
+PWY-5838: superpathway of menaquinol-8 biosynthesis I	Sex	wilcox	46	2	227	0.6651211167326505	0.993662521341229
+PWY-5840: superpathway of menaquinol-7 biosynthesis	Sex	wilcox	46	2	228	0.6767580241027111	0.993662521341229
+PWY-5845: superpathway of menaquinol-9 biosynthesis	Sex	wilcox	46	2	240	0.8908386633801604	0.993662521341229
+PWY-5850: superpathway of menaquinol-6 biosynthesis	Sex	wilcox	46	2	240	0.8849699167233444	0.993662521341229
+PWY-5855: ubiquinol-7 biosynthesis (early decarboxylation)	Sex	wilcox	46	2	289.5	0.31275172830042464	0.993662521341229
+PWY-5860: superpathway of demethylmenaquinol-6 biosynthesis I	Sex	wilcox	46	2	240	0.8849699167233444	0.993662521341229
+PWY-5861: superpathway of demethylmenaquinol-8 biosynthesis I	Sex	wilcox	46	2	231	0.7325566960034533	0.993662521341229
+PWY-5862: superpathway of demethylmenaquinol-9 biosynthesis	Sex	wilcox	46	2	241	0.9089451048827716	0.993662521341229
+PWY-5896: superpathway of menaquinol-10 biosynthesis	Sex	wilcox	46	2	240	0.8849699167233444	0.993662521341229
+PWY-5897: superpathway of menaquinol-11 biosynthesis	Sex	wilcox	46	2	231	0.7325566960034533	0.993662521341229
+PWY-5898: superpathway of menaquinol-12 biosynthesis	Sex	wilcox	46	2	231	0.7325566960034533	0.993662521341229
+PWY-5899: superpathway of menaquinol-13 biosynthesis	Sex	wilcox	46	2	231	0.7325566960034533	0.993662521341229
+PWY-5913: partial TCA cycle (obligate autotrophs)	Sex	wilcox	46	2	273	0.5540483892420874	0.993662521341229
+PWY-5918: superpathway of heme b biosynthesis from glutamate	Sex	wilcox	46	2	302	0.20758905708051495	0.993662521341229
+PWY-5920: superpathway of heme b biosynthesis from glycine	Sex	wilcox	46	2	286	0.3508525575893219	0.993662521341229
+PWY-5941: glycogen degradation II	Sex	wilcox	46	2	300	0.23042617989806957	0.993662521341229
+PWY-5971: palmitate biosynthesis (type II fatty acid synthase)	Sex	wilcox	46	2	285	0.3788032175096565	0.993662521341229
+PWY-5973: cis-vaccenate biosynthesis	Sex	wilcox	46	2	183	0.1530989933444178	0.993662521341229
+PWY-5981: CDP-diacylglycerol biosynthesis III	Sex	wilcox	46	2	204	0.33833721612130435	0.993662521341229
+PWY-5989: stearate biosynthesis II (bacteria and plants)	Sex	wilcox	46	2	242	0.9282518935855415	0.993662521341229
+PWY-6121: 5-aminoimidazole ribonucleotide biosynthesis I	Sex	wilcox	46	2	219	0.5427953558171662	0.993662521341229
+PWY-6122: 5-aminoimidazole ribonucleotide biosynthesis II	Sex	wilcox	46	2	222	0.5886326522264319	0.993662521341229
+PWY-6123: inosine-5'-phosphate biosynthesis I	Sex	wilcox	46	2	205	0.3545603266377909	0.993662521341229
+PWY-6124: inosine-5'-phosphate biosynthesis II	Sex	wilcox	46	2	191	0.21312337546001225	0.993662521341229
+PWY-6125: superpathway of guanosine nucleotides de novo biosynthesis II	Sex	wilcox	46	2	239	0.8747820620801647	0.993662521341229
+PWY-6126: superpathway of adenosine nucleotides de novo biosynthesis II	Sex	wilcox	46	2	244	0.9640903770305866	0.993662521341229
+PWY-6143: CMP-pseudaminate biosynthesis	Sex	wilcox	46	2	240	0.8767131826695276	0.993662521341229
+PWY-6147: 6-hydroxymethyl-dihydropterin diphosphate biosynthesis I	Sex	wilcox	46	2	224	0.6201293953262279	0.993662521341229
+PWY-6151: S-adenosyl-L-methionine salvage I	Sex	wilcox	46	2	259	0.7870092926463929	0.993662521341229
+PWY-6163: chorismate biosynthesis from 3-dehydroquinate	Sex	wilcox	46	2	259	0.7870092926463929	0.993662521341229
+PWY-6168: flavin biosynthesis III (fungi)	Sex	wilcox	46	2	223.5	0.6067895571012736	0.993662521341229
+PWY-621: sucrose degradation III (sucrose invertase)	Sex	wilcox	46	2	283	0.4166186525866639	0.993662521341229
+PWY-6270: isoprene biosynthesis I	Sex	wilcox	46	2	282	0.4297414455805982	0.993662521341229
+PWY-6277: superpathway of 5-aminoimidazole ribonucleotide biosynthesis	Sex	wilcox	46	2	222	0.5886326522264319	0.993662521341229
+PWY-6282: palmitoleate biosynthesis I (from (5Z)-dodec-5-enoate)	Sex	wilcox	46	2	244	0.9640903770305866	0.993662521341229
+PWY-6284: superpathway of unsaturated fatty acids biosynthesis (E. coli)	Sex	wilcox	46	2	279	0.458608661961593	0.993662521341229
+PWY-6285: superpathway of fatty acids biosynthesis (E. coli)	Sex	wilcox	46	2	288	0.3027195976851285	0.993662521341229
+PWY-6292: superpathway of L-cysteine biosynthesis (mammalian)	Sex	wilcox	46	2	333	0.05030539594962959	0.993662521341229
+PWY-6293: superpathway of L-cysteine biosynthesis (fungi)	Sex	wilcox	46	2	315	0.0980937630143089	0.993662521341229
+PWY-6305: superpathway of putrescine biosynthesis	Sex	wilcox	46	2	249	0.9640903770305866	0.993662521341229
+PWY-6317: D-galactose degradation I (Leloir pathway)	Sex	wilcox	46	2	276	0.5132365272327273	0.993662521341229
+PWY-6353: purine nucleotides degradation II (aerobic)	Sex	wilcox	46	2	322	0.08796497546787344	0.993662521341229
+PWY-6385: peptidoglycan biosynthesis III (mycobacteria)	Sex	wilcox	46	2	234	0.7870092926463929	0.993662521341229
+PWY-6386: UDP-N-acetylmuramoyl-pentapeptide biosynthesis II (lysine-containing)	Sex	wilcox	46	2	244	0.9640903770305866	0.993662521341229
+PWY-6387: UDP-N-acetylmuramoyl-pentapeptide biosynthesis I (meso-diaminopimelate containing)	Sex	wilcox	46	2	245	0.9820407374658929	0.993662521341229
+PWY-6470: peptidoglycan biosynthesis V (&beta;-lactam resistance)	Sex	wilcox	46	2	243	0.9455359584913825	0.993662521341229
+PWY-6507: 4-deoxy-L-threo-hex-4-enopyranuronate degradation	Sex	wilcox	46	2	331	0.05531941855816038	0.993662521341229
+PWY-6519: 8-amino-7-oxononanoate biosynthesis I	Sex	wilcox	46	2	223	0.6042908948775337	0.993662521341229
+PWY-6527: stachyose degradation	Sex	wilcox	46	2	266	0.668665758963498	0.993662521341229
+PWY-6531: mannitol cycle	Sex	wilcox	46	2	314	0.1270916922490374	0.993662521341229
+PWY-6545: pyrimidine deoxyribonucleotides de novo biosynthesis III	Sex	wilcox	46	2	267	0.6484393369469659	0.993662521341229
+PWY-6549: L-glutamine biosynthesis III	Sex	wilcox	46	2	321	0.09213563263482771	0.993662521341229
+PWY-6572: chondroitin sulfate degradation I (bacterial)	Sex	wilcox	46	2	205	0.3027195976851285	0.993662521341229
+PWY-6588: pyruvate fermentation to acetone	Sex	wilcox	46	2	242	0.927281727537432	0.993662521341229
+PWY-6590: superpathway of Clostridium acetobutylicum acidogenic fermentation	Sex	wilcox	46	2	266	0.665266795302454	0.993662521341229
+PWY-6595: superpathway of guanosine nucleotides degradation (plants)	Sex	wilcox	46	2	304.5	0.18675752597431705	0.993662521341229
+PWY-6606: guanosine nucleotides degradation II	Sex	wilcox	46	2	305	0.1889223883245621	0.993662521341229
+PWY-6607: guanosine nucleotides degradation I	Sex	wilcox	46	2	301.5	0.21080664362232138	0.993662521341229
+PWY-6608: guanosine nucleotides degradation III	Sex	wilcox	46	2	278	0.4845204482597142	0.993662521341229
+PWY-6609: adenine and adenosine salvage III	Sex	wilcox	46	2	282	0.4297414455805982	0.993662521341229
+PWY-6612: superpathway of tetrahydrofolate biosynthesis	Sex	wilcox	46	2	255	0.85455862389406545	0.993662521341229
+PWY-6628: superpathway of L-phenylalanine biosynthesis	Sex	wilcox	46	2	196	0.25817145787895296	0.993662521341229
+PWY-6629: superpathway of L-tryptophan biosynthesis	Sex	wilcox	46	2	258	0.8043901224979675	0.993662521341229
+PWY-6630: superpathway of L-tyrosine biosynthesis	Sex	wilcox	46	2	213	0.45667942538304707	0.993662521341229
+PWY-6700: queuosine biosynthesis I (de novo)	Sex	wilcox	46	2	275	0.5279127843585668	0.993662521341229
+PWY-6703: preQ0 biosynthesis	Sex	wilcox	46	2	175	0.10665668065074291	0.993662521341229
+PWY-6731: starch degradation III	Sex	wilcox	46	2	264	0.7018094086908856	0.993662521341229
+PWY-6749: CMP-legionaminate biosynthesis I	Sex	wilcox	46	2	198	0.24294931325040373	0.993662521341229
+PWY-6803: phosphatidylcholine acyl editing	Sex	wilcox	46	2	284	0.3825145764590425	0.993662521341229
+PWY-6807: xyloglucan degradation II (exoglucanase)	Sex	wilcox	46	2	248	0.9804011094881723	0.993662521341229
+PWY-6823: molybdopterin biosynthesis	Sex	wilcox	46	2	287	0.36649167731063614	0.993662521341229
+PWY-6859: all-trans-farnesol biosynthesis	Sex	wilcox	46	2	225	0.6326790274296339	0.993662521341229
+PWY-6892: thiazole component of thiamine diphosphate biosynthesis I	Sex	wilcox	46	2	198	0.277878731809931	0.993662521341229
+PWY-6895: superpathway of thiamine diphosphate biosynthesis II	Sex	wilcox	46	2	278	0.4800420996192421	0.993662521341229
+PWY-6897: thiamine diphosphate salvage II	Sex	wilcox	46	2	242	0.9282518935855415	0.993662521341229
+PWY-6901: superpathway of glucose and xylose degradation	Sex	wilcox	46	2	285	0.39107818447423115	0.993662521341229
+PWY-6902: chitin degradation II (Vibrio)	Sex	wilcox	46	2	162	0.05531941855816038	0.993662521341229
+PWY-6906: chitin derivatives degradation	Sex	wilcox	46	2	245	0.9817764275509974	0.993662521341229
+PWY-6922: L-N&delta;-acetylornithine biosynthesis	Sex	wilcox	46	2	270	0.5821866295147022	0.993662521341229
+PWY-6936: seleno-amino acid biosynthesis (plants)	Sex	wilcox	46	2	250	0.9461578078477684	0.993662521341229
+PWY-6961: L-ascorbate degradation II (bacterial, aerobic)	Sex	wilcox	46	2	277.5	0.47824880999204694	0.993662521341229
+PWY-6969: TCA cycle V (2-oxoglutarate synthase)	Sex	wilcox	46	2	239	0.8747820620801647	0.993662521341229
+PWY-6992: 1,5-anhydrofructose degradation	Sex	wilcox	46	2	249.5	0.9498918332879758	0.993662521341229
+PWY-7013: (S)-propane-1,2-diol degradation	Sex	wilcox	46	2	293.5	0.289811687525353	0.993662521341229
+PWY-702: L-methionine biosynthesis II	Sex	wilcox	46	2	269	0.6201293953262279	0.993662521341229
+PWY-7094: fatty acid salvage	Sex	wilcox	46	2	294.5	0.25207691229368845	0.993662521341229
+PWY-7111: pyruvate fermentation to isobutanol (engineered)	Sex	wilcox	46	2	246	0.9999999999999999	1
+PWY-7115: C4 photosynthetic carbon assimilation cycle, NAD-ME type	Sex	wilcox	46	2	319	0.10094542428982531	0.993662521341229
+PWY-7117: C4 photosynthetic carbon assimilation cycle, PEPCK type	Sex	wilcox	46	2	271	0.5849360967759134	0.993662521341229
+PWY-7118: chitin deacetylation	Sex	wilcox	46	2	300.5	0.2168459255583108	0.993662521341229
+PWY-7184: pyrimidine deoxyribonucleotides de novo biosynthesis I	Sex	wilcox	46	2	270	0.6000552476717691	0.993662521341229
+PWY-7185: UTP and CTP dephosphorylation I	Sex	wilcox	46	2	235	0.7951557129641496	0.993662521341229
+PWY-7187: pyrimidine deoxyribonucleotides de novo biosynthesis II	Sex	wilcox	46	2	262	0.702360712046912	0.993662521341229
+PWY-7197: pyrimidine deoxyribonucleotide phosphorylation	Sex	wilcox	46	2	229	0.7018094086908856	0.993662521341229
+PWY-7198: pyrimidine deoxyribonucleotides de novo biosynthesis IV	Sex	wilcox	46	2	285	0.39107818447423115	0.993662521341229
+PWY-7199: pyrimidine deoxyribonucleosides salvage	Sex	wilcox	46	2	257	0.8218660848334578	0.993662521341229
+PWY-7204: pyridoxal 5'-phosphate salvage II (plants)	Sex	wilcox	46	2	271	0.5593391740662943	0.993662521341229
+PWY-7208: superpathway of pyrimidine nucleobases salvage	Sex	wilcox	46	2	237	0.8394289695592305	0.993662521341229
+PWY-7209: superpathway of pyrimidine ribonucleosides degradation	Sex	wilcox	46	2	260.5	0.7343460005945803	0.993662521341229
+PWY-7210: pyrimidine deoxyribonucleotides biosynthesis from CTP	Sex	wilcox	46	2	235	0.7951557129641496	0.993662521341229
+PWY-7211: superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis	Sex	wilcox	46	2	311.5	0.14011495948735522	0.993662521341229
+PWY-7220: adenosine deoxyribonucleotides de novo biosynthesis II	Sex	wilcox	46	2	239	0.8747820620801647	0.993662521341229
+PWY-7221: guanosine ribonucleotides de novo biosynthesis	Sex	wilcox	46	2	264	0.7018094086908856	0.993662521341229
+PWY-7222: guanosine deoxyribonucleotides de novo biosynthesis II	Sex	wilcox	46	2	239	0.8747820620801647	0.993662521341229
+PWY-7228: superpathway of guanosine nucleotides de novo biosynthesis I	Sex	wilcox	46	2	240	0.8925552786399716	0.993662521341229
+PWY-7229: superpathway of adenosine nucleotides de novo biosynthesis I	Sex	wilcox	46	2	250	0.9461578078477684	0.993662521341229
+PWY-7234: inosine-5'-phosphate biosynthesis III	Sex	wilcox	46	2	234	0.7870092926463929	0.993662521341229
+PWY-7237: myo-, chiro- and scyllo-inositol degradation	Sex	wilcox	46	2	255.5	0.8452639735098033	0.993662521341229
+PWY-7238: sucrose biosynthesis II	Sex	wilcox	46	2	315	0.12259044690715848	0.993662521341229
+PWY-7242: D-fructuronate degradation	Sex	wilcox	46	2	354	0.013774949071698135	0.993662521341229
+PWY-724: superpathway of L-lysine, L-threonine and L-methionine biosynthesis II	Sex	wilcox	46	2	263	0.7185965342636842	0.993662521341229
+PWY-7254: TCA cycle VII (acetate-producers)	Sex	wilcox	46	2	329.5	0.038097312934493074	0.993662521341229
+PWY-7282: 4-amino-2-methyl-5-diphosphomethylpyrimidine biosynthesis II	Sex	wilcox	46	2	245	0.9820407374658929	0.993662521341229
+PWY-7312: dTDP-&beta;-D-fucofuranose biosynthesis	Sex	wilcox	46	2	260	0.7468029609426019	0.993662521341229
+PWY-7315: dTDP-N-acetylthomosamine biosynthesis	Sex	wilcox	46	2	289	0.33067954384235215	0.993662521341229
+PWY-7316: dTDP-N-acetylviosamine biosynthesis	Sex	wilcox	46	2	206	0.3305339695945215	0.993662521341229
+PWY-7323: superpathway of GDP-mannose-derived O-antigen building blocks biosynthesis	Sex	wilcox	46	2	236	0.8218660848334578	0.993662521341229
+PWY-7328: superpathway of UDP-glucose-derived O-antigen building blocks biosynthesis	Sex	wilcox	46	2	360	0.009093920578007762	0.993662521341229
+PWY-7345: superpathway of anaerobic sucrose degradation	Sex	wilcox	46	2	317	0.11177902376906573	0.993662521341229
+PWY-7356: thiamine diphosphate salvage IV (yeast)	Sex	wilcox	46	2	312	0.1402809551139219	0.993662521341229
+PWY-7357: thiamine phosphate formation from pyrithiamine and oxythiamine (yeast)	Sex	wilcox	46	2	268	0.6361422005442208	0.993662521341229
+PWY-7371: 1,4-dihydroxy-6-naphthoate biosynthesis II	Sex	wilcox	46	2	259	0.774068291423464	0.993662521341229
+PWY-7383: anaerobic energy metabolism (invertebrates, cytosol)	Sex	wilcox	46	2	276	0.5132365272327273	0.993662521341229
+PWY-7385: 1,3-propanediol biosynthesis (engineered)	Sex	wilcox	46	2	298	0.19984640374808688	0.993662521341229
+PWY-7392: taxadiene biosynthesis (engineered)	Sex	wilcox	46	2	232	0.749955035621415	0.993662521341229
+PWY-7400: L-arginine biosynthesis IV (archaebacteria)	Sex	wilcox	46	2	205	0.3545603266377909	0.993662521341229
+PWY-7456: &beta;-(1,4)-mannan degradation	Sex	wilcox	46	2	245	0.9820407374658929	0.993662521341229
+PWY-7560: methylerythritol phosphate pathway II	Sex	wilcox	46	2	251	0.9282518935855415	0.993662521341229
+PWY-7663: gondoate biosynthesis (anaerobic)	Sex	wilcox	46	2	159	0.046941554256684656	0.993662521341229
+PWY-7664: oleate biosynthesis IV (anaerobic)	Sex	wilcox	46	2	240	0.8925552786399716	0.993662521341229
+PWY-7688: dTDP-&alpha;-D-ravidosamine and dTDP-4-acetyl-&alpha;-D-ravidosamine biosynthesis	Sex	wilcox	46	2	256	0.8317812324798717	0.993662521341229
+PWY-7761: NAD salvage pathway II (PNC IV cycle)	Sex	wilcox	46	2	236	0.8218660848334578	0.993662521341229
+PWY-7790: UMP biosynthesis II	Sex	wilcox	46	2	262	0.7355176012322131	0.993662521341229
+PWY-7791: UMP biosynthesis III	Sex	wilcox	46	2	262	0.7355176012322131	0.993662521341229
+PWY-7851: coenzyme A biosynthesis II (eukaryotic)	Sex	wilcox	46	2	219	0.5427953558171662	0.993662521341229
+PWY-7858: (5Z)-dodecenoate biosynthesis II	Sex	wilcox	46	2	259	0.774068291423464	0.993662521341229
+PWY-7883: anhydromuropeptides recycling II	Sex	wilcox	46	2	280	0.4331458526127473	0.993662521341229
+PWY-7942: 5-oxo-L-proline metabolism	Sex	wilcox	46	2	293	0.2631423857761183	0.993662521341229
+PWY-7953: UDP-N-acetylmuramoyl-pentapeptide biosynthesis III (meso-diaminopimelate containing)	Sex	wilcox	46	2	225	0.6361422005442208	0.993662521341229
+PWY-7977: L-methionine biosynthesis IV	Sex	wilcox	46	2	207	0.3786647849499849	0.993662521341229
+PWY-7992: superpathway of menaquinol-8 biosynthesis III	Sex	wilcox	46	2	247.5	0.9903809425980793	0.9991453757184163
+PWY-8004: Entner-Doudoroff pathway I	Sex	wilcox	46	2	341	0.03138400877468674	0.993662521341229
+PWY-801: homocysteine and cysteine interconversion	Sex	wilcox	46	2	314	0.1031352844754074	0.993662521341229
+PWY-8073: lipid IVA biosynthesis (P. putida)	Sex	wilcox	46	2	216.5	0.5019930118128972	0.993662521341229
+PWY-8131: 5'-deoxyadenosine degradation II	Sex	wilcox	46	2	267.5	0.6408316346573806	0.993662521341229
+PWY-8178: pentose phosphate pathway (non-oxidative branch) II	Sex	wilcox	46	2	290	0.3314274497703078	0.993662521341229
+PWY-8187: L-arginine degradation XIII (reductive Stickland reaction)	Sex	wilcox	46	2	185	0.16676821273227954	0.993662521341229
+PWY-821: superpathway of sulfur amino acid biosynthesis (Saccharomyces cerevisiae)	Sex	wilcox	46	2	275.5	0.5106183770331769	0.993662521341229
+PWY-841: superpathway of purine nucleotides de novo biosynthesis I	Sex	wilcox	46	2	220	0.5578795412431055	0.993662521341229
+PWY-I9: L-cysteine biosynthesis VI (from L-methionine)	Sex	wilcox	46	2	288	0.3545603266377909	0.993662521341229
+PWY0-1061: superpathway of L-alanine biosynthesis	Sex	wilcox	46	2	277	0.49452059406590365	0.993662521341229
+PWY0-1241: ADP-L-glycero-&beta;-D-manno-heptose biosynthesis	Sex	wilcox	46	2	207	0.37477911439797174	0.993662521341229
+PWY0-1261: anhydromuropeptides recycling I	Sex	wilcox	46	2	202	0.320227549861369	0.993662521341229
+PWY0-1296: purine ribonucleosides degradation	Sex	wilcox	46	2	241	0.9103814591258214	0.993662521341229
+PWY0-1297: superpathway of purine deoxyribonucleosides degradation	Sex	wilcox	46	2	298	0.24868214504722114	0.993662521341229
+PWY0-1298: superpathway of pyrimidine deoxyribonucleosides degradation	Sex	wilcox	46	2	250	0.9461578078477684	0.993662521341229
+PWY0-1319: CDP-diacylglycerol biosynthesis II	Sex	wilcox	46	2	283	0.4166186525866639	0.993662521341229
+PWY0-1337: oleate &beta;-oxidation	Sex	wilcox	46	2	294	0.2431074022444205	0.993662521341229
+PWY0-1338: polymyxin resistance	Sex	wilcox	46	2	294	0.2431074022444205	0.993662521341229
+PWY0-1415: superpathway of heme b biosynthesis from uroporphyrinogen-III	Sex	wilcox	46	2	294	0.27239662509911017	0.993662521341229
+PWY0-1477: ethanolamine utilization	Sex	wilcox	46	2	320	0.09695925508827222	0.993662521341229
+PWY0-1479: tRNA processing	Sex	wilcox	46	2	273.5	0.5463417092790795	0.993662521341229
+PWY0-1586: peptidoglycan maturation (meso-diaminopimelate containing)	Sex	wilcox	46	2	290	0.3314274497703078	0.993662521341229
+PWY0-162: superpathway of pyrimidine ribonucleotides de novo biosynthesis	Sex	wilcox	46	2	232	0.752565181612852	0.993662521341229
+PWY0-166: superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis (E. coli)	Sex	wilcox	46	2	282	0.4137387317153572	0.993662521341229
+PWY0-301: L-ascorbate degradation I (bacterial, anaerobic)	Sex	wilcox	46	2	297	0.25095702835987754	0.993662521341229
+PWY0-42: 2-methylcitrate cycle I	Sex	wilcox	46	2	301.5	0.18881147695811837	0.993662521341229
+PWY0-781: aspartate superpathway	Sex	wilcox	46	2	305	0.17916969248584527	0.993662521341229
+PWY0-845: superpathway of pyridoxal 5'-phosphate biosynthesis and salvage	Sex	wilcox	46	2	227	0.668665758963498	0.993662521341229
+PWY0-862: (5Z)-dodecenoate biosynthesis I	Sex	wilcox	46	2	245	0.9820407374658929	0.993662521341229
+PWY1ZNC-1: assimilatory sulfate reduction IV	Sex	wilcox	46	2	213	0.4525213155168524	0.993662521341229
+PWY3O-4107: NAD salvage pathway V (PNC V cycle)	Sex	wilcox	46	2	215	0.4802455292706943	0.993662521341229
+PWY4FS-7: phosphatidylglycerol biosynthesis I (plastidic)	Sex	wilcox	46	2	263	0.7185965342636842	0.993662521341229
+PWY4FS-8: phosphatidylglycerol biosynthesis II (non-plastidic)	Sex	wilcox	46	2	263	0.7185965342636842	0.993662521341229
+PWY4LZ-257: superpathway of fermentation (Chlamydomonas reinhardtii)	Sex	wilcox	46	2	253	0.8913587250932793	0.993662521341229
+PWY66-389: phytol degradation	Sex	wilcox	46	2	296	0.2236325875442039	0.993662521341229
+PWY66-391: fatty acid &beta;-oxidation VI (mammalian peroxisome)	Sex	wilcox	46	2	267	0.6404663595230863	0.993662521341229
+PWY66-399: gluconeogenesis III	Sex	wilcox	46	2	237	0.8394289695592305	0.993662521341229
+PWY66-409: superpathway of purine nucleotide salvage	Sex	wilcox	46	2	301	0.2190572862486251	0.993662521341229
+PWY66-429: fatty acid biosynthesis initiation (mitochondria)	Sex	wilcox	46	2	276	0.5132365272327273	0.993662521341229
+PYRIDNUCSAL-PWY: NAD salvage pathway I (PNC VI cycle)	Sex	wilcox	46	2	214	0.4661980831052945	0.993662521341229
+PYRIDNUCSYN-PWY: NAD de novo biosynthesis I (from aspartate)	Sex	wilcox	46	2	187	0.181313733015133	0.993662521341229
+PYRIDOXSYN-PWY: pyridoxal 5'-phosphate biosynthesis I	Sex	wilcox	46	2	239	0.8747820620801647	0.993662521341229
+REDCITCYC: TCA cycle VI (Helicobacter)	Sex	wilcox	46	2	318.5	0.08470658809820023	0.993662521341229
+RHAMCAT-PWY: L-rhamnose degradation I	Sex	wilcox	46	2	271	0.5886326522264319	0.993662521341229
+RIBOSYN2-PWY: flavin biosynthesis I (bacteria and plants)	Sex	wilcox	46	2	283	0.4166186525866639	0.993662521341229
+RUMP-PWY: formaldehyde oxidation I	Sex	wilcox	46	2	267.5	0.6210973617680944	0.993662521341229
+SALVADEHYPOX-PWY: adenosine nucleotides degradation II	Sex	wilcox	46	2	302	0.21312337546001225	0.993662521341229
+SER-GLYSYN-PWY: superpathway of L-serine and glycine biosynthesis I	Sex	wilcox	46	2	227	0.668665758963498	0.993662521341229
+SO4ASSIM-PWY: assimilatory sulfate reduction I	Sex	wilcox	46	2	245	0.9817967704028092	0.993662521341229
+SULFATE-CYS-PWY: superpathway of sulfate assimilation and cysteine biosynthesis	Sex	wilcox	46	2	251	0.927281727537432	0.993662521341229
+TCA-GLYOX-BYPASS: superpathway of glyoxylate bypass and TCA	Sex	wilcox	46	2	295	0.2508736236263527	0.993662521341229
+TCA: TCA cycle I (prokaryotic)	Sex	wilcox	46	2	292	0.2881956681087203	0.993662521341229
+THISYN-PWY: superpathway of thiamine diphosphate biosynthesis I	Sex	wilcox	46	2	218	0.5279127843585668	0.993662521341229
+THISYNARA-PWY: superpathway of thiamine diphosphate biosynthesis III (eukaryotes)	Sex	wilcox	46	2	290	0.3314274497703078	0.993662521341229
+THRESYN-PWY: superpathway of L-threonine biosynthesis	Sex	wilcox	46	2	216	0.498771024666019	0.993662521341229
+TRNA-CHARGING-PWY: tRNA charging	Sex	wilcox	46	2	250	0.9461578078477684	0.993662521341229
+TRPSYN-PWY: L-tryptophan biosynthesis	Sex	wilcox	46	2	242	0.9282518935855415	0.993662521341229
+UDPNAGSYN-PWY: UDP-N-acetyl-D-glucosamine biosynthesis I	Sex	wilcox	46	2	281	0.4430959762406831	0.993662521341229
+UNINTEGRATED	Sex	wilcox	46	2	273	0.5578795412431055	0.993662521341229
+UNMAPPED	Sex	wilcox	46	2	210	0.4166186525866639	0.993662521341229
+VALSYN-PWY: L-valine biosynthesis	Sex	wilcox	46	2	211	0.4297414455805982	0.993662521341229
+1CMET2-PWY: folate transformations III (E. coli)	Location	wilcox	46	2	237	0.6213558334184388	0.8817580706601912
+ALLANTOINDEG-PWY: superpathway of allantoin degradation in yeast	Location	wilcox	46	2	273	0.7565085906299496	0.9302827599921948
+ANAEROFRUCAT-PWY: homolactic fermentation	Location	wilcox	46	2	172	0.051885671868345154	0.3696854120619592
+ANAGLYCOLYSIS-PWY: glycolysis III (from glucose)	Location	wilcox	46	2	163	0.031529306380225566	0.2695755695509286
+ARG+POLYAMINE-SYN: superpathway of arginine and polyamine biosynthesis	Location	wilcox	46	2	253.5	0.8942289715699423	0.9695644624831502
+ARGININE-SYN4-PWY: L-ornithine biosynthesis II	Location	wilcox	46	2	252	0.8693189207573664	0.9590550674161913
+ARGSYN-PWY: L-arginine biosynthesis I (via L-ornithine)	Location	wilcox	46	2	108	5.265108942937202e-4	0.036013345169690465
+ARGSYNBSUB-PWY: L-arginine biosynthesis II (acetyl cycle)	Location	wilcox	46	2	115	9.937215791317633e-4	0.04357718803740813
+ARO-PWY: chorismate biosynthesis I	Location	wilcox	46	2	117	0.0011832802783950454	0.04357718803740813
+ASPASN-PWY: superpathway of L-aspartate and L-asparagine biosynthesis	Location	wilcox	46	2	320	0.1892831520411835	0.6484331926300072
+AST-PWY: L-arginine degradation II (AST pathway)	Location	wilcox	46	2	299	0.36181526785358276	0.7421068355983734
+BIOTIN-BIOSYNTHESIS-PWY: biotin biosynthesis I	Location	wilcox	46	2	297	0.4223562647510976	0.78503175296127925
+BRANCHED-CHAIN-AA-SYN-PWY: superpathway of branched chain amino acid biosynthesis	Location	wilcox	46	2	120	0.001529024141663443	0.04357718803740813
+CALVIN-PWY: Calvin-Benson-Bassham cycle	Location	wilcox	46	2	197	0.16766831076808728	0.62878148907471
+CENTFERM-PWY: pyruvate fermentation to butanoate	Location	wilcox	46	2	246	0.7646927123188362	0.9302827599921948
+CITRULBIO-PWY: L-citrulline biosynthesis	Location	wilcox	46	2	188	0.11373282064230665	0.5637191979662155
+COA-PWY-1: superpathway of coenzyme A biosynthesis III (mammals)	Location	wilcox	46	2	204	0.22113520880957835	0.6519675983868602
+COA-PWY: coenzyme A biosynthesis I (prokaryotic)	Location	wilcox	46	2	195	0.1543034662053712	0.6065722464624936
+COBALSYN-PWY: superpathway of adenosylcobalamin salvage from cobinamide I	Location	wilcox	46	2	116	0.0010847723905636976	0.04357718803740813
+COLANSYN-PWY: colanic acid building blocks biosynthesis	Location	wilcox	46	2	209	0.26600468059745924	0.7107312559713365
+COMPLETE-ARO-PWY: superpathway of aromatic amino acid biosynthesis	Location	wilcox	46	2	115	9.937215791317633e-4	0.04357718803740813
+DAPLYSINESYN-PWY: L-lysine biosynthesis I	Location	wilcox	46	2	306	0.3166394394671717	0.7316938398498157
+DARABCATK12-PWY: D-arabinose degradation I	Location	wilcox	46	2	262	0.9703189499051537	0.9852765436124633
+DENOVOPURINE2-PWY: superpathway of purine nucleotides de novo biosynthesis II	Location	wilcox	46	2	288	0.4951431610183518	0.8180626138564073
+DTDPRHAMSYN-PWY: dTDP-&beta;-L-rhamnose biosynthesis	Location	wilcox	46	2	254	0.9039717224063655	0.9695644624831502
+FAO-PWY: fatty acid &beta;-oxidation I (generic)	Location	wilcox	46	2	282	0.6137206476615022	0.8745519229176407
+FASYN-ELONG-PWY: fatty acid elongation -- saturated	Location	wilcox	46	2	285	0.5906347582262228	0.8559198614973228
+FERMENTATION-PWY: mixed acid fermentation	Location	wilcox	46	2	252	0.8693189207573664	0.9590550674161913
+FOLSYN-PWY: superpathway of tetrahydrofolate biosynthesis and salvage	Location	wilcox	46	2	255	0.9200294900545852	0.9695644624831502
+FUC-RHAMCAT-PWY: superpathway of fucose and rhamnose degradation	Location	wilcox	46	2	238.5	0.6416862114735759	0.8893875823667484
+FUCCAT-PWY: fucose degradation	Location	wilcox	46	2	241	0.6847335633228674	0.8938125139558041
+GALACT-GLUCUROCAT-PWY: superpathway of hexuronide and hexuronate degradation	Location	wilcox	46	2	257.5	0.9646506589237414	0.9852765436124633
+GALACTARDEG-PWY: D-galactarate degradation I	Location	wilcox	46	2	353	0.04005238904621422	0.31131629667739236
+GALACTITOLCAT-PWY: galactitol degradation	Location	wilcox	46	2	264	0.9358923491981007	0.9818257160299093
+GALACTUROCAT-PWY: D-galacturonate degradation I	Location	wilcox	46	2	258	0.97375284134799	0.9852765436124633
+GLCMANNANAUT-PWY: superpathway of N-acetylglucosamine, N-acetylmannosamine and N-acetylneuraminate degradation	Location	wilcox	46	2	196	0.16088324158898684	0.6182254901509382
+GLUCARDEG-PWY: D-glucarate degradation I	Location	wilcox	46	2	318	0.20094859137246635	0.6484331926300072
+GLUCARGALACTSUPER-PWY: superpathway of D-glucarate and D-galactarate degradation	Location	wilcox	46	2	353	0.04005238904621422	0.31131629667739236
+GLUCONEO-PWY: gluconeogenesis I	Location	wilcox	46	2	278	0.7009463142795669	0.9012166897880146
+GLUCOSE1PMETAB-PWY: glucose and glucose-1-phosphate degradation	Location	wilcox	46	2	253	0.8846972343163029	0.9687655509962009
+GLUCUROCAT-PWY: superpathway of &beta;-D-glucuronosides degradation	Location	wilcox	46	2	243	0.7172936335027843	0.9119988130016906
+GLUDEG-I-PWY: GABA shunt	Location	wilcox	46	2	281	0.6492963426452147	0.8893875823667484
+GLUTORN-PWY: L-ornithine biosynthesis I	Location	wilcox	46	2	119	0.0014048267313360751	0.04357718803740813
+GLYCOCAT-PWY: glycogen degradation I	Location	wilcox	46	2	262	0.973481745252206	0.9852765436124633
+GLYCOGENSYNTH-PWY: glycogen biosynthesis I (from ADP-D-Glucose)	Location	wilcox	46	2	145	0.010193885408675869	0.12912254850989432
+GLYCOL-GLYOXDEG-PWY: superpathway of glycol metabolism and degradation	Location	wilcox	46	2	266	0.8953333518420598	0.9695644624831502
+GLYCOLYSIS-E-D: superpathway of glycolysis and the Entner-Doudoroff pathway	Location	wilcox	46	2	267	0.886618764508219	0.9687655509962009
+GLYCOLYSIS: glycolysis I (from glucose 6-phosphate)	Location	wilcox	46	2	197	0.16766831076808728	0.62878148907471
+GLYOXYLATE-BYPASS: glyoxylate cycle	Location	wilcox	46	2	272	0.797511492332359	0.9347324488066135
+GOLPDLCAT-PWY: superpathway of glycerol degradation to 1,3-propanediol	Location	wilcox	46	2	286	0.5755356868777067	0.8465158232070833
+HEME-BIOSYNTHESIS-II-1: heme b biosynthesis V (aerobic)	Location	wilcox	46	2	285.5	0.5741829470559492	0.8465158232070833
+HEME-BIOSYNTHESIS-II: heme b biosynthesis I (aerobic)	Location	wilcox	46	2	248	0.7988358741866167	0.9347324488066135
+HEMESYN2-PWY: heme b biosynthesis II (oxygen-independent)	Location	wilcox	46	2	264	0.9388047120669383	0.981869148400284
+HEXITOLDEGSUPER-PWY: superpathway of hexitol degradation (bacteria)	Location	wilcox	46	2	269	0.8451276365377347	0.946140951552311
+HISDEG-PWY: L-histidine degradation I	Location	wilcox	46	2	333	0.10868114876456891	0.5466022481982731
+HISTSYN-PWY: L-histidine biosynthesis	Location	wilcox	46	2	186	0.1038050204522903	0.5466022481982731
+HOMOSER-METSYN-PWY: L-methionine biosynthesis I	Location	wilcox	46	2	293	0.46747901445604756	0.7993891147198413
+HSERMETANA-PWY: L-methionine biosynthesis III	Location	wilcox	46	2	179	0.07427726318703497	0.45362185732082067
+ILEUSYN-PWY: L-isoleucine biosynthesis I (from threonine)	Location	wilcox	46	2	131	0.003706457080779928	0.06338041608133678
+KDO-NAGLIPASYN-PWY: superpathway of (Kdo)2-lipid A biosynthesis	Location	wilcox	46	2	304	0.2734486728426424	0.7142286049000452
+KETOGLUCONMET-PWY: ketogluconate metabolism	Location	wilcox	46	2	315	0.2103996945925822	0.6518218888069728
+LACTOSECAT-PWY: lactose and galactose degradation I	Location	wilcox	46	2	216.5	0.340669043248026	0.7373975493090182
+MET-SAM-PWY: superpathway of S-adenosyl-L-methionine biosynthesis	Location	wilcox	46	2	293	0.46747901445604756	0.7993891147198413
+METH-ACETATE-PWY: methanogenesis from acetate	Location	wilcox	46	2	213	0.3060473347539209	0.7316938398498157
+METHGLYUT-PWY: superpathway of methylglyoxal degradation	Location	wilcox	46	2	249	0.8150960361960203	0.9385689018644134
+METSYN-PWY: superpathway of L-homoserine and L-methionine biosynthesis	Location	wilcox	46	2	293	0.46747901445604756	0.7993891147198413
+NAD-BIOSYNTHESIS-II: NAD salvage pathway III (to nicotinamide riboside)	Location	wilcox	46	2	307	0.29853587407348187	0.7241082903058922
+NAGLIPASYN-PWY: lipid IVA biosynthesis (E. coli)	Location	wilcox	46	2	263.5	0.9469976716429196	0.9844170325285061
+NONMEVIPP-PWY: methylerythritol phosphate pathway I	Location	wilcox	46	2	138	0.006242370086869077	0.08895377373788434
+NONOXIPENT-PWY: pentose phosphate pathway (non-oxidative branch) I	Location	wilcox	46	2	212	0.2956880527026986	0.7233640602165075
+OANTIGEN-PWY: O-antigen building blocks biosynthesis (E. coli)	Location	wilcox	46	2	192	0.1357658523185141	0.5877458416826813
+ORNDEG-PWY: superpathway of ornithine degradation	Location	wilcox	46	2	300	0.36671361174305583	0.7421068355983734
+P105-PWY: TCA cycle IV (2-oxoglutarate decarboxylase)	Location	wilcox	46	2	289.5	0.5183501939860413	0.8254251715050821
+P108-PWY: pyruvate fermentation to propanoate I	Location	wilcox	46	2	300	0.35755204478445624	0.7421068355983734
+P122-PWY: heterolactic fermentation	Location	wilcox	46	2	258	0.9693771452507058	0.9852765436124633
+P124-PWY: Bifidobacterium shunt	Location	wilcox	46	2	251	0.8330067978240402	0.9454945232144732
+P125-PWY: superpathway of (R,R)-butanediol biosynthesis	Location	wilcox	46	2	231	0.4795931968011316	0.8040238887548383
+P161-PWY: acetylene degradation (anaerobic)	Location	wilcox	46	2	290.5	0.5060763574908692	0.8241814964851298
+P164-PWY: purine nucleobases degradation I (anaerobic)	Location	wilcox	46	2	284.5	0.5948506775062268	0.8583921169077195
+P185-PWY: formaldehyde assimilation III (dihydroxyacetone cycle)	Location	wilcox	46	2	235	0.5865634770182993	0.8536370601713121
+P221-PWY: octane oxidation	Location	wilcox	46	2	302	0.29611394277868724	0.7233640602165075
+P23-PWY: reductive TCA cycle I	Location	wilcox	46	2	361	0.011400206614512546	0.13754672572842916
+P4-PWY: superpathway of L-lysine, L-threonine and L-methionine biosynthesis I	Location	wilcox	46	2	293	0.46360850987500063	0.7993891147198413
+P41-PWY: pyruvate fermentation to acetate and (S)-lactate I	Location	wilcox	46	2	195	0.1543034662053712	0.6065722464624936
+P42-PWY: incomplete reductive TCA cycle	Location	wilcox	46	2	271	0.8178173472385825	0.9385689018644134
+P441-PWY: superpathway of N-acetylneuraminate degradation	Location	wilcox	46	2	314	0.23839919302432683	0.6730391507583202
+P461-PWY: hexitol fermentation to lactate, formate, ethanol and acetate	Location	wilcox	46	2	279.5	0.6737374417892008	0.8938125139558041
+PANTO-PWY: phosphopantothenate biosynthesis I	Location	wilcox	46	2	217	0.34981071462406305	0.7421068355983734
+PANTOSYN-PWY: superpathway of coenzyme A biosynthesis I (bacteria)	Location	wilcox	46	2	199	0.1818656029940961	0.6436049694520538
+PENTOSE-P-PWY: pentose phosphate pathway	Location	wilcox	46	2	286	0.5755356868777067	0.8465158232070833
+PEPTIDOGLYCANSYN-PWY: peptidoglycan biosynthesis I (meso-diaminopimelate containing)	Location	wilcox	46	2	135	0.005011927947391765	0.07452518947860799
+PHOSLIPSYN-PWY: superpathway of phospholipid biosynthesis I (bacteria)	Location	wilcox	46	2	202	0.2047683766200023	0.6484331926300072
+POLYAMINSYN3-PWY: superpathway of polyamine biosynthesis II	Location	wilcox	46	2	278	0.6931026134242455	0.9012166897880146
+POLYAMSYN-PWY: superpathway of polyamine biosynthesis I	Location	wilcox	46	2	258.5	0.9823209902547496	0.9910140963631987
+POLYISOPRENSYN-PWY: polyisoprenoid biosynthesis (E. coli)	Location	wilcox	46	2	267.5	0.876731316671773	0.9641225411631714
+PPGPPMET-PWY: ppGpp metabolism	Location	wilcox	46	2	258	0.9734391271139122	0.9852765436124633
+PRPP-PWY: superpathway of histidine, purine, and pyrimidine biosynthesis	Location	wilcox	46	2	287	0.5109584730221106	0.8254251715050821
+PWY-1042: glycolysis IV	Location	wilcox	46	2	181	0.08192884214770259	0.48309765542266003
+PWY-1269: CMP-3-deoxy-D-manno-octulosonate biosynthesis	Location	wilcox	46	2	303	0.34981071462406305	0.7421068355983734
+PWY-1861: formaldehyde assimilation II (assimilatory RuMP Cycle)	Location	wilcox	46	2	318	0.20256776351205272	0.6484331926300072
+PWY-241: C4 photosynthetic carbon assimilation cycle, NADP-ME type	Location	wilcox	46	2	301.5	0.36360048202156375	0.7421068355983734
+PWY-2941: L-lysine biosynthesis II	Location	wilcox	46	2	273	0.7838922763477028	0.930872078162897
+PWY-2942: L-lysine biosynthesis III	Location	wilcox	46	2	209	0.26600468059745924	0.7107312559713365
+PWY-3001: superpathway of L-isoleucine biosynthesis I	Location	wilcox	46	2	124	0.0021304336429631087	0.04857388705955888
+PWY-3841: folate transformations II (plants)	Location	wilcox	46	2	241	0.6847335633228674	0.8938125139558041
+PWY-4041: &gamma;-glutamyl cycle	Location	wilcox	46	2	265	0.9213697377398357	0.9695644624831502
+PWY-4984: urea cycle	Location	wilcox	46	2	223	0.4223562647510976	0.78503175296127925
+PWY-5005: biotin biosynthesis II	Location	wilcox	46	2	219	0.36622390014630574	0.7421068355983734
+PWY-5022: 4-aminobutanoate degradation V	Location	wilcox	46	2	304	0.3307975339804204	0.7373975493090182
+PWY-5030: L-histidine degradation III	Location	wilcox	46	2	281	0.6527376700995727	0.8893875823667484
+PWY-5097: L-lysine biosynthesis VI	Location	wilcox	46	2	177	0.06720821994409469	0.43368323058264874
+PWY-5100: pyruvate fermentation to acetate and lactate II	Location	wilcox	46	2	170	0.046618236428990385	0.3435304847681105
+PWY-5103: L-isoleucine biosynthesis III	Location	wilcox	46	2	161	0.028061490464727945	0.2593791821334313
+PWY-5104: L-isoleucine biosynthesis IV	Location	wilcox	46	2	281	0.6375611180662792	0.8893875823667484
+PWY-5121: superpathway of geranylgeranyl diphosphate biosynthesis II (via MEP)	Location	wilcox	46	2	257	0.9562684761725316	0.9852765436124633
+PWY-5130: 2-oxobutanoate degradation I	Location	wilcox	46	2	333	0.10812278478678225	0.5466022481982731
+PWY-5136: fatty acid &beta;-oxidation II (plant peroxisome)	Location	wilcox	46	2	273	0.7816633856740614	0.930872078162897
+PWY-5138: fatty acid &beta;-oxidation IV (unsaturated, even number)	Location	wilcox	46	2	288	0.5148106333809528	0.8254251715050821
+PWY-5154: L-arginine biosynthesis III (via N-acetyl-L-citrulline)	Location	wilcox	46	2	156	0.020770653663207808	0.21525950160051727
+PWY-5188: tetrapyrrole biosynthesis I (from glutamate)	Location	wilcox	46	2	202	0.2047683766200023	0.6484331926300072
+PWY-5189: tetrapyrrole biosynthesis II (from glycine)	Location	wilcox	46	2	289	0.5248774767067425	0.8254251715050821
+PWY-5345: superpathway of L-methionine biosynthesis (by sulfhydrylation)	Location	wilcox	46	2	320.5	0.18254292993230767	0.6436049694520538
+PWY-5347: superpathway of L-methionine biosynthesis (transsulfuration)	Location	wilcox	46	2	293	0.46747901445604756	0.7993891147198413
+PWY-5367: petroselinate biosynthesis	Location	wilcox	46	2	243	0.7098207967548116	0.9092086610117811
+PWY-5384: sucrose degradation IV (sucrose phosphorylase)	Location	wilcox	46	2	262	0.97375284134799	0.9852765436124633
+PWY-5484: glycolysis II (from fructose 6-phosphate)	Location	wilcox	46	2	211	0.28556144904489134	0.7220419108223558
+PWY-5497: purine nucleobases degradation II (anaerobic)	Location	wilcox	46	2	220	0.38506079826718254	0.7568436379734277
+PWY-5505: L-glutamate and L-glutamine biosynthesis	Location	wilcox	46	2	247	0.7817881093236294	0.930872078162897
+PWY-561: superpathway of glyoxylate cycle and fatty acid degradation	Location	wilcox	46	2	300	0.36400957347497775	0.7421068355983734
+PWY-5656: mannosylglycerate biosynthesis I	Location	wilcox	46	2	303	0.31410028903087056	0.7316938398498157
+PWY-5659: GDP-mannose biosynthesis	Location	wilcox	46	2	247	0.7838922763477028	0.930872078162897
+PWY-5667: CDP-diacylglycerol biosynthesis I	Location	wilcox	46	2	101	2.6817456337559887e-4	0.025312399375902822
+PWY-5675: nitrate reduction V (assimilatory)	Location	wilcox	46	2	309	0.2740694609067204	0.7142286049000452
+PWY-5676: acetyl-CoA fermentation to butanoate II	Location	wilcox	46	2	275	0.7503650494331979	0.9264434906359339
+PWY-5686: UMP biosynthesis I	Location	wilcox	46	2	204	0.22113520880957835	0.6519675983868602
+PWY-5690: TCA cycle II (plants and fungi)	Location	wilcox	46	2	268.5	0.8510167705846252	0.946140951552311
+PWY-5695: inosine 5'-phosphate degradation	Location	wilcox	46	2	195	0.1543034662053712	0.6065722464624936
+PWY-5723: Rubisco shunt	Location	wilcox	46	2	270	0.8303618247818584	0.9454945232144732
+PWY-5747: 2-methylcitrate cycle II	Location	wilcox	46	2	270	0.8137024593187503	0.9385689018644134
+PWY-5837: 2-carboxy-1,4-naphthoquinol biosynthesis	Location	wilcox	46	2	225.5	0.45072743910472374	0.7993891147198413
+PWY-5838: superpathway of menaquinol-8 biosynthesis I	Location	wilcox	46	2	246.5	0.7730622511687443	0.930872078162897
+PWY-5840: superpathway of menaquinol-7 biosynthesis	Location	wilcox	46	2	287	0.5501002079514917	0.843651439997355
+PWY-5845: superpathway of menaquinol-9 biosynthesis	Location	wilcox	46	2	279	0.680314743078668	0.8938125139558041
+PWY-5850: superpathway of menaquinol-6 biosynthesis	Location	wilcox	46	2	287.5	0.5261482087371576	0.8254251715050821
+PWY-5855: ubiquinol-7 biosynthesis (early decarboxylation)	Location	wilcox	46	2	306.5	0.2873949773256239	0.7220419108223558
+PWY-5860: superpathway of demethylmenaquinol-6 biosynthesis I	Location	wilcox	46	2	287.5	0.5261482087371576	0.8254251715050821
+PWY-5861: superpathway of demethylmenaquinol-8 biosynthesis I	Location	wilcox	46	2	240.5	0.6734146241461907	0.8938125139558041
+PWY-5862: superpathway of demethylmenaquinol-9 biosynthesis	Location	wilcox	46	2	279	0.680314743078668	0.8938125139558041
+PWY-5896: superpathway of menaquinol-10 biosynthesis	Location	wilcox	46	2	287.5	0.5261482087371576	0.8254251715050821
+PWY-5897: superpathway of menaquinol-11 biosynthesis	Location	wilcox	46	2	234.5	0.5791950369311623	0.8465158232070833
+PWY-5898: superpathway of menaquinol-12 biosynthesis	Location	wilcox	46	2	234.5	0.5791950369311623	0.8465158232070833
+PWY-5899: superpathway of menaquinol-13 biosynthesis	Location	wilcox	46	2	234.5	0.5791950369311623	0.8465158232070833
+PWY-5913: partial TCA cycle (obligate autotrophs)	Location	wilcox	46	2	303.5	0.340669043248026	0.7373975493090182
+PWY-5918: superpathway of heme b biosynthesis from glutamate	Location	wilcox	46	2	282	0.6314602727979901	0.8893875823667484
+PWY-5920: superpathway of heme b biosynthesis from glycine	Location	wilcox	46	2	302	0.3337320695447553	0.7373975493090182
+PWY-5941: glycogen degradation II	Location	wilcox	46	2	127	0.0027121299715292	0.054561673544881555
+PWY-5971: palmitate biosynthesis (type II fatty acid synthase)	Location	wilcox	46	2	290	0.5058816951629028	0.8241814964851298
+PWY-5973: cis-vaccenate biosynthesis	Location	wilcox	46	2	270	0.8349103684525465	0.9454945232144732
+PWY-5981: CDP-diacylglycerol biosynthesis III	Location	wilcox	46	2	329	0.12838939870648727	0.5877458416826813
+PWY-5989: stearate biosynthesis II (bacteria and plants)	Location	wilcox	46	2	300	0.38506079826718254	0.7568436379734277
+PWY-6121: 5-aminoimidazole ribonucleotide biosynthesis I	Location	wilcox	46	2	192	0.1357658523185141	0.5877458416826813
+PWY-6122: 5-aminoimidazole ribonucleotide biosynthesis II	Location	wilcox	46	2	179	0.07427726318703497	0.45362185732082067
+PWY-6123: inosine-5'-phosphate biosynthesis I	Location	wilcox	46	2	249	0.8178173472385825	0.9385689018644134
+PWY-6124: inosine-5'-phosphate biosynthesis II	Location	wilcox	46	2	260	1	1
+PWY-6125: superpathway of guanosine nucleotides de novo biosynthesis II	Location	wilcox	46	2	338	0.08598256870846283	0.49010064163823813
+PWY-6126: superpathway of adenosine nucleotides de novo biosynthesis II	Location	wilcox	46	2	327	0.1417478805397475	0.6059721893074206
+PWY-6143: CMP-pseudaminate biosynthesis	Location	wilcox	46	2	334	0.06425094235396153	0.43085926049127143
+PWY-6147: 6-hydroxymethyl-dihydropterin diphosphate biosynthesis I	Location	wilcox	46	2	319	0.1969166321258111	0.6484331926300072
+PWY-6151: S-adenosyl-L-methionine salvage I	Location	wilcox	46	2	162	0.029752933937906206	0.2609103437631775
+PWY-6163: chorismate biosynthesis from 3-dehydroquinate	Location	wilcox	46	2	134	0.004652296940008499	0.07305398813909254
+PWY-6168: flavin biosynthesis III (fungi)	Location	wilcox	46	2	304.5	0.32709995158544913	0.7373975493090182
+PWY-621: sucrose degradation III (sucrose invertase)	Location	wilcox	46	2	255	0.9213697377398357	0.9695644624831502
+PWY-6270: isoprene biosynthesis I	Location	wilcox	46	2	206	0.23839919302432683	0.6730391507583202
+PWY-6277: superpathway of 5-aminoimidazole ribonucleotide biosynthesis	Location	wilcox	46	2	179	0.07427726318703497	0.45362185732082067
+PWY-6282: palmitoleate biosynthesis I (from (5Z)-dodec-5-enoate)	Location	wilcox	46	2	289	0.53134468898368	0.825999471056448
+PWY-6284: superpathway of unsaturated fatty acids biosynthesis (E. coli)	Location	wilcox	46	2	250	0.8303618247818584	0.9454945232144732
+PWY-6285: superpathway of fatty acids biosynthesis (E. coli)	Location	wilcox	46	2	292.5	0.433495584013969	0.7917555335606595
+PWY-6292: superpathway of L-cysteine biosynthesis (mammalian)	Location	wilcox	46	2	246	0.7648054381736442	0.9302827599921948
+PWY-6293: superpathway of L-cysteine biosynthesis (fungi)	Location	wilcox	46	2	289	0.4996430930951524	0.8215285473006833
+PWY-6305: superpathway of putrescine biosynthesis	Location	wilcox	46	2	260	1	1
+PWY-6317: D-galactose degradation I (Leloir pathway)	Location	wilcox	46	2	151	0.01516051548779499	0.16725471925244798
+PWY-6353: purine nucleotides degradation II (aerobic)	Location	wilcox	46	2	247	0.7838922763477028	0.930872078162897
+PWY-6385: peptidoglycan biosynthesis III (mycobacteria)	Location	wilcox	46	2	118	0.0012897776698620137	0.04357718803740813
+PWY-6386: UDP-N-acetylmuramoyl-pentapeptide biosynthesis II (lysine-containing)	Location	wilcox	46	2	126	0.002504163714686114	0.053526499401415684
+PWY-6387: UDP-N-acetylmuramoyl-pentapeptide biosynthesis I (meso-diaminopimelate containing)	Location	wilcox	46	2	121	0.0016629989396154212	0.04374966441142108
+PWY-6470: peptidoglycan biosynthesis V (&beta;-lactam resistance)	Location	wilcox	46	2	350	0.04721032977807366	0.3435304847681105
+PWY-6507: 4-deoxy-L-threo-hex-4-enopyranuronate degradation	Location	wilcox	46	2	246	0.7670752582391781	0.9302827599921948
+PWY-6519: 8-amino-7-oxononanoate biosynthesis I	Location	wilcox	46	2	295	0.4483308949040148	0.7993891147198413
+PWY-6527: stachyose degradation	Location	wilcox	46	2	151	0.01516051548779499	0.16725471925244798
+PWY-6531: mannitol cycle	Location	wilcox	46	2	272	0.7987386615985683	0.9347324488066135
+PWY-6545: pyrimidine deoxyribonucleotides de novo biosynthesis III	Location	wilcox	46	2	328	0.134058682471713	0.5877458416826813
+PWY-6549: L-glutamine biosynthesis III	Location	wilcox	46	2	251	0.8505863487615584	0.946140951552311
+PWY-6572: chondroitin sulfate degradation I (bacterial)	Location	wilcox	46	2	380.5	0.0033130794038691226	0.059635429269644206
+PWY-6588: pyruvate fermentation to acetone	Location	wilcox	46	2	325.5	0.1487258661746046	0.6065722464624936
+PWY-6590: superpathway of Clostridium acetobutylicum acidogenic fermentation	Location	wilcox	46	2	241	0.68167025989143	0.8938125139558041
+PWY-6595: superpathway of guanosine nucleotides degradation (plants)	Location	wilcox	46	2	294	0.4538912667246626	0.7993891147198413
+PWY-6606: guanosine nucleotides degradation II	Location	wilcox	46	2	244	0.7337688363226864	0.9158720511764917
+PWY-6607: guanosine nucleotides degradation I	Location	wilcox	46	2	298	0.4018231701551985	0.7741293599669012
+PWY-6608: guanosine nucleotides degradation III	Location	wilcox	46	2	254	0.9039717224063655	0.9695644624831502
+PWY-6609: adenine and adenosine salvage III	Location	wilcox	46	2	158	0.0234656804594806	0.22292396436506567
+PWY-6612: superpathway of tetrahydrofolate biosynthesis	Location	wilcox	46	2	255	0.9200294900545852	0.9695644624831502
+PWY-6628: superpathway of L-phenylalanine biosynthesis	Location	wilcox	46	2	221	0.3972675628792752	0.7719631051404098
+PWY-6629: superpathway of L-tryptophan biosynthesis	Location	wilcox	46	2	124	0.0021304336429631087	0.04857388705955888
+PWY-6630: superpathway of L-tyrosine biosynthesis	Location	wilcox	46	2	207	0.24737174539293957	0.6768090953950827
+PWY-6700: queuosine biosynthesis I (de novo)	Location	wilcox	46	2	162	0.029752933937906206	0.2609103437631775
+PWY-6703: preQ0 biosynthesis	Location	wilcox	46	2	288	0.545885904899297	0.8409593670070251
+PWY-6731: starch degradation III	Location	wilcox	46	2	192	0.1357658523185141	0.5877458416826813
+PWY-6749: CMP-legionaminate biosynthesis I	Location	wilcox	46	2	338	0.06640704612993488	0.43368323058264874
+PWY-6803: phosphatidylcholine acyl editing	Location	wilcox	46	2	311	0.24582781888852137	0.6768090953950827
+PWY-6807: xyloglucan degradation II (exoglucanase)	Location	wilcox	46	2	214.5	0.28175314667707263	0.7220419108223558
+PWY-6823: molybdopterin biosynthesis	Location	wilcox	46	2	158	0.0234656804594806	0.22292396436506567
+PWY-6859: all-trans-farnesol biosynthesis	Location	wilcox	46	2	275	0.7479545360054665	0.9264434906359339
+PWY-6892: thiazole component of thiamine diphosphate biosynthesis I	Location	wilcox	46	2	190	0.12437709002232993	0.5877458416826813
+PWY-6895: superpathway of thiamine diphosphate biosynthesis II	Location	wilcox	46	2	279	0.6815308320164808	0.8938125139558041
+PWY-6897: thiamine diphosphate salvage II	Location	wilcox	46	2	175	0.06069138664286938	0.4236011067726802
+PWY-6901: superpathway of glucose and xylose degradation	Location	wilcox	46	2	272	0.8008087938606367	0.9347324488066135
+PWY-6902: chitin degradation II (Vibrio)	Location	wilcox	46	2	286	0.5755356868777067	0.8465158232070833
+PWY-6906: chitin derivatives degradation	Location	wilcox	46	2	266	0.9026415279632727	0.9695644624831502
+PWY-6922: L-N&delta;-acetylornithine biosynthesis	Location	wilcox	46	2	294	0.43522209048013266	0.7917555335606595
+PWY-6936: seleno-amino acid biosynthesis (plants)	Location	wilcox	46	2	203	0.2128405581342718	0.6518218888069728
+PWY-6961: L-ascorbate degradation II (bacterial, aerobic)	Location	wilcox	46	2	295	0.4347909329691028	0.7917555335606595
+PWY-6969: TCA cycle V (2-oxoglutarate synthase)	Location	wilcox	46	2	255	0.9213697377398357	0.9695644624831502
+PWY-6992: 1,5-anhydrofructose degradation	Location	wilcox	46	2	275	0.7226657260919829	0.9119988130016906
+PWY-7013: (S)-propane-1,2-diol degradation	Location	wilcox	46	2	206.5	0.24008998945179846	0.6730391507583202
+PWY-702: L-methionine biosynthesis II	Location	wilcox	46	2	225	0.4483308949040148	0.7993891147198413
+PWY-7094: fatty acid salvage	Location	wilcox	46	2	304.5	0.3015959801380674	0.7263790507550637
+PWY-7111: pyruvate fermentation to isobutanol (engineered)	Location	wilcox	46	2	187	0.10868114876456891	0.5466022481982731
+PWY-7115: C4 photosynthetic carbon assimilation cycle, NAD-ME type	Location	wilcox	46	2	250.5	0.8417606361000314	0.946140951552311
+PWY-7117: C4 photosynthetic carbon assimilation cycle, PEPCK type	Location	wilcox	46	2	303.5	0.340669043248026	0.7373975493090182
+PWY-7118: chitin deacetylation	Location	wilcox	46	2	298.5	0.393054740982942	0.7681412652352352
+PWY-7184: pyrimidine deoxyribonucleotides de novo biosynthesis I	Location	wilcox	46	2	324	0.15868746614337878	0.616717197966313
+PWY-7185: UTP and CTP dephosphorylation I	Location	wilcox	46	2	276	0.7216861109782525	0.9119988130016906
+PWY-7187: pyrimidine deoxyribonucleotides de novo biosynthesis II	Location	wilcox	46	2	285	0.5433632660110834	0.8408608007954324
+PWY-7197: pyrimidine deoxyribonucleotide phosphorylation	Location	wilcox	46	2	304	0.3385215486102174	0.7373975493090182
+PWY-7198: pyrimidine deoxyribonucleotides de novo biosynthesis IV	Location	wilcox	46	2	306	0.3166394394671717	0.7316938398498157
+PWY-7199: pyrimidine deoxyribonucleosides salvage	Location	wilcox	46	2	239	0.6527376700995727	0.8893875823667484
+PWY-7204: pyridoxal 5'-phosphate salvage II (plants)	Location	wilcox	46	2	290	0.4847161311199428	0.8047228972962156
+PWY-7208: superpathway of pyrimidine nucleobases salvage	Location	wilcox	46	2	302	0.3613310191045787	0.7421068355983734
+PWY-7209: superpathway of pyrimidine ribonucleosides degradation	Location	wilcox	46	2	309	0.2351984825016022	0.6730391507583202
+PWY-7210: pyrimidine deoxyribonucleotides biosynthesis from CTP	Location	wilcox	46	2	276	0.7216861109782525	0.9119988130016906
+PWY-7211: superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis	Location	wilcox	46	2	317	0.20825685320167853	0.6518218888069728
+PWY-7220: adenosine deoxyribonucleotides de novo biosynthesis II	Location	wilcox	46	2	333	0.10868114876456891	0.5466022481982731
+PWY-7221: guanosine ribonucleotides de novo biosynthesis	Location	wilcox	46	2	227	0.4751708546835392	0.8040238887548383
+PWY-7222: guanosine deoxyribonucleotides de novo biosynthesis II	Location	wilcox	46	2	333	0.10868114876456891	0.5466022481982731
+PWY-7228: superpathway of guanosine nucleotides de novo biosynthesis I	Location	wilcox	46	2	334	0.1038050204522903	0.5466022481982731
+PWY-7229: superpathway of adenosine nucleotides de novo biosynthesis I	Location	wilcox	46	2	306	0.3166394394671717	0.7316938398498157
+PWY-7234: inosine-5'-phosphate biosynthesis III	Location	wilcox	46	2	303	0.34981071462406305	0.7421068355983734
+PWY-7237: myo-, chiro- and scyllo-inositol degradation	Location	wilcox	46	2	206.5	0.23605869985165695	0.6730391507583202
+PWY-7238: sucrose biosynthesis II	Location	wilcox	46	2	102	2.960514546889219e-4	0.025312399375902822
+PWY-7242: D-fructuronate degradation	Location	wilcox	46	2	231	0.53134468898368	0.825999471056448
+PWY-724: superpathway of L-lysine, L-threonine and L-methionine biosynthesis II	Location	wilcox	46	2	170	0.046618236428990385	0.3435304847681105
+PWY-7254: TCA cycle VII (acetate-producers)	Location	wilcox	46	2	376	0.0046993793539767134	0.07305398813909254
+PWY-7282: 4-amino-2-methyl-5-diphosphomethylpyrimidine biosynthesis II	Location	wilcox	46	2	201	0.1969166321258111	0.6484331926300072
+PWY-7312: dTDP-&beta;-D-fucofuranose biosynthesis	Location	wilcox	46	2	313	0.20424583469652247	0.6484331926300072
+PWY-7315: dTDP-N-acetylthomosamine biosynthesis	Location	wilcox	46	2	274	0.7607905519255879	0.9302827599921948
+PWY-7316: dTDP-N-acetylviosamine biosynthesis	Location	wilcox	46	2	326	0.12079771780318264	0.5818706970237811
+PWY-7323: superpathway of GDP-mannose-derived O-antigen building blocks biosynthesis	Location	wilcox	46	2	226	0.461644152222472	0.7993891147198413
+PWY-7328: superpathway of UDP-glucose-derived O-antigen building blocks biosynthesis	Location	wilcox	46	2	255	0.9213697377398357	0.9695644624831502
+PWY-7345: superpathway of anaerobic sucrose degradation	Location	wilcox	46	2	269	0.8520801551991573	0.946140951552311
+PWY-7356: thiamine diphosphate salvage IV (yeast)	Location	wilcox	46	2	255	0.9213697377398357	0.9695644624831502
+PWY-7357: thiamine phosphate formation from pyrithiamine and oxythiamine (yeast)	Location	wilcox	46	2	154	0.01834404962755888	0.19605203039453553
+PWY-7371: 1,4-dihydroxy-6-naphthoate biosynthesis II	Location	wilcox	46	2	201	0.1730116508629612	0.62878148907471
+PWY-7383: anaerobic energy metabolism (invertebrates, cytosol)	Location	wilcox	46	2	276	0.7337688363226864	0.9158720511764917
+PWY-7385: 1,3-propanediol biosynthesis (engineered)	Location	wilcox	46	2	282	0.5987293678354169	0.8603590075618175
+PWY-7392: taxadiene biosynthesis (engineered)	Location	wilcox	46	2	287	0.5569478872053976	0.8446311905646968
+PWY-7400: L-arginine biosynthesis IV (archaebacteria)	Location	wilcox	46	2	141	0.0077309665755246814	0.10575962275317764
+PWY-7456: &beta;-(1,4)-mannan degradation	Location	wilcox	46	2	281	0.6527376700995727	0.8893875823667484
+PWY-7560: methylerythritol phosphate pathway II	Location	wilcox	46	2	189	0.11896362071224324	0.5812222611941027
+PWY-7663: gondoate biosynthesis (anaerobic)	Location	wilcox	46	2	251	0.8520801551991573	0.946140951552311
+PWY-7664: oleate biosynthesis IV (anaerobic)	Location	wilcox	46	2	284	0.6059099135007707	0.8670342695282995
+PWY-7688: dTDP-&alpha;-D-ravidosamine and dTDP-4-acetyl-&alpha;-D-ravidosamine biosynthesis	Location	wilcox	46	2	279	0.6707277707156278	0.8938125139558041
+PWY-7761: NAD salvage pathway II (PNC IV cycle)	Location	wilcox	46	2	281	0.6527376700995727	0.8893875823667484
+PWY-7790: UMP biosynthesis II	Location	wilcox	46	2	204	0.22113520880957835	0.6519675983868602
+PWY-7791: UMP biosynthesis III	Location	wilcox	46	2	204	0.22113520880957835	0.6519675983868602
+PWY-7851: coenzyme A biosynthesis II (eukaryotic)	Location	wilcox	46	2	211	0.28556144904489134	0.7220419108223558
+PWY-7858: (5Z)-dodecenoate biosynthesis II	Location	wilcox	46	2	309	0.25861575594403813	0.7019570518481035
+PWY-7883: anhydromuropeptides recycling II	Location	wilcox	46	2	223.5	0.4050809871995751	0.7741293599669012
+PWY-7942: 5-oxo-L-proline metabolism	Location	wilcox	46	2	279	0.6612476319599292	0.8938125139558041
+PWY-7953: UDP-N-acetylmuramoyl-pentapeptide biosynthesis III (meso-diaminopimelate containing)	Location	wilcox	46	2	128	0.0029353630041804427	0.05577189707942841
+PWY-7977: L-methionine biosynthesis IV	Location	wilcox	46	2	222	0.4097000413859916	0.7741293599669012
+PWY-7992: superpathway of menaquinol-8 biosynthesis III	Location	wilcox	46	2	222.5	0.38502583849771266	0.7568436379734277
+PWY-8004: Entner-Doudoroff pathway I	Location	wilcox	46	2	278	0.7009463142795669	0.9012166897880146
+PWY-801: homocysteine and cysteine interconversion	Location	wilcox	46	2	290	0.4847161311199428	0.8047228972962156
+PWY-8073: lipid IVA biosynthesis (P. putida)	Location	wilcox	46	2	263.5	0.9469976716429196	0.9844170325285061
+PWY-8131: 5'-deoxyadenosine degradation II	Location	wilcox	46	2	194	0.1466614454496393	0.6065722464624936
+PWY-8178: pentose phosphate pathway (non-oxidative branch) II	Location	wilcox	46	2	207	0.24737174539293957	0.6768090953950827
+PWY-8187: L-arginine degradation XIII (reductive Stickland reaction)	Location	wilcox	46	2	304	0.3385215486102174	0.7373975493090182
+PWY-821: superpathway of sulfur amino acid biosynthesis (Saccharomyces cerevisiae)	Location	wilcox	46	2	324	0.15351346638003074	0.6065722464624936
+PWY-841: superpathway of purine nucleotides de novo biosynthesis I	Location	wilcox	46	2	308	0.2956880527026986	0.7233640602165075
+PWY-I9: L-cysteine biosynthesis VI (from L-methionine)	Location	wilcox	46	2	259	0.9912495704779973	0.9970804503043385
+PWY0-1061: superpathway of L-alanine biosynthesis	Location	wilcox	46	2	219	0.3692002007665234	0.7427439333067706
+PWY0-1241: ADP-L-glycero-&beta;-D-manno-heptose biosynthesis	Location	wilcox	46	2	306	0.31333827013455484	0.7316938398498157
+PWY0-1261: anhydromuropeptides recycling I	Location	wilcox	46	2	239	0.6527376700995727	0.8893875823667484
+PWY0-1296: purine ribonucleosides degradation	Location	wilcox	46	2	147	0.011663318848317094	0.13754672572842916
+PWY0-1297: superpathway of purine deoxyribonucleosides degradation	Location	wilcox	46	2	280	0.6686619076065032	0.8938125139558041
+PWY0-1298: superpathway of pyrimidine deoxyribonucleosides degradation	Location	wilcox	46	2	355	0.03534971081611462	0.29486831949051706
+PWY0-1319: CDP-diacylglycerol biosynthesis II	Location	wilcox	46	2	101	2.6817456337559887e-4	0.025312399375902822
+PWY0-1337: oleate &beta;-oxidation	Location	wilcox	46	2	315	0.18753334609692235	0.6484331926300072
+PWY0-1338: polymyxin resistance	Location	wilcox	46	2	287	0.521640124046257	0.8254251715050821
+PWY0-1415: superpathway of heme b biosynthesis from uroporphyrinogen-III	Location	wilcox	46	2	296	0.41955186630098124	0.78503175296127925
+PWY0-1477: ethanolamine utilization	Location	wilcox	46	2	293	0.4751708546835392	0.8040238887548383
+PWY0-1479: tRNA processing	Location	wilcox	46	2	238.5	0.6415937030985811	0.8893875823667484
+PWY0-1586: peptidoglycan maturation (meso-diaminopimelate containing)	Location	wilcox	46	2	222	0.4097000413859916	0.7741293599669012
+PWY0-162: superpathway of pyrimidine ribonucleotides de novo biosynthesis	Location	wilcox	46	2	354	0.03740032516137209	0.3045455048854584
+PWY0-166: superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis (E. coli)	Location	wilcox	46	2	294	0.4462253690773009	0.7993891147198413
+PWY0-301: L-ascorbate degradation I (bacterial, anaerobic)	Location	wilcox	46	2	297.5	0.4081286326995054	0.7741293599669012
+PWY0-42: 2-methylcitrate cycle I	Location	wilcox	46	2	298	0.3786360776928838	0.7568436379734277
+PWY0-781: aspartate superpathway	Location	wilcox	46	2	293	0.46360850987500063	0.7993891147198413
+PWY0-845: superpathway of pyridoxal 5'-phosphate biosynthesis and salvage	Location	wilcox	46	2	304	0.3385215486102174	0.7373975493090182
+PWY0-862: (5Z)-dodecenoate biosynthesis I	Location	wilcox	46	2	287	0.5606177785327081	0.8446311905646968
+PWY1ZNC-1: assimilatory sulfate reduction IV	Location	wilcox	46	2	338.5	0.08382791374038596	0.4859177372747796
+PWY3O-4107: NAD salvage pathway V (PNC V cycle)	Location	wilcox	46	2	278	0.698006548895474	0.9012166897880146
+PWY4FS-7: phosphatidylglycerol biosynthesis I (plastidic)	Location	wilcox	46	2	198	0.174661524742975	0.62878148907471
+PWY4FS-8: phosphatidylglycerol biosynthesis II (non-plastidic)	Location	wilcox	46	2	198	0.174661524742975	0.62878148907471
+PWY4LZ-257: superpathway of fermentation (Chlamydomonas reinhardtii)	Location	wilcox	46	2	292.5	0.4781444086789233	0.8040238887548383
+PWY66-389: phytol degradation	Location	wilcox	46	2	310	0.2313057765030846	0.6730391507583202
+PWY66-391: fatty acid &beta;-oxidation VI (mammalian peroxisome)	Location	wilcox	46	2	309	0.2701170939248636	0.7142286049000452
+PWY66-399: gluconeogenesis III	Location	wilcox	46	2	344	0.06388266840259568	0.43085926049127143
+PWY66-409: superpathway of purine nucleotide salvage	Location	wilcox	46	2	275	0.7479545360054665	0.9264434906359339
+PWY66-429: fatty acid biosynthesis initiation (mitochondria)	Location	wilcox	46	2	218	0.3613310191045787	0.7421068355983734
+PYRIDNUCSAL-PWY: NAD salvage pathway I (PNC VI cycle)	Location	wilcox	46	2	276	0.7310956070989765	0.9158720511764917
+PYRIDNUCSYN-PWY: NAD de novo biosynthesis I (from aspartate)	Location	wilcox	46	2	233	0.5606177785327081	0.8446311905646968
+PYRIDOXSYN-PWY: pyridoxal 5'-phosphate biosynthesis I	Location	wilcox	46	2	328	0.1357658523185141	0.5877458416826813
+REDCITCYC: TCA cycle VI (Helicobacter)	Location	wilcox	46	2	358	0.02207519341946028	0.2220504749839828
+RHAMCAT-PWY: L-rhamnose degradation I	Location	wilcox	46	2	195	0.1543034662053712	0.6065722464624936
+RIBOSYN2-PWY: flavin biosynthesis I (bacteria and plants)	Location	wilcox	46	2	233	0.5606177785327081	0.8446311905646968
+RUMP-PWY: formaldehyde oxidation I	Location	wilcox	46	2	315	0.200709664929152	0.6484331926300072
+SALVADEHYPOX-PWY: adenosine nucleotides degradation II	Location	wilcox	46	2	271	0.8178173472385825	0.9385689018644134
+SER-GLYSYN-PWY: superpathway of L-serine and glycine biosynthesis I	Location	wilcox	46	2	191	0.12997669681862123	0.5877458416826813
+SO4ASSIM-PWY: assimilatory sulfate reduction I	Location	wilcox	46	2	319.5	0.1899422417030495	0.6484331926300072
+SULFATE-CYS-PWY: superpathway of sulfate assimilation and cysteine biosynthesis	Location	wilcox	46	2	316.5	0.21346213902450573	0.6518218888069728
+TCA-GLYOX-BYPASS: superpathway of glyoxylate bypass and TCA	Location	wilcox	46	2	306	0.2892390110604174	0.7220419108223558
+TCA: TCA cycle I (prokaryotic)	Location	wilcox	46	2	303	0.3287203895970251	0.7373975493090182
+THISYN-PWY: superpathway of thiamine diphosphate biosynthesis I	Location	wilcox	46	2	180	0.07802833903306255	0.46817003419837533
+THISYNARA-PWY: superpathway of thiamine diphosphate biosynthesis III (eukaryotes)	Location	wilcox	46	2	198	0.174661524742975	0.62878148907471
+THRESYN-PWY: superpathway of L-threonine biosynthesis	Location	wilcox	46	2	224	0.43523403599240934	0.7917555335606595
+TRNA-CHARGING-PWY: tRNA charging	Location	wilcox	46	2	210	0.27566718083861397	0.7142286049000452
+TRPSYN-PWY: L-tryptophan biosynthesis	Location	wilcox	46	2	145	0.010193885408675869	0.12912254850989432
+UDPNAGSYN-PWY: UDP-N-acetyl-D-glucosamine biosynthesis I	Location	wilcox	46	2	183	0.09019329476208973	0.5056738821087653
+UNINTEGRATED	Location	wilcox	46	2	272	0.8008087938606367	0.9347324488066135
+UNMAPPED	Location	wilcox	46	2	258	0.97375284134799	0.9852765436124633
+VALSYN-PWY: L-valine biosynthesis	Location	wilcox	46	2	82	3.437430252173211e-5	0.011756011462432383
+1CMET2-PWY: folate transformations III (E. coli)	FICat	wilcox	46	2	276	0.8022538403478334	1
+ALLANTOINDEG-PWY: superpathway of allantoin degradation in yeast	FICat	wilcox	46	2	265	0.9901795372415617	1
+ANAEROFRUCAT-PWY: homolactic fermentation	FICat	wilcox	46	2	239	0.5933987983756668	1
+ANAGLYCOLYSIS-PWY: glycolysis III (from glucose)	FICat	wilcox	46	2	330	0.151050415748487	1
+ARG+POLYAMINE-SYN: superpathway of arginine and polyamine biosynthesis	FICat	wilcox	46	2	265	0.9912271755280572	1
+ARGININE-SYN4-PWY: L-ornithine biosynthesis II	FICat	wilcox	46	2	250	0.7687522213476	1
+ARGSYN-PWY: L-arginine biosynthesis I (via L-ornithine)	FICat	wilcox	46	2	284	0.67097627445937	1
+ARGSYNBSUB-PWY: L-arginine biosynthesis II (acetyl cycle)	FICat	wilcox	46	2	283	0.6869485429904645	1
+ARO-PWY: chorismate biosynthesis I	FICat	wilcox	46	2	284	0.67097627445937	1
+ASPASN-PWY: superpathway of L-aspartate and L-asparagine biosynthesis	FICat	wilcox	46	2	302	0.4132114690886593	1
+AST-PWY: L-arginine degradation II (AST pathway)	FICat	wilcox	46	2	275	0.8050538387388597	1
+BIOTIN-BIOSYNTHESIS-PWY: biotin biosynthesis I	FICat	wilcox	46	2	218	0.320291109359855	1
+BRANCHED-CHAIN-AA-SYN-PWY: superpathway of branched chain amino acid biosynthesis	FICat	wilcox	46	2	263	0.9913143343639648	1
+CALVIN-PWY: Calvin-Benson-Bassham cycle	FICat	wilcox	46	2	295	0.5060401557385229	1
+CENTFERM-PWY: pyruvate fermentation to butanoate	FICat	wilcox	46	2	312	0.2959450653024163	1
+CITRULBIO-PWY: L-citrulline biosynthesis	FICat	wilcox	46	2	223	0.3766734646299977	1
+COA-PWY-1: superpathway of coenzyme A biosynthesis III (mammals)	FICat	wilcox	46	2	289	0.5933987983756668	1
+COA-PWY: coenzyme A biosynthesis I (prokaryotic)	FICat	wilcox	46	2	283	0.6869485429904645	1
+COBALSYN-PWY: superpathway of adenosylcobalamin salvage from cobinamide I	FICat	wilcox	46	2	220	0.342160279820662	1
+COLANSYN-PWY: colanic acid building blocks biosynthesis	FICat	wilcox	46	2	283	0.6869485429904645	1
+COMPLETE-ARO-PWY: superpathway of aromatic amino acid biosynthesis	FICat	wilcox	46	2	274	0.8361156862145794	1
+DAPLYSINESYN-PWY: L-lysine biosynthesis I	FICat	wilcox	46	2	268	0.9392568093134893	1
+DARABCATK12-PWY: D-arabinose degradation I	FICat	wilcox	46	2	279	0.7211332560667718	1
+DENOVOPURINE2-PWY: superpathway of purine nucleotides de novo biosynthesis II	FICat	wilcox	46	2	273	0.8342582300276777	1
+DTDPRHAMSYN-PWY: dTDP-&beta;-L-rhamnose biosynthesis	FICat	wilcox	46	2	287	0.6239498496959035	1
+FAO-PWY: fatty acid &beta;-oxidation I (generic)	FICat	wilcox	46	2	260.5	0.9442753606532389	1
+FASYN-ELONG-PWY: fatty acid elongation -- saturated	FICat	wilcox	46	2	247	0.7193012479171921	1
+FERMENTATION-PWY: mixed acid fermentation	FICat	wilcox	46	2	254	0.8361156862145794	1
+FOLSYN-PWY: superpathway of tetrahydrofolate biosynthesis and salvage	FICat	wilcox	46	2	235	0.5280342659248074	1
+FUC-RHAMCAT-PWY: superpathway of fucose and rhamnose degradation	FICat	wilcox	46	2	311.5	0.3013415848905357	1
+FUCCAT-PWY: fucose degradation	FICat	wilcox	46	2	261	0.9565918486801646	1
+GALACT-GLUCUROCAT-PWY: superpathway of hexuronide and hexuronate degradation	FICat	wilcox	46	2	245	0.6841349961144466	1
+GALACTARDEG-PWY: D-galactarate degradation I	FICat	wilcox	46	2	230	0.4605511955334976	1
+GALACTITOLCAT-PWY: galactitol degradation	FICat	wilcox	46	2	238	0.5608629108354983	1
+GALACTUROCAT-PWY: D-galacturonate degradation I	FICat	wilcox	46	2	290	0.578379557530774	1
+GLCMANNANAUT-PWY: superpathway of N-acetylglucosamine, N-acetylmannosamine and N-acetylneuraminate degradation	FICat	wilcox	46	2	332	0.13878953799218466	1
+GLUCARDEG-PWY: D-glucarate degradation I	FICat	wilcox	46	2	219	0.3260037783474659	1
+GLUCARGALACTSUPER-PWY: superpathway of D-glucarate and D-galactarate degradation	FICat	wilcox	46	2	230	0.4605511955334976	1
+GLUCONEO-PWY: gluconeogenesis I	FICat	wilcox	46	2	296	0.4921540598287515	1
+GLUCOSE1PMETAB-PWY: glucose and glucose-1-phosphate degradation	FICat	wilcox	46	2	259	0.9206356222808415	1
+GLUCUROCAT-PWY: superpathway of &beta;-D-glucuronosides degradation	FICat	wilcox	46	2	284	0.67097627445937	1
+GLUDEG-I-PWY: GABA shunt	FICat	wilcox	46	2	211.5	0.25232732249191525	1
+GLUTORN-PWY: L-ornithine biosynthesis I	FICat	wilcox	46	2	269	0.9219499385100909	1
+GLYCOCAT-PWY: glycogen degradation I	FICat	wilcox	46	2	209	0.2306829434521319	1
+GLYCOGENSYNTH-PWY: glycogen biosynthesis I (from ADP-D-Glucose)	FICat	wilcox	46	2	363	0.02934128892273381	1
+GLYCOL-GLYOXDEG-PWY: superpathway of glycol metabolism and degradation	FICat	wilcox	46	2	303	0.36076535058450127	1
+GLYCOLYSIS-E-D: superpathway of glycolysis and the Entner-Doudoroff pathway	FICat	wilcox	46	2	279	0.7521546677034546	1
+GLYCOLYSIS: glycolysis I (from glucose 6-phosphate)	FICat	wilcox	46	2	211	0.2509622505802137	1
+GLYOXYLATE-BYPASS: glyoxylate cycle	FICat	wilcox	46	2	266	0.9735063022335707	1
+GOLPDLCAT-PWY: superpathway of glycerol degradation to 1,3-propanediol	FICat	wilcox	46	2	223	0.3766734646299977	1
+HEME-BIOSYNTHESIS-II-1: heme b biosynthesis V (aerobic)	FICat	wilcox	46	2	255	0.8496274811202327	1
+HEME-BIOSYNTHESIS-II: heme b biosynthesis I (aerobic)	FICat	wilcox	46	2	311	0.3064686413919539	1
+HEMESYN2-PWY: heme b biosynthesis II (oxygen-independent)	FICat	wilcox	46	2	304	0.3886297562152198	1
+HEXITOLDEGSUPER-PWY: superpathway of hexitol degradation (bacteria)	FICat	wilcox	46	2	231	0.458569597587046	1
+HISDEG-PWY: L-histidine degradation I	FICat	wilcox	46	2	218	0.320291109359855	1
+HISTSYN-PWY: L-histidine biosynthesis	FICat	wilcox	46	2	194	0.12729490624341305	1
+HOMOSER-METSYN-PWY: L-methionine biosynthesis I	FICat	wilcox	46	2	259	0.9204719180537112	1
+HSERMETANA-PWY: L-methionine biosynthesis III	FICat	wilcox	46	2	184	0.08036945494728961	1
+ILEUSYN-PWY: L-isoleucine biosynthesis I (from threonine)	FICat	wilcox	46	2	257	0.8874526056301757	1
+KDO-NAGLIPASYN-PWY: superpathway of (Kdo)2-lipid A biosynthesis	FICat	wilcox	46	2	262.5	0.9800673068185569	1
+KETOGLUCONMET-PWY: ketogluconate metabolism	FICat	wilcox	46	2	278	0.7581699551494911	1
+LACTOSECAT-PWY: lactose and galactose degradation I	FICat	wilcox	46	2	222	0.3614465892860281	1
+MET-SAM-PWY: superpathway of S-adenosyl-L-methionine biosynthesis	FICat	wilcox	46	2	261	0.955767001161393	1
+METH-ACETATE-PWY: methanogenesis from acetate	FICat	wilcox	46	2	264	1	1
+METHGLYUT-PWY: superpathway of methylglyoxal degradation	FICat	wilcox	46	2	334	0.12450431011231561	1
+METSYN-PWY: superpathway of L-homoserine and L-methionine biosynthesis	FICat	wilcox	46	2	259	0.9204719180537112	1
+NAD-BIOSYNTHESIS-II: NAD salvage pathway III (to nicotinamide riboside)	FICat	wilcox	46	2	277.5	0.7730217360828663	1
+NAGLIPASYN-PWY: lipid IVA biosynthesis (E. coli)	FICat	wilcox	46	2	220.5	0.3443536252329008	1
+NONMEVIPP-PWY: methylerythritol phosphate pathway I	FICat	wilcox	46	2	279	0.7521546677034546	1
+NONOXIPENT-PWY: pentose phosphate pathway (non-oxidative branch) I	FICat	wilcox	46	2	239	0.5933987983756668	1
+OANTIGEN-PWY: O-antigen building blocks biosynthesis (E. coli)	FICat	wilcox	46	2	298	0.4649942534478931	1
+ORNDEG-PWY: superpathway of ornithine degradation	FICat	wilcox	46	2	233.5	0.4962887061651058	1
+P105-PWY: TCA cycle IV (2-oxoglutarate decarboxylase)	FICat	wilcox	46	2	239.5	0.5957894017914562	1
+P108-PWY: pyruvate fermentation to propanoate I	FICat	wilcox	46	2	300	0.411883842909999	1
+P122-PWY: heterolactic fermentation	FICat	wilcox	46	2	265	0.9898677914417136	1
+P124-PWY: Bifidobacterium shunt	FICat	wilcox	46	2	312	0.24228222708795652	1
+P125-PWY: superpathway of (R,R)-butanediol biosynthesis	FICat	wilcox	46	2	317	0.1962235937750826	1
+P161-PWY: acetylene degradation (anaerobic)	FICat	wilcox	46	2	228	0.4348701730519657	1
+P164-PWY: purine nucleobases degradation I (anaerobic)	FICat	wilcox	46	2	304.5	0.3790618849147708	1
+P185-PWY: formaldehyde assimilation III (dihydroxyacetone cycle)	FICat	wilcox	46	2	291	0.5593930904839594	1
+P221-PWY: octane oxidation	FICat	wilcox	46	2	268	0.9303171351451806	1
+P23-PWY: reductive TCA cycle I	FICat	wilcox	46	2	241	0.5740125857881839	1
+P4-PWY: superpathway of L-lysine, L-threonine and L-methionine biosynthesis I	FICat	wilcox	46	2	283	0.6788545162894212	1
+P41-PWY: pyruvate fermentation to acetate and (S)-lactate I	FICat	wilcox	46	2	275	0.8191434292692455	1
+P42-PWY: incomplete reductive TCA cycle	FICat	wilcox	46	2	199	0.1574759728772719	1
+P441-PWY: superpathway of N-acetylneuraminate degradation	FICat	wilcox	46	2	264	1	1
+P461-PWY: hexitol fermentation to lactate, formate, ethanol and acetate	FICat	wilcox	46	2	230.5	0.4680278844653612	1
+PANTO-PWY: phosphopantothenate biosynthesis I	FICat	wilcox	46	2	257	0.8874526056301757	1
+PANTOSYN-PWY: superpathway of coenzyme A biosynthesis I (bacteria)	FICat	wilcox	46	2	276	0.8022538403478334	1
+PENTOSE-P-PWY: pentose phosphate pathway	FICat	wilcox	46	2	240	0.6085906419615881	1
+PEPTIDOGLYCANSYN-PWY: peptidoglycan biosynthesis I (meso-diaminopimelate containing)	FICat	wilcox	46	2	296	0.4921540598287515	1
+PHOSLIPSYN-PWY: superpathway of phospholipid biosynthesis I (bacteria)	FICat	wilcox	46	2	261	0.9565918486801646	1
+POLYAMINSYN3-PWY: superpathway of polyamine biosynthesis II	FICat	wilcox	46	2	265	0.991071928165321	1
+POLYAMSYN-PWY: superpathway of polyamine biosynthesis I	FICat	wilcox	46	2	265	0.9912271755280572	1
+POLYISOPRENSYN-PWY: polyisoprenoid biosynthesis (E. coli)	FICat	wilcox	46	2	349	0.06313917359290538	1
+PPGPPMET-PWY: ppGpp metabolism	FICat	wilcox	46	2	257	0.886146210663233	1
+PRPP-PWY: superpathway of histidine, purine, and pyrimidine biosynthesis	FICat	wilcox	46	2	275	0.7960386836387194	1
+PWY-1042: glycolysis IV	FICat	wilcox	46	2	376	0.013202399229844399	1
+PWY-1269: CMP-3-deoxy-D-manno-octulosonate biosynthesis	FICat	wilcox	46	2	255	0.853163069618915	1
+PWY-1861: formaldehyde assimilation II (assimilatory RuMP Cycle)	FICat	wilcox	46	2	170	0.03975203853080257	1
+PWY-241: C4 photosynthetic carbon assimilation cycle, NADP-ME type	FICat	wilcox	46	2	253	0.8173910487283688	1
+PWY-2941: L-lysine biosynthesis II	FICat	wilcox	46	2	296	0.4921540598287515	1
+PWY-2942: L-lysine biosynthesis III	FICat	wilcox	46	2	211	0.2509622505802137	1
+PWY-3001: superpathway of L-isoleucine biosynthesis I	FICat	wilcox	46	2	282	0.7030590029640466	1
+PWY-3841: folate transformations II (plants)	FICat	wilcox	46	2	279	0.7521546677034546	1
+PWY-4041: &gamma;-glutamyl cycle	FICat	wilcox	46	2	300	0.43867254109562964	1
+PWY-4984: urea cycle	FICat	wilcox	46	2	228	0.43867254109562964	1
+PWY-5005: biotin biosynthesis II	FICat	wilcox	46	2	300	0.4318707802961255	1
+PWY-5022: 4-aminobutanoate degradation V	FICat	wilcox	46	2	191	0.10772093871458548	1
+PWY-5030: L-histidine degradation III	FICat	wilcox	46	2	227	0.42583316368068264	1
+PWY-5097: L-lysine biosynthesis VI	FICat	wilcox	46	2	246	0.7030590029640466	1
+PWY-5100: pyruvate fermentation to acetate and lactate II	FICat	wilcox	46	2	279	0.7521546677034546	1
+PWY-5103: L-isoleucine biosynthesis III	FICat	wilcox	46	2	244	0.67097627445937	1
+PWY-5104: L-isoleucine biosynthesis IV	FICat	wilcox	46	2	266	0.9727101487789107	1
+PWY-5121: superpathway of geranylgeranyl diphosphate biosynthesis II (via MEP)	FICat	wilcox	46	2	359	0.036832153185823086	1
+PWY-5130: 2-oxobutanoate degradation I	FICat	wilcox	46	2	304	0.38500513436496636	1
+PWY-5136: fatty acid &beta;-oxidation II (plant peroxisome)	FICat	wilcox	46	2	224	0.384770460787848	1
+PWY-5138: fatty acid &beta;-oxidation IV (unsaturated, even number)	FICat	wilcox	46	2	271	0.8785652337560045	1
+PWY-5154: L-arginine biosynthesis III (via N-acetyl-L-citrulline)	FICat	wilcox	46	2	287	0.6239498496959035	1
+PWY-5188: tetrapyrrole biosynthesis I (from glutamate)	FICat	wilcox	46	2	243	0.6551484091462669	1
+PWY-5189: tetrapyrrole biosynthesis II (from glycine)	FICat	wilcox	46	2	234	0.5136594141068629	1
+PWY-5345: superpathway of L-methionine biosynthesis (by sulfhydrylation)	FICat	wilcox	46	2	271.5	0.8773494747409879	1
+PWY-5347: superpathway of L-methionine biosynthesis (transsulfuration)	FICat	wilcox	46	2	259	0.9204719180537112	1
+PWY-5367: petroselinate biosynthesis	FICat	wilcox	46	2	308	0.33029375342307987	1
+PWY-5384: sucrose degradation IV (sucrose phosphorylase)	FICat	wilcox	46	2	333	0.13294803876174782	1
+PWY-5484: glycolysis II (from fructose 6-phosphate)	FICat	wilcox	46	2	203	0.18521314329262367	1
+PWY-5497: purine nucleobases degradation II (anaerobic)	FICat	wilcox	46	2	257	0.8874526056301757	1
+PWY-5505: L-glutamate and L-glutamine biosynthesis	FICat	wilcox	46	2	294.5	0.5094337935412986	1
+PWY-561: superpathway of glyoxylate cycle and fatty acid degradation	FICat	wilcox	46	2	243	0.6401215602283002	1
+PWY-5656: mannosylglycerate biosynthesis I	FICat	wilcox	46	2	240	0.5806822576064159	1
+PWY-5659: GDP-mannose biosynthesis	FICat	wilcox	46	2	320	0.22465378683140513	1
+PWY-5667: CDP-diacylglycerol biosynthesis I	FICat	wilcox	46	2	333	0.13294803876174782	1
+PWY-5675: nitrate reduction V (assimilatory)	FICat	wilcox	46	2	264	1	1
+PWY-5676: acetyl-CoA fermentation to butanoate II	FICat	wilcox	46	2	256	0.8702779537504417	1
+PWY-5686: UMP biosynthesis I	FICat	wilcox	46	2	284	0.67097627445937	1
+PWY-5690: TCA cycle II (plants and fungi)	FICat	wilcox	46	2	285	0.6329122174643643	1
+PWY-5695: inosine 5'-phosphate degradation	FICat	wilcox	46	2	356	0.043443057959082466	1
+PWY-5723: Rubisco shunt	FICat	wilcox	46	2	242	0.6303983647133642	1
+PWY-5747: 2-methylcitrate cycle II	FICat	wilcox	46	2	264	1	1
+PWY-5837: 2-carboxy-1,4-naphthoquinol biosynthesis	FICat	wilcox	46	2	321	0.21358177734956973	1
+PWY-5838: superpathway of menaquinol-8 biosynthesis I	FICat	wilcox	46	2	311	0.30600572849126717	1
+PWY-5840: superpathway of menaquinol-7 biosynthesis	FICat	wilcox	46	2	287	0.614580414114243	1
+PWY-5845: superpathway of menaquinol-9 biosynthesis	FICat	wilcox	46	2	266	0.9735517187171983	1
+PWY-5850: superpathway of menaquinol-6 biosynthesis	FICat	wilcox	46	2	278.5	0.7442823897406459	1
+PWY-5855: ubiquinol-7 biosynthesis (early decarboxylation)	FICat	wilcox	46	2	240.5	0.597581430732548	1
+PWY-5860: superpathway of demethylmenaquinol-6 biosynthesis I	FICat	wilcox	46	2	277.5	0.761974815814329	1
+PWY-5861: superpathway of demethylmenaquinol-8 biosynthesis I	FICat	wilcox	46	2	312	0.29572130045459044	1
+PWY-5862: superpathway of demethylmenaquinol-9 biosynthesis	FICat	wilcox	46	2	265	0.9911824705965052	1
+PWY-5896: superpathway of menaquinol-10 biosynthesis	FICat	wilcox	46	2	278.5	0.7442823897406459	1
+PWY-5897: superpathway of menaquinol-11 biosynthesis	FICat	wilcox	46	2	315	0.2662696666107744	1
+PWY-5898: superpathway of menaquinol-12 biosynthesis	FICat	wilcox	46	2	315	0.2662696666107744	1
+PWY-5899: superpathway of menaquinol-13 biosynthesis	FICat	wilcox	46	2	315	0.2662696666107744	1
+PWY-5913: partial TCA cycle (obligate autotrophs)	FICat	wilcox	46	2	255	0.8517229264473565	1
+PWY-5918: superpathway of heme b biosynthesis from glutamate	FICat	wilcox	46	2	258	0.9030781822816459	1
+PWY-5920: superpathway of heme b biosynthesis from glycine	FICat	wilcox	46	2	233	0.48080530960563167	1
+PWY-5941: glycogen degradation II	FICat	wilcox	46	2	317	0.2509622505802137	1
+PWY-5971: palmitate biosynthesis (type II fatty acid synthase)	FICat	wilcox	46	2	270	0.9020365949699302	1
+PWY-5973: cis-vaccenate biosynthesis	FICat	wilcox	46	2	236	0.5488787149812437	1
+PWY-5981: CDP-diacylglycerol biosynthesis III	FICat	wilcox	46	2	264	1	1
+PWY-5989: stearate biosynthesis II (bacteria and plants)	FICat	wilcox	46	2	248	0.7356687165070628	1
+PWY-6121: 5-aminoimidazole ribonucleotide biosynthesis I	FICat	wilcox	46	2	289	0.5933987983756668	1
+PWY-6122: 5-aminoimidazole ribonucleotide biosynthesis II	FICat	wilcox	46	2	279	0.7521546677034546	1
+PWY-6123: inosine-5'-phosphate biosynthesis I	FICat	wilcox	46	2	253	0.8191434292692455	1
+PWY-6124: inosine-5'-phosphate biosynthesis II	FICat	wilcox	46	2	255	0.853163069618915	1
+PWY-6125: superpathway of guanosine nucleotides de novo biosynthesis II	FICat	wilcox	46	2	332	0.13878953799218466	1
+PWY-6126: superpathway of adenosine nucleotides de novo biosynthesis II	FICat	wilcox	46	2	336	0.11654048280850315	1
+PWY-6143: CMP-pseudaminate biosynthesis	FICat	wilcox	46	2	279.5	0.7078331051105086	1
+PWY-6147: 6-hydroxymethyl-dihydropterin diphosphate biosynthesis I	FICat	wilcox	46	2	276	0.8022538403478334	1
+PWY-6151: S-adenosyl-L-methionine salvage I	FICat	wilcox	46	2	243	0.6551484091462669	1
+PWY-6163: chorismate biosynthesis from 3-dehydroquinate	FICat	wilcox	46	2	282	0.7030590029640466	1
+PWY-6168: flavin biosynthesis III (fungi)	FICat	wilcox	46	2	240	0.603472152240304	1
+PWY-621: sucrose degradation III (sucrose invertase)	FICat	wilcox	46	2	347	0.06937066153634765	1
+PWY-6270: isoprene biosynthesis I	FICat	wilcox	46	2	246	0.7030590029640466	1
+PWY-6277: superpathway of 5-aminoimidazole ribonucleotide biosynthesis	FICat	wilcox	46	2	279	0.7521546677034546	1
+PWY-6282: palmitoleate biosynthesis I (from (5Z)-dodec-5-enoate)	FICat	wilcox	46	2	250	0.7687522213476	1
+PWY-6284: superpathway of unsaturated fatty acids biosynthesis (E. coli)	FICat	wilcox	46	2	295	0.49486934126656407	1
+PWY-6285: superpathway of fatty acids biosynthesis (E. coli)	FICat	wilcox	46	2	291.5	0.5119401154098824	1
+PWY-6292: superpathway of L-cysteine biosynthesis (mammalian)	FICat	wilcox	46	2	346	0.0730682674532844	1
+PWY-6293: superpathway of L-cysteine biosynthesis (fungi)	FICat	wilcox	46	2	298	0.43102004782529546	1
+PWY-6305: superpathway of putrescine biosynthesis	FICat	wilcox	46	2	276	0.8022538403478334	1
+PWY-6317: D-galactose degradation I (Leloir pathway)	FICat	wilcox	46	2	338	0.1064991122308984	1
+PWY-6353: purine nucleotides degradation II (aerobic)	FICat	wilcox	46	2	289	0.5933987983756668	1
+PWY-6385: peptidoglycan biosynthesis III (mycobacteria)	FICat	wilcox	46	2	291	0.5635379279672469	1
+PWY-6386: UDP-N-acetylmuramoyl-pentapeptide biosynthesis II (lysine-containing)	FICat	wilcox	46	2	276	0.8022538403478334	1
+PWY-6387: UDP-N-acetylmuramoyl-pentapeptide biosynthesis I (meso-diaminopimelate containing)	FICat	wilcox	46	2	294	0.5201255955442005	1
+PWY-6470: peptidoglycan biosynthesis V (&beta;-lactam resistance)	FICat	wilcox	46	2	291	0.5598299914568879	1
+PWY-6507: 4-deoxy-L-threo-hex-4-enopyranuronate degradation	FICat	wilcox	46	2	302	0.4132114690886593	1
+PWY-6519: 8-amino-7-oxononanoate biosynthesis I	FICat	wilcox	46	2	227	0.42583316368068264	1
+PWY-6527: stachyose degradation	FICat	wilcox	46	2	333	0.13294803876174782	1
+PWY-6531: mannitol cycle	FICat	wilcox	46	2	254	0.8344219194150031	1
+PWY-6545: pyrimidine deoxyribonucleotides de novo biosynthesis III	FICat	wilcox	46	2	276	0.8000189907883088	1
+PWY-6549: L-glutamine biosynthesis III	FICat	wilcox	46	2	291	0.5600237552891505	1
+PWY-6572: chondroitin sulfate degradation I (bacterial)	FICat	wilcox	46	2	238.5	0.543691320011211	1
+PWY-6588: pyruvate fermentation to acetone	FICat	wilcox	46	2	200	0.1615150046017596	1
+PWY-6590: superpathway of Clostridium acetobutylicum acidogenic fermentation	FICat	wilcox	46	2	315	0.26649121375292445	1
+PWY-6595: superpathway of guanosine nucleotides degradation (plants)	FICat	wilcox	46	2	330.5	0.14310939459743033	1
+PWY-6606: guanosine nucleotides degradation II	FICat	wilcox	46	2	281	0.7193012479171921	1
+PWY-6607: guanosine nucleotides degradation I	FICat	wilcox	46	2	326.5	0.1689568143575515	1
+PWY-6608: guanosine nucleotides degradation III	FICat	wilcox	46	2	271	0.8874526056301757	1
+PWY-6609: adenine and adenosine salvage III	FICat	wilcox	46	2	398	0.002728010594323536	0.9329796232586494
+PWY-6612: superpathway of tetrahydrofolate biosynthesis	FICat	wilcox	46	2	235	0.5280342659248074	1
+PWY-6628: superpathway of L-phenylalanine biosynthesis	FICat	wilcox	46	2	309	0.33111126163850496	1
+PWY-6629: superpathway of L-tryptophan biosynthesis	FICat	wilcox	46	2	303	0.4008096702818839	1
+PWY-6630: superpathway of L-tyrosine biosynthesis	FICat	wilcox	46	2	319	0.2331995066486628	1
+PWY-6700: queuosine biosynthesis I (de novo)	FICat	wilcox	46	2	277	0.7854543339969031	1
+PWY-6703: preQ0 biosynthesis	FICat	wilcox	46	2	223	0.3766734646299977	1
+PWY-6731: starch degradation III	FICat	wilcox	46	2	289	0.5933987983756668	1
+PWY-6749: CMP-legionaminate biosynthesis I	FICat	wilcox	46	2	300	0.4040223179217321	1
+PWY-6803: phosphatidylcholine acyl editing	FICat	wilcox	46	2	257	0.8821526918775112	1
+PWY-6807: xyloglucan degradation II (exoglucanase)	FICat	wilcox	46	2	236.5	0.5215731803596046	1
+PWY-6823: molybdopterin biosynthesis	FICat	wilcox	46	2	337	0.11143239972623314	1
+PWY-6859: all-trans-farnesol biosynthesis	FICat	wilcox	46	2	372	0.01806837591624437	1
+PWY-6892: thiazole component of thiamine diphosphate biosynthesis I	FICat	wilcox	46	2	260	0.9392568093134893	1
+PWY-6895: superpathway of thiamine diphosphate biosynthesis II	FICat	wilcox	46	2	265	0.9912179633071831	1
+PWY-6897: thiamine diphosphate salvage II	FICat	wilcox	46	2	282	0.7030590029640466	1
+PWY-6901: superpathway of glucose and xylose degradation	FICat	wilcox	46	2	274	0.8361156862145794	1
+PWY-6902: chitin degradation II (Vibrio)	FICat	wilcox	46	2	225	0.4008096702818839	1
+PWY-6906: chitin derivatives degradation	FICat	wilcox	46	2	201	0.1677445303369805	1
+PWY-6922: L-N&delta;-acetylornithine biosynthesis	FICat	wilcox	46	2	219	0.30365916555776645	1
+PWY-6936: seleno-amino acid biosynthesis (plants)	FICat	wilcox	46	2	260	0.9392568093134893	1
+PWY-6961: L-ascorbate degradation II (bacterial, aerobic)	FICat	wilcox	46	2	259	0.9194731220842494	1
+PWY-6969: TCA cycle V (2-oxoglutarate synthase)	FICat	wilcox	46	2	217	0.3097001854193756	1
+PWY-6992: 1,5-anhydrofructose degradation	FICat	wilcox	46	2	233	0.45879445672308045	1
+PWY-7013: (S)-propane-1,2-diol degradation	FICat	wilcox	46	2	274.5	0.8258963979278562	1
+PWY-702: L-methionine biosynthesis II	FICat	wilcox	46	2	252	0.8022538403478334	1
+PWY-7094: fatty acid salvage	FICat	wilcox	46	2	264	1	1
+PWY-7111: pyruvate fermentation to isobutanol (engineered)	FICat	wilcox	46	2	257	0.8874526056301757	1
+PWY-7115: C4 photosynthetic carbon assimilation cycle, NAD-ME type	FICat	wilcox	46	2	287.5	0.6126347221492725	1
+PWY-7117: C4 photosynthetic carbon assimilation cycle, PEPCK type	FICat	wilcox	46	2	257	0.886338164349831	1
+PWY-7118: chitin deacetylation	FICat	wilcox	46	2	276	0.797557678884594	1
+PWY-7184: pyrimidine deoxyribonucleotides de novo biosynthesis I	FICat	wilcox	46	2	277	0.7830469151711468	1
+PWY-7185: UTP and CTP dephosphorylation I	FICat	wilcox	46	2	286	0.6238967724553698	1
+PWY-7187: pyrimidine deoxyribonucleotides de novo biosynthesis II	FICat	wilcox	46	2	274	0.8150934531569647	1
+PWY-7197: pyrimidine deoxyribonucleotide phosphorylation	FICat	wilcox	46	2	289	0.5933987983756668	1
+PWY-7198: pyrimidine deoxyribonucleotides de novo biosynthesis IV	FICat	wilcox	46	2	249	0.7521546677034546	1
+PWY-7199: pyrimidine deoxyribonucleosides salvage	FICat	wilcox	46	2	328	0.16410224038369675	1
+PWY-7204: pyridoxal 5'-phosphate salvage II (plants)	FICat	wilcox	46	2	252	0.7869158178165289	1
+PWY-7208: superpathway of pyrimidine nucleobases salvage	FICat	wilcox	46	2	328	0.16410224038369675	1
+PWY-7209: superpathway of pyrimidine ribonucleosides degradation	FICat	wilcox	46	2	222	0.31344523246684597	1
+PWY-7210: pyrimidine deoxyribonucleotides biosynthesis from CTP	FICat	wilcox	46	2	287	0.6078524034986612	1
+PWY-7211: superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis	FICat	wilcox	46	2	290.5	0.5655140412412889	1
+PWY-7220: adenosine deoxyribonucleotides de novo biosynthesis II	FICat	wilcox	46	2	324	0.19266951624750073	1
+PWY-7221: guanosine ribonucleotides de novo biosynthesis	FICat	wilcox	46	2	242	0.6394709894242339	1
+PWY-7222: guanosine deoxyribonucleotides de novo biosynthesis II	FICat	wilcox	46	2	324	0.19266951624750073	1
+PWY-7228: superpathway of guanosine nucleotides de novo biosynthesis I	FICat	wilcox	46	2	334	0.12729490624341305	1
+PWY-7229: superpathway of adenosine nucleotides de novo biosynthesis I	FICat	wilcox	46	2	351	0.0566236916562897	1
+PWY-7234: inosine-5'-phosphate biosynthesis III	FICat	wilcox	46	2	253	0.8191434292692455	1
+PWY-7237: myo-, chiro- and scyllo-inositol degradation	FICat	wilcox	46	2	268.5	0.9292837485173497	1
+PWY-7238: sucrose biosynthesis II	FICat	wilcox	46	2	319	0.2331995066486628	1
+PWY-7242: D-fructuronate degradation	FICat	wilcox	46	2	276	0.8022538403478334	1
+PWY-724: superpathway of L-lysine, L-threonine and L-methionine biosynthesis II	FICat	wilcox	46	2	270	0.9046792284461405	1
+PWY-7254: TCA cycle VII (acetate-producers)	FICat	wilcox	46	2	232.5	0.4514630039027462	1
+PWY-7282: 4-amino-2-methyl-5-diphosphomethylpyrimidine biosynthesis II	FICat	wilcox	46	2	270	0.9046792284461405	1
+PWY-7312: dTDP-&beta;-D-fucofuranose biosynthesis	FICat	wilcox	46	2	246	0.6745114903116036	1
+PWY-7315: dTDP-N-acetylthomosamine biosynthesis	FICat	wilcox	46	2	254	0.8316324726679076	1
+PWY-7316: dTDP-N-acetylviosamine biosynthesis	FICat	wilcox	46	2	291	0.5333462298504629	1
+PWY-7323: superpathway of GDP-mannose-derived O-antigen building blocks biosynthesis	FICat	wilcox	46	2	276	0.8022538403478334	1
+PWY-7328: superpathway of UDP-glucose-derived O-antigen building blocks biosynthesis	FICat	wilcox	46	2	252	0.8022538403478334	1
+PWY-7345: superpathway of anaerobic sucrose degradation	FICat	wilcox	46	2	306	0.364942311735763	1
+PWY-7356: thiamine diphosphate salvage IV (yeast)	FICat	wilcox	46	2	294	0.5201255955442005	1
+PWY-7357: thiamine phosphate formation from pyrithiamine and oxythiamine (yeast)	FICat	wilcox	46	2	281	0.7193012479171921	1
+PWY-7371: 1,4-dihydroxy-6-naphthoate biosynthesis II	FICat	wilcox	46	2	218	0.2929220104603658	1
+PWY-7383: anaerobic energy metabolism (invertebrates, cytosol)	FICat	wilcox	46	2	207	0.21632976337706092	1
+PWY-7385: 1,3-propanediol biosynthesis (engineered)	FICat	wilcox	46	2	255.5	0.8459277071687183	1
+PWY-7392: taxadiene biosynthesis (engineered)	FICat	wilcox	46	2	359	0.03764551227557621	1
+PWY-7400: L-arginine biosynthesis IV (archaebacteria)	FICat	wilcox	46	2	283	0.6869485429904645	1
+PWY-7456: &beta;-(1,4)-mannan degradation	FICat	wilcox	46	2	278	0.7687522213476	1
+PWY-7560: methylerythritol phosphate pathway II	FICat	wilcox	46	2	231	0.4784709516386791	1
+PWY-7663: gondoate biosynthesis (anaerobic)	FICat	wilcox	46	2	235	0.5344064855701185	1
+PWY-7664: oleate biosynthesis IV (anaerobic)	FICat	wilcox	46	2	247	0.7193012479171921	1
+PWY-7688: dTDP-&alpha;-D-ravidosamine and dTDP-4-acetyl-&alpha;-D-ravidosamine biosynthesis	FICat	wilcox	46	2	287	0.6078524034986612	1
+PWY-7761: NAD salvage pathway II (PNC IV cycle)	FICat	wilcox	46	2	274	0.8361156862145794	1
+PWY-7790: UMP biosynthesis II	FICat	wilcox	46	2	284	0.67097627445937	1
+PWY-7791: UMP biosynthesis III	FICat	wilcox	46	2	284	0.67097627445937	1
+PWY-7851: coenzyme A biosynthesis II (eukaryotic)	FICat	wilcox	46	2	286	0.6394709894242339	1
+PWY-7858: (5Z)-dodecenoate biosynthesis II	FICat	wilcox	46	2	280	0.7201317546323822	1
+PWY-7883: anhydromuropeptides recycling II	FICat	wilcox	46	2	252	0.7918254886745977	1
+PWY-7942: 5-oxo-L-proline metabolism	FICat	wilcox	46	2	258	0.8971341989674503	1
+PWY-7953: UDP-N-acetylmuramoyl-pentapeptide biosynthesis III (meso-diaminopimelate containing)	FICat	wilcox	46	2	289	0.5933987983756668	1
+PWY-7977: L-methionine biosynthesis IV	FICat	wilcox	46	2	242	0.6394709894242339	1
+PWY-7992: superpathway of menaquinol-8 biosynthesis III	FICat	wilcox	46	2	233	0.47731783680177964	1
+PWY-8004: Entner-Doudoroff pathway I	FICat	wilcox	46	2	304	0.3886297562152198	1
+PWY-801: homocysteine and cysteine interconversion	FICat	wilcox	46	2	298	0.43102004782529546	1
+PWY-8073: lipid IVA biosynthesis (P. putida)	FICat	wilcox	46	2	220.5	0.3443536252329008	1
+PWY-8131: 5'-deoxyadenosine degradation II	FICat	wilcox	46	2	262	0.9736857683402061	1
+PWY-8178: pentose phosphate pathway (non-oxidative branch) II	FICat	wilcox	46	2	274	0.8361156862145794	1
+PWY-8187: L-arginine degradation XIII (reductive Stickland reaction)	FICat	wilcox	46	2	206	0.20822568309128728	1
+PWY-821: superpathway of sulfur amino acid biosynthesis (Saccharomyces cerevisiae)	FICat	wilcox	46	2	266.5	0.9644179363439014	1
+PWY-841: superpathway of purine nucleotides de novo biosynthesis I	FICat	wilcox	46	2	328	0.16410224038369675	1
+PWY-I9: L-cysteine biosynthesis VI (from L-methionine)	FICat	wilcox	46	2	248	0.7356687165070628	1
+PWY0-1061: superpathway of L-alanine biosynthesis	FICat	wilcox	46	2	301	0.42189986804770413	1
+PWY0-1241: ADP-L-glycero-&beta;-D-manno-heptose biosynthesis	FICat	wilcox	46	2	183.5	0.07853467527249935	1
+PWY0-1261: anhydromuropeptides recycling I	FICat	wilcox	46	2	242	0.6394709894242339	1
+PWY0-1296: purine ribonucleosides degradation	FICat	wilcox	46	2	376	0.013202399229844399	1
+PWY0-1297: superpathway of purine deoxyribonucleosides degradation	FICat	wilcox	46	2	277	0.7854543339969031	1
+PWY0-1298: superpathway of pyrimidine deoxyribonucleosides degradation	FICat	wilcox	46	2	218	0.320291109359855	1
+PWY0-1319: CDP-diacylglycerol biosynthesis II	FICat	wilcox	46	2	333	0.13294803876174782	1
+PWY0-1337: oleate &beta;-oxidation	FICat	wilcox	46	2	272	0.8571645597196043	1
+PWY0-1338: polymyxin resistance	FICat	wilcox	46	2	278	0.7459588498077752	1
+PWY0-1415: superpathway of heme b biosynthesis from uroporphyrinogen-III	FICat	wilcox	46	2	251	0.7778947841346946	1
+PWY0-1477: ethanolamine utilization	FICat	wilcox	46	2	231	0.4784709516386791	1
+PWY0-1479: tRNA processing	FICat	wilcox	46	2	267	0.9561449193917702	1
+PWY0-1586: peptidoglycan maturation (meso-diaminopimelate containing)	FICat	wilcox	46	2	292	0.5488787149812437	1
+PWY0-162: superpathway of pyrimidine ribonucleotides de novo biosynthesis	FICat	wilcox	46	2	197	0.14482261711717517	1
+PWY0-166: superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis (E. coli)	FICat	wilcox	46	2	281	0.7096517195374734	1
+PWY0-301: L-ascorbate degradation I (bacterial, anaerobic)	FICat	wilcox	46	2	279.5	0.7392870546467722	1
+PWY0-42: 2-methylcitrate cycle I	FICat	wilcox	46	2	279	0.7354858732447371	1
+PWY0-781: aspartate superpathway	FICat	wilcox	46	2	282	0.6953191103303289	1
+PWY0-845: superpathway of pyridoxal 5'-phosphate biosynthesis and salvage	FICat	wilcox	46	2	230	0.4649942534478931	1
+PWY0-862: (5Z)-dodecenoate biosynthesis I	FICat	wilcox	46	2	244	0.67097627445937	1
+PWY1ZNC-1: assimilatory sulfate reduction IV	FICat	wilcox	46	2	243	0.6520374390686644	1
+PWY3O-4107: NAD salvage pathway V (PNC V cycle)	FICat	wilcox	46	2	244	0.6678728630322304	1
+PWY4FS-7: phosphatidylglycerol biosynthesis I (plastidic)	FICat	wilcox	46	2	287	0.6239498496959035	1
+PWY4FS-8: phosphatidylglycerol biosynthesis II (non-plastidic)	FICat	wilcox	46	2	287	0.6239498496959035	1
+PWY4LZ-257: superpathway of fermentation (Chlamydomonas reinhardtii)	FICat	wilcox	46	2	228	0.4348701730519657	1
+PWY66-389: phytol degradation	FICat	wilcox	46	2	288	0.5727867044142758	1
+PWY66-391: fatty acid &beta;-oxidation VI (mammalian peroxisome)	FICat	wilcox	46	2	284	0.6599232497870403	1
+PWY66-399: gluconeogenesis III	FICat	wilcox	46	2	230	0.4649942534478931	1
+PWY66-409: superpathway of purine nucleotide salvage	FICat	wilcox	46	2	290	0.5749246585644017	1
+PWY66-429: fatty acid biosynthesis initiation (mitochondria)	FICat	wilcox	46	2	345	0.07655877507307672	1
+PYRIDNUCSAL-PWY: NAD salvage pathway I (PNC VI cycle)	FICat	wilcox	46	2	249	0.749687491353622	1
+PYRIDNUCSYN-PWY: NAD de novo biosynthesis I (from aspartate)	FICat	wilcox	46	2	255	0.853163069618915	1
+PYRIDOXSYN-PWY: pyridoxal 5'-phosphate biosynthesis I	FICat	wilcox	46	2	218	0.320291109359855	1
+REDCITCYC: TCA cycle VI (Helicobacter)	FICat	wilcox	46	2	252	0.7887456189917914	1
+RHAMCAT-PWY: L-rhamnose degradation I	FICat	wilcox	46	2	290	0.578379557530774	1
+RIBOSYN2-PWY: flavin biosynthesis I (bacteria and plants)	FICat	wilcox	46	2	320	0.22465378683140513	1
+RUMP-PWY: formaldehyde oxidation I	FICat	wilcox	46	2	211.5	0.22568311222015833	1
+SALVADEHYPOX-PWY: adenosine nucleotides degradation II	FICat	wilcox	46	2	247	0.7193012479171921	1
+SER-GLYSYN-PWY: superpathway of L-serine and glycine biosynthesis I	FICat	wilcox	46	2	263	0.9913143343639648	1
+SO4ASSIM-PWY: assimilatory sulfate reduction I	FICat	wilcox	46	2	264.5	1	1
+SULFATE-CYS-PWY: superpathway of sulfate assimilation and cysteine biosynthesis	FICat	wilcox	46	2	261.5	0.9648292276634047	1
+TCA-GLYOX-BYPASS: superpathway of glyoxylate bypass and TCA	FICat	wilcox	46	2	254	0.8261884319451319	1
+TCA: TCA cycle I (prokaryotic)	FICat	wilcox	46	2	267	0.9545326785607655	1
+THISYN-PWY: superpathway of thiamine diphosphate biosynthesis I	FICat	wilcox	46	2	252	0.8022538403478334	1
+THISYNARA-PWY: superpathway of thiamine diphosphate biosynthesis III (eukaryotes)	FICat	wilcox	46	2	287	0.6239498496959035	1
+THRESYN-PWY: superpathway of L-threonine biosynthesis	FICat	wilcox	46	2	314	0.27930325460582195	1
+TRNA-CHARGING-PWY: tRNA charging	FICat	wilcox	46	2	319	0.2331995066486628	1
+TRPSYN-PWY: L-tryptophan biosynthesis	FICat	wilcox	46	2	302	0.4132114690886593	1
+UDPNAGSYN-PWY: UDP-N-acetyl-D-glucosamine biosynthesis I	FICat	wilcox	46	2	305	0.3766734646299977	1
+UNINTEGRATED	FICat	wilcox	46	2	318	0.24196852252139814	1
+UNMAPPED	FICat	wilcox	46	2	208	0.22465378683140513	1
+VALSYN-PWY: L-valine biosynthesis	FICat	wilcox	46	2	271	0.8874526056301757	1
