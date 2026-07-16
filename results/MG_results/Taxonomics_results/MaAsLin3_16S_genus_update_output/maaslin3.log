@@ -1,0 +1,114 @@
+2026-07-16 19:45:20.063989 INFO::Writing function arguments to log file
+2026-07-16 19:45:20.068601 DEBUG::Function arguments
+2026-07-16 19:45:20.071635 DEBUG::Output folder: ../../results/MG_results/Taxonomics_results/MaAsLin3_16S_genus_update_output
+2026-07-16 19:45:20.073876 DEBUG::Formula: ~ Sex + Age +
+                        TimeNW + FIScore + Location + (1|Individual)
+2026-07-16 19:45:20.07575 DEBUG::Fixed effects:
+2026-07-16 19:45:20.07689 DEBUG::Reference:
+2026-07-16 19:45:20.078942 DEBUG::Random effects:
+2026-07-16 19:45:20.081011 DEBUG::Group effects:
+2026-07-16 19:45:20.082615 DEBUG::Ordered effects:
+2026-07-16 19:45:20.084194 DEBUG::Strata effects:
+2026-07-16 19:45:20.085758 DEBUG::Min Abundance: 0.000000
+2026-07-16 19:45:20.087769 DEBUG::Min Prevalence: 0.000000
+2026-07-16 19:45:20.089366 DEBUG::Max Prevalence: 1.010000
+2026-07-16 19:45:20.090912 DEBUG::Zero Threshold: 0.000000
+2026-07-16 19:45:20.092623 DEBUG::Min variance: 0.000000
+2026-07-16 19:45:20.095636 DEBUG::Max significance: 0.100000
+2026-07-16 19:45:20.099633 DEBUG::Normalization: TSS
+2026-07-16 19:45:20.103008 DEBUG::Transform: LOG
+2026-07-16 19:45:20.105049 DEBUG::Correction method: BH
+2026-07-16 19:45:20.106675 DEBUG::Standardize: TRUE
+2026-07-16 19:45:20.108273 DEBUG::Abundance median comparison: TRUE
+2026-07-16 19:45:20.110171 DEBUG::Prevalence median comparison: FALSE
+2026-07-16 19:45:20.125167 DEBUG::Abundance median comparison threshold: 0
+2026-07-16 19:45:20.12731 DEBUG::Prevalence median comparison threshold: 0
+2026-07-16 19:45:20.128721 DEBUG::Subtract median: FALSE
+2026-07-16 19:45:20.129945 DEBUG::Warn prevalence: TRUE
+2026-07-16 19:45:20.131271 DEBUG::Small random effects: FALSE
+2026-07-16 19:45:20.132501 DEBUG::Augment: TRUE
+2026-07-16 19:45:20.134162 DEBUG::Evaluate only:
+2026-07-16 19:45:20.13568 DEBUG::Cores: 4
+2026-07-16 19:45:20.136741 DEBUG::Balanced Summary plot: FALSE
+2026-07-16 19:45:20.137765 INFO::Verifying options selected are valid
+2026-07-16 19:45:20.140659 INFO::Determining format of input files
+2026-07-16 19:45:20.143213 INFO::Input format is data samples as rows and metadata samples as rows
+2026-07-16 19:45:20.146384 DEBUG::A total of 205 samples were found in both the data and metadata
+2026-07-16 19:45:20.149007 DEBUG::Reordering data/metadata to use same sample ordering
+2026-07-16 19:45:20.152833 INFO::Running selected normalization method: TSS
+2026-07-16 19:45:20.203439 INFO::Creating output feature tables folder
+2026-07-16 19:45:20.206908 INFO::Writing normalized data to file ../../results/MG_results/Taxonomics_results/MaAsLin3_16S_genus_update_output/features/data_norm.tsv
+2026-07-16 19:45:20.549976 INFO::Filter data based on min abundance, min prevalence, and max prevalence
+2026-07-16 19:45:20.553387 INFO::Total samples in data: 205
+2026-07-16 19:45:20.556354 INFO::Min samples required with min abundance for a feature not to be filtered: 0.000000
+2026-07-16 19:45:20.559034 INFO::Max samples allowed with min abundance for a feature not to be filtered: 207.050000
+2026-07-16 19:45:20.740382 INFO::Total filtered features: 0
+2026-07-16 19:45:20.746036 INFO::Filtered feature names from abundance, min prevalence, and max prevalence filtering:
+2026-07-16 19:45:20.839377 INFO::Total features filtered by non-zero variance filtering: 18
+2026-07-16 19:45:20.848916 INFO::Filtered feature names from variance filtering: Cellulosilyticum, Anaeroglobus, Mobiluncus, Robinsoniella, Lachnoanaerobaculum, Gemella, Oribacterium, Morganella, Anaerococcus, Catabacter, Epulopiscium, Pseudoflavonifractor, Peptostreptococcus, Sedimentibacter, Fastidiosipila, Parvimonas, Pseudomonas, UCG-007
+2026-07-16 19:45:20.859696 INFO::Writing filtered data to file ../../results/MG_results/Taxonomics_results/MaAsLin3_16S_genus_update_output/features/filtered_data.tsv
+2026-07-16 19:45:21.198961 INFO::Running selected transform method: LOG
+2026-07-16 19:45:21.260341 INFO::Writing normalized, filtered, transformed data to file ../../results/MG_results/Taxonomics_results/MaAsLin3_16S_genus_update_output/features/data_transformed.tsv
+2026-07-16 19:45:21.605384 INFO::Factor detected for categorial metadata 'Sex'. Using as-is.
+2026-07-16 19:45:21.612764 INFO::Factor detected for categorial metadata 'Location'. Using as-is.
+2026-07-16 19:45:21.620602 INFO::Applying z-score to standardize continuous metadata
+2026-07-16 19:45:21.663326 INFO::Running the linear model component
+2026-07-16 19:45:21.69234 INFO::Creating cluster of 4 R processes
+2026-07-16 19:45:42.081264 DEBUG::Object: augment, Size: 56
+2026-07-16 19:45:42.083029 DEBUG::Object: cluster, Size: 6136
+2026-07-16 19:45:42.084994 DEBUG::Object: cores, Size: 56
+2026-07-16 19:45:42.086509 DEBUG::Object: correction, Size: 112
+2026-07-16 19:45:42.087937 DEBUG::Object: extract_out, Size: 2984
+2026-07-16 19:45:42.089271 DEBUG::Object: feature_specific_covariate, Size: 0
+2026-07-16 19:45:42.090607 DEBUG::Object: feature_specific_covariate_name, Size: 0
+2026-07-16 19:45:42.092009 DEBUG::Object: feature_specific_covariate_record, Size: 0
+2026-07-16 19:45:42.093315 DEBUG::Object: features, Size: 370208
+2026-07-16 19:45:42.094475 DEBUG::Object: formula, Size: 2576
+2026-07-16 19:45:42.095879 DEBUG::Object: fun_list, Size: 124640
+2026-07-16 19:45:42.097201 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 19:45:42.098337 DEBUG::Object: groups, Size: 48
+2026-07-16 19:45:42.099473 DEBUG::Object: median_comparison, Size: 56
+2026-07-16 19:45:42.100668 DEBUG::Object: median_comparison_threshold, Size: 56
+2026-07-16 19:45:42.101916 DEBUG::Object: metadata, Size: 67320
+2026-07-16 19:45:42.103081 DEBUG::Object: model, Size: 112
+2026-07-16 19:45:42.10434 DEBUG::Object: model_function, Size: 71464
+2026-07-16 19:45:42.105541 DEBUG::Object: ordereds, Size: 48
+2026-07-16 19:45:42.107059 DEBUG::Object: random_effects_formula, Size: 2576
+2026-07-16 19:45:42.108256 DEBUG::Object: ranef_function, Size: 1240
+2026-07-16 19:45:42.109422 DEBUG::Object: save_models, Size: 56
+2026-07-16 19:45:42.110656 DEBUG::Object: small_random_effects, Size: 56
+2026-07-16 19:45:42.111865 DEBUG::Object: strata, Size: 48
+2026-07-16 19:45:42.112996 DEBUG::Object: subtract_median, Size: 56
+2026-07-16 19:45:42.114204 DEBUG::Object: summary_function, Size: 51456
+2026-07-16 19:45:42.115719 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 19:46:25.07009 INFO::Performing tests against medians
+2026-07-16 19:46:33.902332 INFO::Counting total values for each feature
+2026-07-16 19:46:34.035668 INFO::Running the logistic model component
+2026-07-16 19:46:34.045873 INFO::Creating cluster of 4 R processes
+2026-07-16 19:49:23.727504 DEBUG::Object: augment, Size: 56
+2026-07-16 19:49:27.211808 DEBUG::Object: cluster, Size: 6136
+2026-07-16 19:49:35.290171 DEBUG::Object: cores, Size: 56
+2026-07-16 19:49:36.558947 DEBUG::Object: correction, Size: 112
+2026-07-16 19:49:37.26819 DEBUG::Object: extract_out, Size: 2984
+2026-07-16 19:49:37.269499 DEBUG::Object: feature_specific_covariate, Size: 0
+2026-07-16 19:49:37.27058 DEBUG::Object: feature_specific_covariate_name, Size: 0
+2026-07-16 19:49:37.271713 DEBUG::Object: feature_specific_covariate_record, Size: 0
+2026-07-16 19:49:37.273233 DEBUG::Object: features, Size: 358840
+2026-07-16 19:49:37.274327 DEBUG::Object: formula, Size: 2576
+2026-07-16 19:49:37.275609 DEBUG::Object: fun_list, Size: 212584
+2026-07-16 19:49:37.492859 DEBUG::Object: func_to_run, Size: 435336
+2026-07-16 19:49:37.494591 DEBUG::Object: groups, Size: 48
+2026-07-16 19:49:37.496869 DEBUG::Object: median_comparison, Size: 56
+2026-07-16 19:49:37.499131 DEBUG::Object: median_comparison_threshold, Size: 56
+2026-07-16 19:49:37.500855 DEBUG::Object: metadata, Size: 67320
+2026-07-16 19:49:37.502634 DEBUG::Object: model, Size: 120
+2026-07-16 19:49:37.504936 DEBUG::Object: model_function, Size: 161200
+2026-07-16 19:49:37.506555 DEBUG::Object: ordereds, Size: 48
+2026-07-16 19:49:37.507922 DEBUG::Object: random_effects_formula, Size: 2576
+2026-07-16 19:49:37.509264 DEBUG::Object: ranef_function, Size: 1240
+2026-07-16 19:49:37.510598 DEBUG::Object: save_models, Size: 56
+2026-07-16 19:49:37.511814 DEBUG::Object: small_random_effects, Size: 56
+2026-07-16 19:49:37.513573 DEBUG::Object: strata, Size: 48
+2026-07-16 19:49:37.514881 DEBUG::Object: subtract_median, Size: 56
+2026-07-16 19:49:37.515885 DEBUG::Object: summary_function, Size: 49664
+2026-07-16 19:49:37.517109 DEBUG::Object: func_to_run, Size: 435336

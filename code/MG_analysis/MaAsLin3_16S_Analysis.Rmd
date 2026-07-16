@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### 16S Taxa Units MaSaLin3 Analysis (Metadata)
 ```{r pressure, echo=FALSE}
-setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
+#setwd()
 
 library(dplyr)
 library(stringr)
@@ -22,10 +22,10 @@ library(tibble)
 library(maaslin3)
 
 ### Read in 16S ASV feature table
-#data_table_name <- file.path("../../tmp_figures/16S_MaAsLin3_data", "table_bleed_decon.tsv")
 # Read in updated 16S ASV feature table
-data_table_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "feature-table.tsv")
+# data_table_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "feature-table.tsv")
 
+data_table_name <- file.path("../../data/16S/feature_tables", "table_bleed_decon.tsv")
 org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, skip = 1, check.names = FALSE)
 nrow(org_data_table)
 org_data_table[1:5, 1:5]
@@ -42,7 +42,7 @@ ncol(data_table)
 
 
 ### Read in ASV taxonomic mappings
-taxa_map_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "taxonomy.tsv")
+taxa_map_name <- file.path("../../data/16S/", "taxonomy.tsv")
 taxa_map_table <- read.csv(taxa_map_name, sep = '\t', header = TRUE, check.names = FALSE)
 head(taxa_map_table)
 # New columns for taxonomic information
@@ -86,9 +86,8 @@ taxa_map_table[1:5, ]
 
 
 # ### Read in 16S metadata
-# metadata_name <- file.path("../../tmp_figures/16S_MaAsLin3_data", "northwood_map.txt")
 ### Read in update 16S metadata
-metadata_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "update_northwood_map.txt")
+metadata_name <- file.path("../../data/Metadata/", "update_northwood_map.txt")
 org_metadata <- read.csv(metadata_name, sep = '\t', header = TRUE)
 names(org_metadata)[1] <- "SampleID"
 head(org_metadata)
@@ -121,8 +120,8 @@ metadata[1:5, ]
 ###### Perform MaAsLin3_16S_Analysis
 ### Add specific level taxonomic annotation to the feature table
 # level <- "Phylum"
-level <- "Family"
-# level <- "Genus"
+# level <- "Family"
+level <- "Genus"
 # level <- "Species"
 # level <- "ASV_ID"
 # taxa_map_table$ASV_ID <- taxa_map_table$ASV
@@ -151,9 +150,11 @@ sum_anno_data_table <- anno_data_table %>%
 sum_anno_data_table
 
 # ### Output family-level taxonomic profilings
-# family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "16S_Family_Profiling.tsv")
-# family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
-# family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+# family_level_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Family_Profiling.tsv")
+# write.table(sum_anno_data_table, family_level_taxa_file, sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
+
+# ### Output genus-level taxonomic profilings
+# family_level_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Genus_Profiling.tsv")
 # write.table(sum_anno_data_table, family_level_taxa_file, sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
 
 
@@ -182,8 +183,8 @@ ncol(final_data_table)
 set.seed(1)
 fit_out <- maaslin3(input_data = final_data_table,
                     input_metadata = final_metadata,
-                    #output = 'MaAsLin3_16S_genus_test_output',
-                    output = 'MaAsLin3_16S_family_update_output',
+                    #output = '../../results/MG_results/Taxonomics_results/MaAsLin3_16S_family_update_output',
+                    output = '../../results/MG_results/Taxonomics_results/MaAsLin3_16S_genus_update_output',
                     formula = '~ Sex + Age +
                         TimeNW + FIScore + Location + (1|Individual)',
                     normalization = 'TSS',
@@ -203,7 +204,7 @@ fit_out <- maaslin3(input_data = final_data_table,
 
 
 
-### 16S Taxa Units (Disease and medication)
+### 16S Taxa Units MaSaLin3 Analysis (Disease and medication. Not shown in the manuscripts)
 ```{r}
 library(dplyr)
 library(tibble)
@@ -212,9 +213,9 @@ library(stringr)
 
 ### Read in 16S taxonomic results
 #level <- "Family"
-#family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
+#family_level_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Family_Profiling.tsv")
 level <- "Genus"
-family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+family_level_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Genus_Profiling.tsv")
 
 sum_anno_data_table <- read.table(family_level_taxa_file, sep = "\t", header = TRUE, check.names = FALSE)
 
@@ -234,7 +235,7 @@ nrow(final_data_table)
 
 
 ### Read in sample metadata
-metadata_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "update_northwood_map.txt")
+metadata_name <- file.path("../../data/Metadata/", "update_northwood_map.txt")
 org_metadata <- read.csv(metadata_name, sep = '\t', header = TRUE)
 names(org_metadata)[1] <- "SampleID"
 head(org_metadata)
@@ -329,7 +330,7 @@ final_metadata[1:5, ]
 
 
 
-### Running MaAsLin3
+### Running MaAsLin3 with metadata
 set.seed(1)
 fit_out <- maaslin3(input_data = final_data_table,
                     input_metadata = final_metadata,
@@ -347,6 +348,8 @@ fit_out <- maaslin3(input_data = final_data_table,
                     cores = 4)
 
 set.seed(1)
+
+### Running MaAsLin3 with disease status
 fit_out <- maaslin3(input_data = final_data_table,
                     input_metadata = final_metadata,
                     output = 'MaAsLin3_16S_genus_disease_without_metadata_output',
@@ -362,7 +365,7 @@ fit_out <- maaslin3(input_data = final_data_table,
                     cores = 4)
 
 
-### Running MaAsLin3
+### Running MaAsLin3 with medication status
 set.seed(1)
 fit_out <- maaslin3(input_data = final_data_table,
                     input_metadata = final_metadata,
@@ -1523,7 +1526,7 @@ ggsave(
 
 
 
-### 16S Taxonomic Profiling for All Samples (Genus Level, not shown in the manuscripts)
+### 16S Taxonomic Profiling for All Samples (Genus Level. Not shown in the manuscripts)
 ```{r}
 library(ggplot2)
 library(ggtext)
@@ -1805,8 +1808,6 @@ ggsave(
 # )
 
 ```
-
-
 
 
 
