@@ -1,0 +1,716 @@
+Sample,Drug_Class_plot,rel_reads
+NW001_3,Other,0.0238201573123584
+NW001_3,Aminocoumarin antibiotic,0.0203084033240012
+NW001_3,Aminoglycoside antibiotic,0.0598809047682531
+NW001_3,Cephalosporin,0.185699314165519
+NW001_3,Diaminopyrimidine antibiotic,0.026420181012902
+NW001_3,Disinfecting agents and antiseptics,0.00603438060110504
+NW001_3,Fluoroquinolone antibiotic,0.0110796338266009
+NW001_3,Lincosamide antibiotic,0.0106874638937031
+NW001_3,Macrolide antibiotic,0.0191530018219793
+NW001_3,Nucleoside antibiotic,0.0049104563835933
+NW001_3,Penicillin beta-lactam,0.00632323097661053
+NW001_3,Peptide antibiotic,0.00875438830378172
+NW001_3,Phenicol antibiotic,0.00420499488957028
+NW001_3,Rifamycin antibiotic,0.0406001422032618
+NW001_3,Streptogramin antibiotic,0.00751010976314269
+NW001_3,Tetracycline antibiotic,0.564613236753618
+NW002_2,Other,0.0819988199719743
+NW002_2,Aminocoumarin antibiotic,0.0247702632937532
+NW002_2,Aminoglycoside antibiotic,0.0798460063426506
+NW002_2,Cephalosporin,0.0154835902352681
+NW002_2,Diaminopyrimidine antibiotic,0.00649664429530201
+NW002_2,Disinfecting agents and antiseptics,0.0163810015487868
+NW002_2,Fluoroquinolone antibiotic,0.036758758020503
+NW002_2,Lincosamide antibiotic,0.0644474272930649
+NW002_2,Macrolide antibiotic,0.0819802345305701
+NW002_2,Nucleoside antibiotic,0.0116778523489933
+NW002_2,Penicillin beta-lactam,0.0249377289377289
+NW002_2,Peptide antibiotic,0.0271480197654694
+NW002_2,Phenicol antibiotic,0.00475684047496128
+NW002_2,Rifamycin antibiotic,0.0306628807434177
+NW002_2,Streptogramin antibiotic,0.0327695749440716
+NW002_2,Tetracycline antibiotic,0.459884357253485
+NW003_3,Other,0.0250884527065725
+NW003_3,Aminocoumarin antibiotic,0.0223312975383117
+NW003_3,Aminoglycoside antibiotic,0.0331516997371844
+NW003_3,Cephalosporin,0.029303672460029
+NW003_3,Diaminopyrimidine antibiotic,0.0131514856307842
+NW003_3,Disinfecting agents and antiseptics,0.00969937677195349
+NW003_3,Fluoroquinolone antibiotic,0.0296608733043219
+NW003_3,Lincosamide antibiotic,0.0351680467608378
+NW003_3,Macrolide antibiotic,0.0413023735478679
+NW003_3,Nucleoside antibiotic,0.0106673161227472
+NW003_3,Penicillin beta-lactam,0.0443223443223443
+NW003_3,Peptide antibiotic,0.016834115713804
+NW003_3,Phenicol antibiotic,0.0036107260169608
+NW003_3,Rifamycin antibiotic,0.0269586721121061
+NW003_3,Streptogramin antibiotic,0.00623477837311252
+NW003_3,Tetracycline antibiotic,0.652514768881062
+NW005_3,Other,0.0146583394562821
+NW005_3,Aminocoumarin antibiotic,0.000551065393093314
+NW005_3,Aminoglycoside antibiotic,0.0249816311535636
+NW005_3,Cephalosporin,0.0529022777369581
+NW005_3,Diaminopyrimidine antibiotic,0.0293901542983101
+NW005_3,Disinfecting agents and antiseptics,0.000734753857457752
+NW005_3,Fluoroquinolone antibiotic,0.00220426157237326
+NW005_3,Lincosamide antibiotic,0.0504041146216018
+NW005_3,Macrolide antibiotic,0.0619764878765613
+NW005_3,Nucleoside antibiotic,0.00367376928728876
+NW005_3,Penicillin beta-lactam,0.000734753857457752
+NW005_3,Phenicol antibiotic,0.00955180014695077
+NW005_3,Rifamycin antibiotic,0.0624540778839089
+NW005_3,Streptogramin antibiotic,0.0121969140337987
+NW005_3,Tetracycline antibiotic,0.673585598824394
+NW006_3,Other,0.0415482162764771
+NW006_3,Aminocoumarin antibiotic,0.0519788182831661
+NW006_3,Aminoglycoside antibiotic,0.103790412486065
+NW006_3,Cephalosporin,0.0343520066889632
+NW006_3,Diaminopyrimidine antibiotic,0.00217391304347826
+NW006_3,Disinfecting agents and antiseptics,0.0231684318097362
+NW006_3,Fluoroquinolone antibiotic,0.0540983835005574
+NW006_3,Lincosamide antibiotic,0.00280193236714976
+NW006_3,Macrolide antibiotic,0.0332952434039391
+NW006_3,Nucleoside antibiotic,0.0206521739130435
+NW006_3,Penicillin beta-lactam,0.044678093645485
+NW006_3,Peptide antibiotic,0.0461817168338907
+NW006_3,Phenicol antibiotic,0.0162843738387217
+NW006_3,Rifamycin antibiotic,0.161815774804905
+NW006_3,Streptogramin antibiotic,0.00135265700483092
+NW006_3,Tetracycline antibiotic,0.361827852099591
+NW007_2,Other,0.166873661670236
+NW007_2,Aminocoumarin antibiotic,0.00139186295503212
+NW007_2,Aminoglycoside antibiotic,0.011134903640257
+NW007_2,Cephalosporin,0.0187009279086367
+NW007_2,Diaminopyrimidine antibiotic,0.00171306209850107
+NW007_2,Disinfecting agents and antiseptics,0.000214132762312634
+NW007_2,Fluoroquinolone antibiotic,0.0033547466095646
+NW007_2,Lincosamide antibiotic,0.0431263383297645
+NW007_2,Macrolide antibiotic,0.0449107780157031
+NW007_2,Nucleoside antibiotic,0.000214132762312634
+NW007_2,Penicillin beta-lactam,0.00121341898643826
+NW007_2,Peptide antibiotic,0.00310492505353319
+NW007_2,Rifamycin antibiotic,0.206959314775161
+NW007_2,Streptogramin antibiotic,0.011220556745182
+NW007_2,Tetracycline antibiotic,0.485867237687366
+NW008_1,Other,0.0753272897248229
+NW008_1,Aminocoumarin antibiotic,0.0323036782951394
+NW008_1,Aminoglycoside antibiotic,0.0306263944783869
+NW008_1,Cephalosporin,0.0766415747440415
+NW008_1,Diaminopyrimidine antibiotic,0.0374762808349146
+NW008_1,Disinfecting agents and antiseptics,0.0226974164355569
+NW008_1,Fluoroquinolone antibiotic,0.0494989434979947
+NW008_1,Lincosamide antibiotic,0.0182163187855787
+NW008_1,Macrolide antibiotic,0.0298278492538455
+NW008_1,Nucleoside antibiotic,0.0176470588235294
+NW008_1,Penicillin beta-lactam,0.0343819289502401
+NW008_1,Peptide antibiotic,0.0426045728465083
+NW008_1,Phenicol antibiotic,0.0198511166253102
+NW008_1,Rifamycin antibiotic,0.103366296890965
+NW008_1,Streptogramin antibiotic,0.00578747628083491
+NW008_1,Tetracycline antibiotic,0.403745803532331
+NW010_2,Other,0.00804851157662624
+NW010_2,Aminocoumarin antibiotic,0.00248070562293275
+NW010_2,Aminoglycoside antibiotic,0.0264608599779493
+NW010_2,Cephalosporin,0.220782800441014
+NW010_2,Diaminopyrimidine antibiotic,0.0251378169790518
+NW010_2,Disinfecting agents and antiseptics,0.000275633958103638
+NW010_2,Fluoroquinolone antibiotic,0.00189268651231165
+NW010_2,Lincosamide antibiotic,0.011135611907387
+NW010_2,Macrolide antibiotic,0.0179345828739434
+NW010_2,Penicillin beta-lactam,0.00101065784638001
+NW010_2,Peptide antibiotic,0.000275633958103638
+NW010_2,Phenicol antibiotic,0.000275633958103638
+NW010_2,Rifamycin antibiotic,0.0468577728776185
+NW010_2,Streptogramin antibiotic,0.00782800441014333
+NW010_2,Tetracycline antibiotic,0.629603087100331
+NW011_2,Other,0.0998275118585597
+NW011_2,Aminoglycoside antibiotic,0.0428201811125485
+NW011_2,Cephalosporin,0.107158257869771
+NW011_2,Diaminopyrimidine antibiotic,0.00355756791720569
+NW011_2,Disinfecting agents and antiseptics,0.000776196636481242
+NW011_2,Fluoroquinolone antibiotic,0.000991806813281587
+NW011_2,Lincosamide antibiotic,0.0955153083225528
+NW011_2,Macrolide antibiotic,0.0941677447175507
+NW011_2,Penicillin beta-lactam,0.00109961190168176
+NW011_2,Peptide antibiotic,0.00129366106080207
+NW011_2,Phenicol antibiotic,0.000323415265200517
+NW011_2,Rifamycin antibiotic,0.0478654592496766
+NW011_2,Streptogramin antibiotic,0.0403730056058646
+NW011_2,Tetracycline antibiotic,0.464230271668823
+NW012_3,Other,0.0273056653491436
+NW012_3,Aminocoumarin antibiotic,0.00345849802371542
+NW012_3,Aminoglycoside antibiotic,0.016798418972332
+NW012_3,Cephalosporin,0.197084980237154
+NW012_3,Diaminopyrimidine antibiotic,0.00790513833992095
+NW012_3,Disinfecting agents and antiseptics,0.00627470355731225
+NW012_3,Fluoroquinolone antibiotic,0.00367259552042161
+NW012_3,Lincosamide antibiotic,0.0243330039525692
+NW012_3,Macrolide antibiotic,0.0154150197628458
+NW012_3,Nucleoside antibiotic,0.0050395256916996
+NW012_3,Penicillin beta-lactam,0.00513833992094862
+NW012_3,Peptide antibiotic,0.00395256916996047
+NW012_3,Phenicol antibiotic,0.00182806324110672
+NW012_3,Rifamycin antibiotic,0.0694169960474308
+NW012_3,Streptogramin antibiotic,0.0104001976284585
+NW012_3,Tetracycline antibiotic,0.60197628458498
+NW013_3,Other,0.0141525009172068
+NW013_3,Aminocoumarin antibiotic,6.11471199706494e-05
+NW013_3,Aminoglycoside antibiotic,0.0533202886144063
+NW013_3,Cephalosporin,0.1952784232196
+NW013_3,Diaminopyrimidine antibiotic,0.00278219395866455
+NW013_3,Disinfecting agents and antiseptics,0.00025987525987526
+NW013_3,Fluoroquinolone antibiotic,0.00145224409930292
+NW013_3,Lincosamide antibiotic,0.0599761526232114
+NW013_3,Macrolide antibiotic,0.0602095307977661
+NW013_3,Nucleoside antibiotic,0.0115262321144674
+NW013_3,Penicillin beta-lactam,0.0010547878194937
+NW013_3,Peptide antibiotic,6.11471199706494e-05
+NW013_3,Phenicol antibiotic,0.000418857771798948
+NW013_3,Rifamycin antibiotic,0.0594808609514492
+NW013_3,Streptogramin antibiotic,0.00631955484896661
+NW013_3,Tetracycline antibiotic,0.53364620276385
+NW014_1,Other,0.0472776695877962
+NW014_1,Aminocoumarin antibiotic,0.00577586969992033
+NW014_1,Aminoglycoside antibiotic,0.0151736449204804
+NW014_1,Cephalosporin,0.143534787996813
+NW014_1,Disinfecting agents and antiseptics,0.00784242129178838
+NW014_1,Fluoroquinolone antibiotic,0.0100480215986545
+NW014_1,Lincosamide antibiotic,0.0352128883774453
+NW014_1,Macrolide antibiotic,0.0329335221740285
+NW014_1,Nucleoside antibiotic,0.00489067894131185
+NW014_1,Penicillin beta-lactam,0.00774652562627246
+NW014_1,Peptide antibiotic,0.00951580065504116
+NW014_1,Phenicol antibiotic,0.00870548228143165
+NW014_1,Rifamycin antibiotic,0.0624070549703461
+NW014_1,Streptogramin antibiotic,0.00385500575373993
+NW014_1,Tetracycline antibiotic,0.60508062612493
+NW015_3,Other,0.0188954765041722
+NW015_3,Aminocoumarin antibiotic,0.000317181476601766
+NW015_3,Aminoglycoside antibiotic,0.0189820914458596
+NW015_3,Cephalosporin,0.038624164348802
+NW015_3,Diaminopyrimidine antibiotic,0.000390377201971405
+NW015_3,Disinfecting agents and antiseptics,0.00137241985068072
+NW015_3,Fluoroquinolone antibiotic,0.00147001415117357
+NW015_3,Lincosamide antibiotic,0.0314888010540184
+NW015_3,Macrolide antibiotic,0.0287024837749475
+NW015_3,Nucleoside antibiotic,0.000175669740887132
+NW015_3,Penicillin beta-lactam,0.00144073586102572
+NW015_3,Peptide antibiotic,0.00175669740887132
+NW015_3,Phenicol antibiotic,0.00395866881374128
+NW015_3,Rifamycin antibiotic,0.0534584980237154
+NW015_3,Streptogramin antibiotic,0.00254721124286342
+NW015_3,Tetracycline antibiotic,0.796419509100669
+NW016_1,Other,0.0788401820226772
+NW016_1,Aminocoumarin antibiotic,0.034183166871094
+NW016_1,Aminoglycoside antibiotic,0.0485461324299593
+NW016_1,Cephalosporin,0.0448262854584039
+NW016_1,Diaminopyrimidine antibiotic,0.035954495828335
+NW016_1,Disinfecting agents and antiseptics,0.152454232244402
+NW016_1,Fluoroquinolone antibiotic,0.0970501625683858
+NW016_1,Lincosamide antibiotic,0.00509024005607149
+NW016_1,Macrolide antibiotic,0.0936062924673403
+NW016_1,Nucleoside antibiotic,0.00417031715437182
+NW016_1,Penicillin beta-lactam,0.0377297373595779
+NW016_1,Peptide antibiotic,0.0622481163483441
+NW016_1,Phenicol antibiotic,0.111360074372603
+NW016_1,Rifamycin antibiotic,0.00846244827539729
+NW016_1,Streptogramin antibiotic,0.000525670229542667
+NW016_1,Tetracycline antibiotic,0.184952446313494
+NW018_3_2,Other,0.118456078083407
+NW018_3_2,Aminoglycoside antibiotic,0.00432564330079858
+NW018_3_2,Cephalosporin,0.125443655723159
+NW018_3_2,Diaminopyrimidine antibiotic,0.00399290150842946
+NW018_3_2,Fluoroquinolone antibiotic,0.00166370896184561
+NW018_3_2,Lincosamide antibiotic,0.089396628216504
+NW018_3_2,Macrolide antibiotic,0.0915039929015084
+NW018_3_2,Penicillin beta-lactam,0.000221827861579414
+NW018_3_2,Rifamycin antibiotic,0.0354924578527063
+NW018_3_2,Streptogramin antibiotic,0.0248447204968944
+NW018_3_2,Tetracycline antibiotic,0.504658385093168
+NW019_3,Other,0.0222707514837415
+NW019_3,Aminocoumarin antibiotic,0.00351082504388531
+NW019_3,Aminoglycoside antibiotic,0.00590152971662626
+NW019_3,Cephalosporin,0.203039232076681
+NW019_3,Diaminopyrimidine antibiotic,0.00807489760093622
+NW019_3,Disinfecting agents and antiseptics,0.0027940315974254
+NW019_3,Fluoroquinolone antibiotic,0.00440455292708072
+NW019_3,Lincosamide antibiotic,0.0925492490735323
+NW019_3,Macrolide antibiotic,0.029170497924155
+NW019_3,Nucleoside antibiotic,0.00327677004095963
+NW019_3,Penicillin beta-lactam,0.00553581877455488
+NW019_3,Peptide antibiotic,0.00484828220346067
+NW019_3,Phenicol antibiotic,0.00291105909888824
+NW019_3,Rifamycin antibiotic,0.043519602106495
+NW019_3,Streptogramin antibiotic,0.00881607177686756
+NW019_3,Tetracycline antibiotic,0.55937682855471
+NW020_3,Other,0.018026236429433
+NW020_3,Aminocoumarin antibiotic,0.000753920386007238
+NW020_3,Aminoglycoside antibiotic,0.0173401688781665
+NW020_3,Cephalosporin,0.0215244270205066
+NW020_3,Diaminopyrimidine antibiotic,0.0180940892641737
+NW020_3,Disinfecting agents and antiseptics,0.000716224366706876
+NW020_3,Fluoroquinolone antibiotic,0.00172145154804986
+NW020_3,Lincosamide antibiotic,0.0407217531162043
+NW020_3,Macrolide antibiotic,0.0807800562927222
+NW020_3,Nucleoside antibiotic,0.00120627261761158
+NW020_3,Penicillin beta-lactam,0.00262615601125854
+NW020_3,Peptide antibiotic,0.00180940892641737
+NW020_3,Phenicol antibiotic,0.00825542822677925
+NW020_3,Rifamycin antibiotic,0.0429357659831122
+NW020_3,Streptogramin antibiotic,0.0325794129473261
+NW020_3,Tetracycline antibiotic,0.710909227985525
+NW021_3,Other,0.0765952723730377
+NW021_3,Aminocoumarin antibiotic,0.0872960111725101
+NW021_3,Aminoglycoside antibiotic,0.0759862872381084
+NW021_3,Cephalosporin,0.0950895410017902
+NW021_3,Diaminopyrimidine antibiotic,0.00248795248234899
+NW021_3,Disinfecting agents and antiseptics,0.0501196131001129
+NW021_3,Fluoroquinolone antibiotic,0.114158239869884
+NW021_3,Lincosamide antibiotic,0.015555306511263
+NW021_3,Macrolide antibiotic,0.0601452024011701
+NW021_3,Nucleoside antibiotic,0.0358847921102768
+NW021_3,Penicillin beta-lactam,0.0702473728221795
+NW021_3,Peptide antibiotic,0.0856709971637687
+NW021_3,Phenicol antibiotic,0.0173671755790998
+NW021_3,Rifamycin antibiotic,0.0189137406356951
+NW021_3,Streptogramin antibiotic,0.00342933990810266
+NW021_3,Tetracycline antibiotic,0.191053155630652
+NW022_4,Other,0.104196695112022
+NW022_4,Aminocoumarin antibiotic,0.0162153604921147
+NW022_4,Aminoglycoside antibiotic,0.0363055212134005
+NW022_4,Cephalosporin,0.0841658374292635
+NW022_4,Diaminopyrimidine antibiotic,0.0560564484515876
+NW022_4,Disinfecting agents and antiseptics,0.0108481842213712
+NW022_4,Fluoroquinolone antibiotic,0.0247969624782639
+NW022_4,Lincosamide antibiotic,0.0130798379720371
+NW022_4,Macrolide antibiotic,0.0199655238267547
+NW022_4,Nucleoside antibiotic,0.00795766366130929
+NW022_4,Penicillin beta-lactam,0.0127232658886912
+NW022_4,Peptide antibiotic,0.0162153604921147
+NW022_4,Phenicol antibiotic,0.0322123551347385
+NW022_4,Rifamycin antibiotic,0.217871573741821
+NW022_4,Streptogramin antibiotic,0.00433816803867764
+NW022_4,Tetracycline antibiotic,0.343051241845832
+NW023_3,Other,0.0126295336787565
+NW023_3,Aminocoumarin antibiotic,0.00226683937823834
+NW023_3,Aminoglycoside antibiotic,0.0290641191709845
+NW023_3,Cephalosporin,0.174843480138169
+NW023_3,Diaminopyrimidine antibiotic,0.00142487046632124
+NW023_3,Disinfecting agents and antiseptics,0.000323834196891192
+NW023_3,Fluoroquinolone antibiotic,0.000750215889464594
+NW023_3,Lincosamide antibiotic,0.0966968911917098
+NW023_3,Macrolide antibiotic,0.0227817357512953
+NW023_3,Nucleoside antibiotic,0.00615284974093264
+NW023_3,Penicillin beta-lactam,0.00151122625215889
+NW023_3,Peptide antibiotic,0.00145725388601036
+NW023_3,Phenicol antibiotic,0.00129533678756477
+NW023_3,Rifamycin antibiotic,0.0578044041450777
+NW023_3,Streptogramin antibiotic,0.0215673575129534
+NW023_3,Tetracycline antibiotic,0.569430051813472
+NW025_3,Other,0.0218787050308789
+NW025_3,Aminocoumarin antibiotic,0.00825502999416043
+NW025_3,Aminoglycoside antibiotic,0.0456946435207305
+NW025_3,Cephalosporin,0.0845691546778503
+NW025_3,Diaminopyrimidine antibiotic,0.00269151138716356
+NW025_3,Disinfecting agents and antiseptics,0.00588270425226947
+NW025_3,Fluoroquinolone antibiotic,0.0163784484436658
+NW025_3,Lincosamide antibiotic,0.0981136415919025
+NW025_3,Macrolide antibiotic,0.120729150076976
+NW025_3,Nucleoside antibiotic,0.0134575569358178
+NW025_3,Penicillin beta-lactam,0.00948863937994373
+NW025_3,Peptide antibiotic,0.00825502999416043
+NW025_3,Phenicol antibiotic,0.00588270425226947
+NW025_3,Rifamycin antibiotic,0.0269317035621383
+NW025_3,Streptogramin antibiotic,0.0171957671957672
+NW025_3,Tetracycline antibiotic,0.514595609704305
+NW026_3,Other,0.0738322548304776
+NW026_3,Aminocoumarin antibiotic,0.0392932008749544
+NW026_3,Aminoglycoside antibiotic,0.0309528149575543
+NW026_3,Cephalosporin,0.100611187785358
+NW026_3,Diaminopyrimidine antibiotic,0.0172195892575039
+NW026_3,Disinfecting agents and antiseptics,0.00693523991805982
+NW026_3,Fluoroquinolone antibiotic,0.0395992830234536
+NW026_3,Lincosamide antibiotic,0.028021327014218
+NW026_3,Macrolide antibiotic,0.0444401767269066
+NW026_3,Nucleoside antibiotic,0.000592417061611374
+NW026_3,Penicillin beta-lactam,0.0238607364199781
+NW026_3,Peptide antibiotic,0.0745102794125306
+NW026_3,Phenicol antibiotic,0.00922803499817718
+NW026_3,Rifamycin antibiotic,0.0550345685120567
+NW026_3,Streptogramin antibiotic,0.0135071090047393
+NW026_3,Tetracycline antibiotic,0.44236178020242
+NW027_2,Other,0.0681644272240391
+NW027_2,Aminocoumarin antibiotic,0.0934256362860799
+NW027_2,Aminoglycoside antibiotic,0.0635966159533627
+NW027_2,Cephalosporin,0.0671694748566283
+NW027_2,Diaminopyrimidine antibiotic,0.00909426987060998
+NW027_2,Disinfecting agents and antiseptics,0.0632631285842931
+NW027_2,Fluoroquinolone antibiotic,0.145827823593535
+NW027_2,Lincosamide antibiotic,0.0249784349969193
+NW027_2,Macrolide antibiotic,0.0592820749798569
+NW027_2,Nucleoside antibiotic,0.0466358595194085
+NW027_2,Penicillin beta-lactam,0.0977378667235414
+NW027_2,Peptide antibiotic,0.0934718470069672
+NW027_2,Phenicol antibiotic,0.0211497582823831
+NW027_2,Rifamycin antibiotic,0.0230736646286554
+NW027_2,Streptogramin antibiotic,0.00311152187307455
+NW027_2,Tetracycline antibiotic,0.120017595620646
+NW028_3,Other,0.102863209808891
+NW028_3,Aminocoumarin antibiotic,0.0376738132748818
+NW028_3,Aminoglycoside antibiotic,0.0492499486266183
+NW028_3,Cephalosporin,0.0803175255535006
+NW028_3,Diaminopyrimidine antibiotic,0.0121697833184921
+NW028_3,Disinfecting agents and antiseptics,0.0257909598069883
+NW028_3,Fluoroquinolone antibiotic,0.0618080766566964
+NW028_3,Lincosamide antibiotic,0.0146631047788661
+NW028_3,Macrolide antibiotic,0.0384282408993006
+NW028_3,Nucleoside antibiotic,0.0187295933511428
+NW028_3,Penicillin beta-lactam,0.0510927308567558
+NW028_3,Peptide antibiotic,0.0378222252665708
+NW028_3,Phenicol antibiotic,0.0132056229117672
+NW028_3,Rifamycin antibiotic,0.090419435121127
+NW028_3,Streptogramin antibiotic,0.0143365983971505
+NW028_3,Tetracycline antibiotic,0.351429131371251
+NW029_3,Other,0.126790545854963
+NW029_3,Aminocoumarin antibiotic,0.04365004457029
+NW029_3,Aminoglycoside antibiotic,0.040889308373971
+NW029_3,Cephalosporin,0.0447287766766294
+NW029_3,Diaminopyrimidine antibiotic,0.0092706203135651
+NW029_3,Disinfecting agents and antiseptics,0.0294561113732893
+NW029_3,Fluoroquinolone antibiotic,0.0656387971265272
+NW029_3,Lincosamide antibiotic,0.0615030674846626
+NW029_3,Macrolide antibiotic,0.0811960568402286
+NW029_3,Nucleoside antibiotic,0.0219325153374233
+NW029_3,Penicillin beta-lactam,0.0399741754496356
+NW029_3,Peptide antibiotic,0.0487966021708353
+NW029_3,Phenicol antibiotic,0.00851200776047402
+NW029_3,Rifamycin antibiotic,0.0204070316186881
+NW029_3,Streptogramin antibiotic,0.054601226993865
+NW029_3,Tetracycline antibiotic,0.302653112054953
+NW030_2,Other,0.0731988834091249
+NW030_2,Aminocoumarin antibiotic,0.0175094472554922
+NW030_2,Aminoglycoside antibiotic,0.0202799559585571
+NW030_2,Cephalosporin,0.101285368115093
+NW030_2,Diaminopyrimidine antibiotic,0.0149042464612823
+NW030_2,Disinfecting agents and antiseptics,0.00235094838550292
+NW030_2,Fluoroquinolone antibiotic,0.0146224681507779
+NW030_2,Lincosamide antibiotic,0.123294080329884
+NW030_2,Macrolide antibiotic,0.126608015908599
+NW030_2,Nucleoside antibiotic,0.00208159866777685
+NW030_2,Penicillin beta-lactam,0.0115486407846941
+NW030_2,Peptide antibiotic,0.0416857289255291
+NW030_2,Phenicol antibiotic,0.00487860391066053
+NW030_2,Rifamycin antibiotic,0.0428380424737627
+NW030_2,Streptogramin antibiotic,0.0204631061417073
+NW030_2,Tetracycline antibiotic,0.382450865121556
+NW031_3,Other,0.055772617377095
+NW031_3,Aminocoumarin antibiotic,0.00946070927414211
+NW031_3,Aminoglycoside antibiotic,0.0746101604310559
+NW031_3,Cephalosporin,0.128590259933544
+NW031_3,Diaminopyrimidine antibiotic,0.00656078581451716
+NW031_3,Disinfecting agents and antiseptics,0.00572883446017774
+NW031_3,Fluoroquinolone antibiotic,0.007400376019779
+NW031_3,Lincosamide antibiotic,0.0619154228855721
+NW031_3,Macrolide antibiotic,0.0210156330678719
+NW031_3,Nucleoside antibiotic,0.0181592039800995
+NW031_3,Penicillin beta-lactam,0.0111565949252516
+NW031_3,Peptide antibiotic,0.00641640697610847
+NW031_3,Phenicol antibiotic,0.0119662371901178
+NW031_3,Rifamycin antibiotic,0.0358352468427095
+NW031_3,Streptogramin antibiotic,0.0277114427860697
+NW031_3,Tetracycline antibiotic,0.517700068035889
+NW032_3,Other,0.0377499484642342
+NW032_3,Aminoglycoside antibiotic,0.04143475572047
+NW032_3,Cephalosporin,0.0787724180581323
+NW032_3,Diaminopyrimidine antibiotic,0.00927643784786642
+NW032_3,Disinfecting agents and antiseptics,0.00456091527520099
+NW032_3,Fluoroquinolone antibiotic,0.00188105545248402
+NW032_3,Lincosamide antibiotic,0.0353535353535354
+NW032_3,Macrolide antibiotic,0.0344258915687487
+NW032_3,Penicillin beta-lactam,0.00249948464234179
+NW032_3,Phenicol antibiotic,0.00703463203463203
+NW032_3,Rifamycin antibiotic,0.0373376623376623
+NW032_3,Streptogramin antibiotic,0.0211296639868068
+NW032_3,Tetracycline antibiotic,0.688543599257885
+NW033_2,Other,0.0650946810722564
+NW033_2,Aminocoumarin antibiotic,0.0115492426284297
+NW033_2,Aminoglycoside antibiotic,0.0362013599574917
+NW033_2,Cephalosporin,0.0228438889616185
+NW033_2,Diaminopyrimidine antibiotic,0.0266292922214436
+NW033_2,Disinfecting agents and antiseptics,0.00663606035014584
+NW033_2,Fluoroquinolone antibiotic,0.0157972487685172
+NW033_2,Lincosamide antibiotic,0.119785096939967
+NW033_2,Macrolide antibiotic,0.135298144197934
+NW033_2,Nucleoside antibiotic,0.00362064938098575
+NW033_2,Penicillin beta-lactam,0.0120598042462093
+NW033_2,Peptide antibiotic,0.00484186451250221
+NW033_2,Phenicol antibiotic,0.00254823040387161
+NW033_2,Rifamycin antibiotic,0.0418108637449913
+NW033_2,Streptogramin antibiotic,0.00836253211866386
+NW033_2,Tetracycline antibiotic,0.486921040494972
+NW034_3,Other,0.0350358421089212
+NW034_3,Aminocoumarin antibiotic,0.00307647348789562
+NW034_3,Aminoglycoside antibiotic,0.0303239082498898
+NW034_3,Cephalosporin,0.24025251993503
+NW034_3,Diaminopyrimidine antibiotic,0.0036111632955518
+NW034_3,Disinfecting agents and antiseptics,0.00316936179231877
+NW034_3,Fluoroquinolone antibiotic,0.00316190687222061
+NW034_3,Lincosamide antibiotic,0.0250986285928987
+NW034_3,Macrolide antibiotic,0.0976668852678622
+NW034_3,Nucleoside antibiotic,0.00676310351305655
+NW034_3,Penicillin beta-lactam,0.00259831491279923
+NW034_3,Peptide antibiotic,0.000324116987652588
+NW034_3,Phenicol antibiotic,0.000430722345056367
+NW034_3,Rifamycin antibiotic,0.012474891255654
+NW034_3,Streptogramin antibiotic,0.0871876761224873
+NW034_3,Tetracycline antibiotic,0.448824485260705
+NW035_2,Other,0.0685125847455614
+NW035_2,Aminocoumarin antibiotic,0.0260307542651901
+NW035_2,Aminoglycoside antibiotic,0.0428668823610458
+NW035_2,Cephalosporin,0.0364344893649368
+NW035_2,Diaminopyrimidine antibiotic,0.0146562905317769
+NW035_2,Disinfecting agents and antiseptics,0.00886824886095314
+NW035_2,Fluoroquinolone antibiotic,0.0295116618681794
+NW035_2,Lincosamide antibiotic,0.0357003891050584
+NW035_2,Macrolide antibiotic,0.0254868564207086
+NW035_2,Nucleoside antibiotic,0.0205739299610895
+NW035_2,Penicillin beta-lactam,0.0190058252923039
+NW035_2,Peptide antibiotic,0.01685899217514
+NW035_2,Phenicol antibiotic,0.00708485067677675
+NW035_2,Rifamycin antibiotic,0.136573069440287
+NW035_2,Streptogramin antibiotic,0.0129377431906615
+NW035_2,Tetracycline antibiotic,0.498897431740331
+NW036_3,Other,0.0319497732821765
+NW036_3,Aminoglycoside antibiotic,0.0274386699221021
+NW036_3,Cephalosporin,0.12789210556912
+NW036_3,Diaminopyrimidine antibiotic,0.0132542727589815
+NW036_3,Disinfecting agents and antiseptics,0.00069759330310429
+NW036_3,Fluoroquinolone antibiotic,0.000116265550517382
+NW036_3,Lincosamide antibiotic,0.0222532263690269
+NW036_3,Macrolide antibiotic,0.0701895128473433
+NW036_3,Nucleoside antibiotic,0.00418555981862574
+NW036_3,Penicillin beta-lactam,0.00244157656086502
+NW036_3,Peptide antibiotic,0.00069759330310429
+NW036_3,Phenicol antibiotic,0.000139518660620858
+NW036_3,Rifamycin antibiotic,0.0268573421695152
+NW036_3,Streptogramin antibiotic,0.0621904429717475
+NW036_3,Tetracycline antibiotic,0.60969654691315
+NW038_3,Other,0.0621089703749741
+NW038_3,Aminocoumarin antibiotic,0.00124300807955252
+NW038_3,Aminoglycoside antibiotic,0.0124300807955252
+NW038_3,Cephalosporin,0.0244458255645328
+NW038_3,Diaminopyrimidine antibiotic,0.0142945929148539
+NW038_3,Lincosamide antibiotic,0.0471100062150404
+NW038_3,Macrolide antibiotic,0.0415164698570541
+NW038_3,Nucleoside antibiotic,0.00248601615910503
+NW038_3,Penicillin beta-lactam,0.000207168013258753
+NW038_3,Peptide antibiotic,0.00124300807955252
+NW038_3,Phenicol antibiotic,0.0186451211932878
+NW038_3,Rifamycin antibiotic,0.110006215040398
+NW038_3,Streptogramin antibiotic,0.0303293971410814
+NW038_3,Tetracycline antibiotic,0.633934120571784
+NW040_3,Other,0.0526287982551104
+NW040_3,Aminocoumarin antibiotic,0.0908570733623218
+NW040_3,Aminoglycoside antibiotic,0.056813582705815
+NW040_3,Cephalosporin,0.065366572364473
+NW040_3,Diaminopyrimidine antibiotic,0.00165357800067387
+NW040_3,Disinfecting agents and antiseptics,0.0540869932752368
+NW040_3,Fluoroquinolone antibiotic,0.127290217493157
+NW040_3,Lincosamide antibiotic,0.0102169349195241
+NW040_3,Macrolide antibiotic,0.0462972931482379
+NW040_3,Nucleoside antibiotic,0.0384651271285281
+NW040_3,Penicillin beta-lactam,0.073258649185871
+NW040_3,Peptide antibiotic,0.0916410974143654
+NW040_3,Phenicol antibiotic,0.0247865241567131
+NW040_3,Rifamycin antibiotic,0.0369641671601084
+NW040_3,Streptogramin antibiotic,0.0019594121763471
+NW040_3,Tetracycline antibiotic,0.227713979253517
+NW041_2,Other,0.0455042735042735
+NW041_2,Aminocoumarin antibiotic,0.00786324786324786
+NW041_2,Aminoglycoside antibiotic,0.0213354700854701
+NW041_2,Cephalosporin,0.0917058404558405
+NW041_2,Diaminopyrimidine antibiotic,0.00944444444444444
+NW041_2,Disinfecting agents and antiseptics,0.00564102564102564
+NW041_2,Fluoroquinolone antibiotic,0.0142984330484331
+NW041_2,Lincosamide antibiotic,0.0565555555555556
+NW041_2,Macrolide antibiotic,0.0513169515669516
+NW041_2,Nucleoside antibiotic,0.00444444444444444
+NW041_2,Penicillin beta-lactam,0.0108262108262108
+NW041_2,Peptide antibiotic,0.00786324786324786
+NW041_2,Phenicol antibiotic,0.0111965811965812
+NW041_2,Rifamycin antibiotic,0.167307692307692
+NW041_2,Streptogramin antibiotic,0.00627777777777778
+NW041_2,Tetracycline antibiotic,0.488418803418803
+NW042_3,Other,0.0438675029789488
+NW042_3,Aminocoumarin antibiotic,0.0488216602674434
+NW042_3,Aminoglycoside antibiotic,0.0536624520058255
+NW042_3,Cephalosporin,0.0309394170086941
+NW042_3,Diaminopyrimidine antibiotic,0.00817555938037866
+NW042_3,Disinfecting agents and antiseptics,0.0240762500551657
+NW042_3,Fluoroquinolone antibiotic,0.0553943797166689
+NW042_3,Lincosamide antibiotic,0.0480063109581182
+NW042_3,Macrolide antibiotic,0.0726383556202833
+NW042_3,Nucleoside antibiotic,0.018395008605852
+NW042_3,Penicillin beta-lactam,0.0319434330729511
+NW042_3,Peptide antibiotic,0.0484989408182179
+NW042_3,Phenicol antibiotic,0.0194506046162673
+NW042_3,Rifamycin antibiotic,0.0508978220574606
+NW042_3,Streptogramin antibiotic,0.00938755020080321
+NW042_3,Tetracycline antibiotic,0.435844752636921
+NW043_3,Other,0.0540995938246702
+NW043_3,Aminocoumarin antibiotic,0.0835985730459488
+NW043_3,Aminoglycoside antibiotic,0.0478545336918011
+NW043_3,Cephalosporin,0.085172871190644
+NW043_3,Diaminopyrimidine antibiotic,0.000555401277422938
+NW043_3,Disinfecting agents and antiseptics,0.0531857247630644
+NW043_3,Fluoroquinolone antibiotic,0.111299872949415
+NW043_3,Lincosamide antibiotic,0.00527631213551791
+NW043_3,Macrolide antibiotic,0.0500715104575143
+NW043_3,Nucleoside antibiotic,0.0391557900583171
+NW043_3,Penicillin beta-lactam,0.0714498312943189
+NW043_3,Peptide antibiotic,0.0893707791791657
+NW043_3,Phenicol antibiotic,0.0156961385370161
+NW043_3,Rifamycin antibiotic,0.0611464764061265
+NW043_3,Streptogramin antibiotic,0.000971952235490142
+NW043_3,Tetracycline antibiotic,0.231094638953567
+NW044_1,Other,0.0502610368093629
+NW044_1,Aminocoumarin antibiotic,0.0359982739842351
+NW044_1,Aminoglycoside antibiotic,0.0408698842554134
+NW044_1,Cephalosporin,0.176405791382843
+NW044_1,Diaminopyrimidine antibiotic,0.00374970002399808
+NW044_1,Disinfecting agents and antiseptics,0.0237360049657566
+NW044_1,Fluoroquinolone antibiotic,0.0415785775599491
+NW044_1,Lincosamide antibiotic,0.047732181425486
+NW044_1,Macrolide antibiotic,0.0610957661848591
+NW044_1,Nucleoside antibiotic,0.0162257019438445
+NW044_1,Penicillin beta-lactam,0.024542940410921
+NW044_1,Peptide antibiotic,0.0285813673367669
+NW044_1,Phenicol antibiotic,0.00716533061970427
+NW044_1,Rifamycin antibiotic,0.033393732347566
+NW044_1,Streptogramin antibiotic,0.0197624190064795
+NW044_1,Tetracycline antibiotic,0.388901291742814
+NW045_3,Other,0.0705547178054392
+NW045_3,Aminocoumarin antibiotic,0.011252373788443
+NW045_3,Aminoglycoside antibiotic,0.0517598624523921
+NW045_3,Cephalosporin,0.160531370414346
+NW045_3,Diaminopyrimidine antibiotic,0.0051298493106765
+NW045_3,Disinfecting agents and antiseptics,0.00852981313866213
+NW045_3,Fluoroquinolone antibiotic,0.0161715328595739
+NW045_3,Lincosamide antibiotic,0.0484209682590574
+NW045_3,Macrolide antibiotic,0.0647902140608136
+NW045_3,Nucleoside antibiotic,0.00729400448861815
+NW045_3,Penicillin beta-lactam,0.011682914712732
+NW045_3,Peptide antibiotic,0.0129814078194969
+NW045_3,Phenicol antibiotic,0.00485876472570926
+NW045_3,Rifamycin antibiotic,0.0186986706784719
+NW045_3,Streptogramin antibiotic,0.0359971144597627
+NW045_3,Tetracycline antibiotic,0.471346421025805
+NW047_4,Other,0.0507723716521044
+NW047_4,Aminocoumarin antibiotic,0.0926560447718577
+NW047_4,Aminoglycoside antibiotic,0.0614447109435974
+NW047_4,Cephalosporin,0.0612281803818552
+NW047_4,Diaminopyrimidine antibiotic,0.0066815144766147
+NW047_4,Disinfecting agents and antiseptics,0.0579802219557231
+NW047_4,Fluoroquinolone antibiotic,0.134755772562009
+NW047_4,Lincosamide antibiotic,0.00144766146993318
+NW047_4,Macrolide antibiotic,0.0566129861230084
+NW047_4,Nucleoside antibiotic,0.0417594654788419
+NW047_4,Penicillin beta-lactam,0.0805303333142977
+NW047_4,Peptide antibiotic,0.0919136542744561
+NW047_4,Phenicol antibiotic,0.016591951725582
+NW047_4,Rifamycin antibiotic,0.0333576037919022
+NW047_4,Streptogramin antibiotic,0.00163325909428359
+NW047_4,Tetracycline antibiotic,0.210634267983934
+NW048_5_1,Other,0.00649640426351612
+NW048_5_1,Aminocoumarin antibiotic,0.000858803133427507
+NW048_5_1,Aminoglycoside antibiotic,0.00789135739052267
+NW048_5_1,Cephalosporin,0.132014896622576
+NW048_5_1,Diaminopyrimidine antibiotic,0.0546744574290484
+NW048_5_1,Disinfecting agents and antiseptics,0.000796198792859895
+NW048_5_1,Fluoroquinolone antibiotic,0.0012831214417191
+NW048_5_1,Lincosamide antibiotic,0.131719532554257
+NW048_5_1,Macrolide antibiotic,0.124613672359916
+NW048_5_1,Penicillin beta-lactam,0.00190916484739523
+NW048_5_1,Peptide antibiotic,0.00106748426865288
+NW048_5_1,Phenicol antibiotic,0.00701489662257609
+NW048_5_1,Rifamycin antibiotic,0.0465599717477848
+NW048_5_1,Streptogramin antibiotic,0.00108514190317195
+NW048_5_1,Tetracycline antibiotic,0.482014896622576
+NW049_3,Other,0.0732504930966469
+NW049_3,Aminocoumarin antibiotic,0.0264750633981403
+NW049_3,Aminoglycoside antibiotic,0.0754860524091293
+NW049_3,Cephalosporin,0.148277261200338
+NW049_3,Diaminopyrimidine antibiotic,0.0316483516483516
+NW049_3,Disinfecting agents and antiseptics,0.0220281769512539
+NW049_3,Fluoroquinolone antibiotic,0.0438816568047337
+NW049_3,Lincosamide antibiotic,0.024
+NW049_3,Macrolide antibiotic,0.0463944773175542
+NW049_3,Nucleoside antibiotic,0.02
+NW049_3,Penicillin beta-lactam,0.0294860524091293
+NW049_3,Peptide antibiotic,0.0390025359256128
+NW049_3,Phenicol antibiotic,0.0222479571710341
+NW049_3,Rifamycin antibiotic,0.0605629754860524
+NW049_3,Streptogramin antibiotic,0.0123516483516484
+NW049_3,Tetracycline antibiotic,0.324907297830375
+NW050_3,Other,0.0738533387219902
+NW050_3,Aminocoumarin antibiotic,0.119652880686156
+NW050_3,Aminoglycoside antibiotic,0.068806412501684
+NW050_3,Cephalosporin,0.0631710748873621
+NW050_3,Diaminopyrimidine antibiotic,0.000583771161704612
+NW050_3,Disinfecting agents and antiseptics,0.067545466792402
+NW050_3,Fluoroquinolone antibiotic,0.160939123145778
+NW050_3,Lincosamide antibiotic,0.00504767464487254
+NW050_3,Macrolide antibiotic,0.0556443187091173
+NW050_3,Nucleoside antibiotic,0.0489258610624635
+NW050_3,Penicillin beta-lactam,0.0914645171913123
+NW050_3,Peptide antibiotic,0.109290942565899
+NW050_3,Phenicol antibiotic,0.0225658987830617
+NW050_3,Rifamycin antibiotic,0.0200790336342
+NW050_3,Streptogramin antibiotic,0.000897061685152753
+NW050_3,Tetracycline antibiotic,0.0915326238268445
+NW051_3,Other,0.0275669808062367
+NW051_3,Aminocoumarin antibiotic,0.000505748260719396
+NW051_3,Aminoglycoside antibiotic,0.0426802190753442
+NW051_3,Cephalosporin,0.0571125474909952
+NW051_3,Diaminopyrimidine antibiotic,0.00064143681847338
+NW051_3,Disinfecting agents and antiseptics,2.46706468643608e-05
+NW051_3,Fluoroquinolone antibiotic,0.00130754428381112
+NW051_3,Lincosamide antibiotic,0.0259461193072482
+NW051_3,Macrolide antibiotic,0.0181131889278137
+NW051_3,Nucleoside antibiotic,0.0099422706863374
+NW051_3,Penicillin beta-lactam,0.00355257314846795
+NW051_3,Peptide antibiotic,0.00226969951152119
+NW051_3,Phenicol antibiotic,0.0433216558938175
+NW051_3,Rifamycin antibiotic,0.0474909952138945
+NW051_3,Streptogramin antibiotic,0.00301475304682489
+NW051_3,Tetracycline antibiotic,0.71650959688163
+NW052_2,Other,0.0199125462495795
+NW052_2,Aminoglycoside antibiotic,0.0106962663975782
+NW052_2,Cephalosporin,0.15539858728557
+NW052_2,Diaminopyrimidine antibiotic,0.0322906155398587
+NW052_2,Disinfecting agents and antiseptics,0.00363269424823411
+NW052_2,Fluoroquinolone antibiotic,0.0117053481331988
+NW052_2,Lincosamide antibiotic,0.0503195425496132
+NW052_2,Macrolide antibiotic,0.0457786747393206
+NW052_2,Penicillin beta-lactam,0.00363269424823411
+NW052_2,Phenicol antibiotic,0.00639085099226371
+NW052_2,Rifamycin antibiotic,0.0857719475277497
+NW052_2,Streptogramin antibiotic,0.0150016818028927
+NW052_2,Tetracycline antibiotic,0.559468550285906
+NW053_3,Other,0.0611872724381515
+NW053_3,Aminocoumarin antibiotic,0.11239813507891
+NW053_3,Aminoglycoside antibiotic,0.0736058583702596
+NW053_3,Cephalosporin,0.0629570294377532
+NW053_3,Diaminopyrimidine antibiotic,0.000255738124160859
+NW053_3,Disinfecting agents and antiseptics,0.068851793199661
+NW053_3,Fluoroquinolone antibiotic,0.153853817793144
+NW053_3,Lincosamide antibiotic,0.0115316582486201
+NW053_3,Macrolide antibiotic,0.0579046031223002
+NW053_3,Nucleoside antibiotic,0.0504315580845214
+NW053_3,Penicillin beta-lactam,0.084732065134533
+NW053_3,Peptide antibiotic,0.110959608130505
+NW053_3,Phenicol antibiotic,0.0221156510092639
+NW053_3,Rifamycin antibiotic,0.0201731068411588
+NW053_3,Streptogramin antibiotic,0.00272147987127848
+NW053_3,Tetracycline antibiotic,0.106320625115779
