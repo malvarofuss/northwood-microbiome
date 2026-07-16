@@ -1,0 +1,6 @@
+# Data
+data/Metagenomics/HUMAnN_func/Normalized_Tables/merged_genefamilies_cpm.tsv
+data/Metadata/
+
+# Temporary Results
+tmp_figures/

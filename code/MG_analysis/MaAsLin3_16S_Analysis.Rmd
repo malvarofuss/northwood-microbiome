@@ -1,0 +1,2019 @@
+---
+title: "MaAsLin3_16S_Analysis"
+author: "Zhongzhi"
+date: "2026-04-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+### 16S Taxa Units MaSaLin3 Analysis (Metadata)
+```{r pressure, echo=FALSE}
+setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
+
+library(dplyr)
+library(stringr)
+library(tidyr)
+library(tibble)
+library(maaslin3)
+
+### Read in 16S ASV feature table
+#data_table_name <- file.path("../../tmp_figures/16S_MaAsLin3_data", "table_bleed_decon.tsv")
+# Read in updated 16S ASV feature table
+data_table_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "feature-table.tsv")
+
+org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, skip = 1, check.names = FALSE)
+nrow(org_data_table)
+org_data_table[1:5, 1:5]
+nrow(org_data_table)
+ncol(org_data_table)
+
+# # Remove Duplicate Samples and Sample without metadata
+# data_table <- org_data_table[, !colnames(org_data_table) %in% c("NW046-1", "NW046-5")]
+data_table <- org_data_table
+data_table[1:5, 1:5]
+nrow(data_table)
+ncol(data_table)
+
+
+
+### Read in ASV taxonomic mappings
+taxa_map_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "taxonomy.tsv")
+taxa_map_table <- read.csv(taxa_map_name, sep = '\t', header = TRUE, check.names = FALSE)
+head(taxa_map_table)
+# New columns for taxonomic information
+taxa_map_table <- taxa_map_table %>%
+  mutate(.row_id = row_number()) %>%
+  # Seperate the Taxon column
+  separate_rows(Taxon, sep = ";") %>%
+  mutate(Taxon = str_trim(Taxon)) %>%
+  mutate(
+    rank = str_extract(Taxon, "^[dpcfogs]__"),
+    value = str_replace(Taxon, "^[dpcfogs]__", ""),
+    value = if_else(is.na(value) | value == "", "Unknown", value)
+  ) %>%
+  # Taxonomy ranks
+  filter(rank %in% c("d__", "p__", "c__", "o__", "f__", "g__", "s__")) %>%
+  # Wide table
+  pivot_wider(
+    id_cols = c(.row_id, `Feature ID`, Confidence),
+    names_from = rank,
+    values_from = value,
+    values_fn = dplyr::first
+  ) %>%
+  # Rename Columns
+  rename(
+    Domain  = `d__`,
+    Phylum  = `p__`,
+    Class   = `c__`,
+    Order   = `o__`,
+    Family  = `f__`,
+    Genus   = `g__`,
+    Species = `s__`
+  ) %>%
+  mutate(across(c(Domain, Phylum, Class, Order, Family, Genus, Species),
+                ~ if_else(is.na(.x) | .x == "", "Unknown", .x))) %>%
+  select(-.row_id)
+
+taxa_map_table[1:5, ]
+colnames(taxa_map_table)[1] <- "ASV"
+taxa_map_table[1:5, ]
+
+
+
+# ### Read in 16S metadata
+# metadata_name <- file.path("../../tmp_figures/16S_MaAsLin3_data", "northwood_map.txt")
+### Read in update 16S metadata
+metadata_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "update_northwood_map.txt")
+org_metadata <- read.csv(metadata_name, sep = '\t', header = TRUE)
+names(org_metadata)[1] <- "SampleID"
+head(org_metadata)
+
+# Remove sample without metadata
+measured_samples <- colnames(data_table)
+metadata <- org_metadata %>% filter(SampleID %in% measured_samples)
+head(metadata)
+nrow(metadata)
+
+
+### Factor the categorical variables in metadata
+metadata$Sex <- 
+  factor(metadata$Sex, levels = c('Male', 'Female'))
+
+metadata$Location <- 
+  factor(metadata$Location, levels = c('Manor', 'Center'))
+
+metadata$FICat <- 
+  factor(metadata$FICat, levels = c('3', '4'))
+
+# Check dataframes
+data_table[1:5, 1:5]
+metadata[1:5, ]
+
+
+
+
+
+###### Perform MaAsLin3_16S_Analysis
+### Add specific level taxonomic annotation to the feature table
+# level <- "Phylum"
+level <- "Family"
+# level <- "Genus"
+# level <- "Species"
+# level <- "ASV_ID"
+# taxa_map_table$ASV_ID <- taxa_map_table$ASV
+
+
+data_table <- data_table %>%
+  rownames_to_column(var = "ASV")
+nrow(taxa_map_table)
+select_taxa_map_table <- taxa_map_table %>% select("ASV", all_of(level)) %>% distinct()
+nrow(select_taxa_map_table)
+table(select_taxa_map_table[[level]])
+
+
+anno_data_table <- data_table %>% 
+  left_join(select_taxa_map_table, by = "ASV") %>%
+  mutate(!!level := if_else(is.na(.data[[level]]) | .data[[level]] == "", "Unknown", .data[[level]]))
+
+### Summarise OTU abundance at specific level
+sample_cols <- setdiff(colnames(anno_data_table), c("ASV", level))
+sum_anno_data_table <- anno_data_table %>%
+  select(all_of(level), all_of(sample_cols)) %>%
+  group_by(.data[[level]]) %>%
+  summarise(across(all_of(sample_cols), ~ sum(as.numeric(.x), na.rm = TRUE)), .groups = "drop") %>%
+  arrange(desc(rowSums(across(all_of(sample_cols)))))
+
+sum_anno_data_table
+
+# ### Output family-level taxonomic profilings
+# family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "16S_Family_Profiling.tsv")
+# family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
+# family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+# write.table(sum_anno_data_table, family_level_taxa_file, sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
+
+
+### Convert taxa table format for MaAsLin input
+sum_df <- as.data.frame(sum_anno_data_table, check.names = FALSE)
+rownames(sum_df) <- sum_df[[level]]
+sum_df[[level]] <- NULL
+final_data_table <- as.data.frame(t(sum_df), check.names = FALSE)
+final_data_table[1:5, ]
+nrow(final_data_table)
+
+metadata[1:5, ]
+nrow(metadata)
+
+final_metadata <- metadata %>%
+  mutate(
+    Individual = str_extract(SampleID, "^[^-]+")  # 提取到第一个 '-' 之前
+  ) %>%
+  column_to_rownames("SampleID")
+final_metadata[1:5, ]
+final_data_table[1:5, ]
+ncol(final_data_table)
+
+
+### Running MaAsLin3
+set.seed(1)
+fit_out <- maaslin3(input_data = final_data_table,
+                    input_metadata = final_metadata,
+                    #output = 'MaAsLin3_16S_genus_test_output',
+                    output = 'MaAsLin3_16S_family_update_output',
+                    formula = '~ Sex + Age +
+                        TimeNW + FIScore + Location + (1|Individual)',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    coef_plot_vars = c("Age", "Location Center"),
+                    heatmap_vars = c("FIScore", "TimeNW", "Sex Female"),
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+
+```
+
+
+
+### 16S Taxa Units (Disease and medication)
+```{r}
+library(dplyr)
+library(tibble)
+library(maaslin3)
+library(stringr)
+
+### Read in 16S taxonomic results
+#level <- "Family"
+#family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
+level <- "Genus"
+family_level_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+
+sum_anno_data_table <- read.table(family_level_taxa_file, sep = "\t", header = TRUE, check.names = FALSE)
+
+### Convert taxa table format for MaAsLin input
+sum_df <- as.data.frame(sum_anno_data_table, check.names = FALSE)
+rownames(sum_df) <- sum_df[[level]]
+sum_df[[level]] <- NULL
+final_data_table <- as.data.frame(t(sum_df), check.names = FALSE)
+final_data_table[1:5, ]
+nrow(final_data_table)
+# Remove sample without metadata
+final_data_table <- final_data_table[
+  !grepl("NW046", rownames(final_data_table)),
+]
+head(final_data_table)
+nrow(final_data_table)
+
+
+### Read in sample metadata
+metadata_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "update_northwood_map.txt")
+org_metadata <- read.csv(metadata_name, sep = '\t', header = TRUE)
+names(org_metadata)[1] <- "SampleID"
+head(org_metadata)
+nrow(org_metadata)
+
+# Remove sample without metadata
+measured_samples <- rownames(final_data_table)
+metadata <- org_metadata %>% filter(SampleID %in% measured_samples)
+head(metadata)
+nrow(metadata)
+
+final_metadata <- metadata %>%
+  mutate(
+    Individual = str_extract(SampleID, "^[^-]+")  # 提取到第一个 '-' 之前
+  ) %>%
+  column_to_rownames("SampleID")
+final_metadata[1:5, ]
+final_data_table[1:5, ]
+ncol(final_data_table)
+
+metadata[1:5, ]
+nrow(metadata)
+
+final_metadata <- metadata %>%
+  mutate(
+    Individual = str_extract(SampleID, "^[^-]+")  # 提取到第一个 '-' 之前
+  ) %>%
+  column_to_rownames("SampleID")
+final_metadata[1:5, ]
+
+# Remove sample without metadata
+final_metadata <- final_metadata[
+  !grepl("NW046", rownames(final_metadata)),
+]
+nrow(final_metadata)
+
+
+
+### Read in individual medication metadata
+med_metadata_name <- file.path("../../data/Metadata", "patients_master_metadata.txt")
+org_med_metadata <- read.csv(med_metadata_name, sep = '\t', row.names = 1)
+# Remove sample without metadata
+med_metadata <- org_med_metadata [!rownames(org_med_metadata) %in% c("NW046"), ]
+head(med_metadata)
+nrow(med_metadata)
+selected_med_metadata <- med_metadata %>%
+  rownames_to_column(var = "Individual") %>%
+  select(Individual, anemia:last_col())
+head(selected_med_metadata)
+
+# Matching medication metadata to basic metadata by individual name
+head(final_metadata)
+final_metadata <- final_metadata %>%
+  rownames_to_column(var = "Sample") %>%
+  left_join(selected_med_metadata, by = "Individual") %>%
+  column_to_rownames(var = "Sample")
+head(final_metadata)
+
+
+### Factor the categorical variables in metadata
+final_metadata$Sex <- 
+  factor(metadata$Sex, levels = c('Male', 'Female'))
+
+final_metadata$Location <- 
+  factor(metadata$Location, levels = c('Manor', 'Center'))
+
+
+
+### Factor the categorical variables in medication columns in the metadata
+binary_vars <- c(
+  "anemia", "arthritis", "atherosclerosis", "copd", "dementia",
+  "depression", "diabetes", "dyslipidemia", "hypertension",
+  "hypothyroidism", "osteoporosis", "renal_disease",
+  "ace_inhibitors", "acetaminophen", "aaps", "benzodiazepines",
+  "beta_blockers", "antiplatelets", "ccbs", "diuretics", "insulin",
+  "iron_supplements", "laxatives", "levothyroxine", "metformin",
+  "nitrates", "opioids", "ppis", "ssris", "statins", "tcas",
+  "vitb12", "vitd"
+)
+
+final_metadata <- final_metadata %>%
+  mutate(
+    across(
+      all_of(binary_vars),
+      ~ factor(.x, levels = c(0, 1))
+    )
+  )
+
+# Check dataframes
+data_table[1:5, 1:5]
+final_metadata[1:5, ]
+
+
+
+### Running MaAsLin3
+set.seed(1)
+fit_out <- maaslin3(input_data = final_data_table,
+                    input_metadata = final_metadata,
+                    output = 'MaAsLin3_16S_genus_metadata_output',
+                    formula = '~ Sex + Age +
+                        TimeNW + FIScore + Location + (1|Individual)',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+set.seed(1)
+fit_out <- maaslin3(input_data = final_data_table,
+                    input_metadata = final_metadata,
+                    output = 'MaAsLin3_16S_genus_disease_without_metadata_output',
+                    formula = '~ anemia + arthritis + atherosclerosis + copd + dementia + depression + diabetes + dyslipidemia + hypertension + hypothyroidism + osteoporosis + renal_disease + (1|Individual)',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+
+### Running MaAsLin3
+set.seed(1)
+fit_out <- maaslin3(input_data = final_data_table,
+                    input_metadata = final_metadata,
+                    output = 'MaAsLin3_16S_genus_medication_without_metadata_output',
+                    formula = '~ ace_inhibitors + acetaminophen + aaps + benzodiazepines + beta_blockers + antiplatelets + ccbs + diuretics + insulin + iron_supplements + laxatives + levothyroxine + metformin + nitrates + opioids + ppis + ssris + statins + tcas + vitb12 + vitd + (1|Individual)',
+                    normalization = 'TSS',
+                    transform = 'LOG',
+                    augment = TRUE,
+                    standardize = TRUE,
+                    max_significance = 0.1,
+                    median_comparison_abundance = TRUE,
+                    median_comparison_prevalence = FALSE,
+                    max_pngs = 250,
+                    cores = 4)
+
+```
+
+
+
+### 16S- and MG-based taxonomic Profiling (Family Level)
+```{r}
+setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(RColorBrewer)
+
+###### Read in Metagenomics-based taxonomic profilings
+### MG taxonomic profiling from MetaPhlAn4
+MG_tax_file <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
+df <- read.delim(MG_tax_file, comment.char = "#", check.names = FALSE)
+
+# Column Name Checking
+stopifnot("clade_name" %in% colnames(df))
+head(df)
+nrow(df)
+
+# Keep Family-level Taxa Anno
+df_fam <- df %>%
+  filter(str_detect(clade_name, "\\|f__")) %>%
+  filter(!str_detect(clade_name, "\\|g__"))
+nrow(df_fam)
+
+# Extract Family Name
+df_fam <- df_fam %>%
+  mutate(Family = str_replace(clade_name, ".*\\|f__", "")) %>%
+  select(Family, everything(), -clade_name)
+
+head(df_fam)
+tail(df_fam)
+ncol(df_fam)
+
+
+
+###### Read in 16S-based taxonomic profilings
+#S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "16S_Family_Profiling.tsv")
+S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
+S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
+head(S16_family_taxa_profile)
+S16_samples <- colnames(S16_family_taxa_profile)
+
+### Extract 16S samples with MG data
+# Get MG sample names
+MG_df_fam <- df_fam
+MG_samples <- colnames(MG_df_fam)
+MG_samples
+MG_samples <- MG_samples[MG_samples != "Family"]
+# Convert MG sample names to 16S-style sample IDs
+MG_samples_16S_style <- MG_samples %>%
+  gsub("_all$", "", .) %>%   # remove trailing "_all"
+  gsub("_", "-", .)          # replace "_" with "-"
+
+MG_samples_16S_style
+
+### Select 16S samples that having MG-based profilings
+selected_16S_cols <- c("Family", intersect(S16_samples, MG_samples_16S_style))
+selected_16S_family_taxa_profile <- S16_family_taxa_profile[, selected_16S_cols]
+# Check results
+colnames(selected_16S_family_taxa_profile)
+dim(selected_16S_family_taxa_profile)
+
+
+top_n = 15
+### Top 15 Families and Other Families in MG samples
+# Convert into long table
+MG_long_fam <- MG_df_fam %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+# Top families in MG data
+MG_top_fam <- MG_long_fam %>%
+  group_by(Family) %>%
+  summarise(total = sum(Abundance, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(total)) %>%
+  slice_head(n = top_n) %>%
+  pull(Family)
+
+# Combine left families into Other taxa
+MG_plot_df <- MG_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% MG_top_fam, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), .groups = "drop")
+
+head(MG_plot_df)
+# Convert MG sample names to 16S-style sample IDs
+MG_plot_df <- MG_plot_df %>%
+  mutate(
+    Sample = Sample %>%
+      gsub("_all$", "", .) %>%
+      gsub("_", "-", .)
+  )
+
+head(MG_plot_df)
+tail(MG_plot_df)
+
+
+
+
+### Top 15 Families and Other Families in 16S samples
+head(selected_16S_family_taxa_profile)
+
+# Convert into long table
+S16_long_fam <- selected_16S_family_taxa_profile %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+# Calculate family relative abundance in the samples
+S16_long_fam <- S16_long_fam %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Top families in 16S data
+S16_top_fam <- S16_long_fam %>%
+  group_by(Family) %>%
+  summarise(total = sum(Rel_Abundance, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(total)) %>%
+  slice_head(n = top_n) %>%
+  pull(Family)
+S16_top_fam
+
+# Combine left families into Other taxa
+S16_plot_df <- S16_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% S16_top_fam, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), Rel_Abundance = sum(Rel_Abundance, na.rm = TRUE), .groups = "drop")
+
+head(S16_plot_df)
+
+
+### Get the name of Top Families in both MG and 16S
+top_fam_union <- union(MG_top_fam, S16_top_fam)
+
+
+###### Regenerate 16S and MG tables
+### MG tables
+# Convert into long table
+update_MG_long_fam <- MG_df_fam %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+# Combine left families into Other taxa
+update_MG_plot_df <- update_MG_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% top_fam_union, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), .groups = "drop")
+
+### S16 tables
+# Convert into long table
+update_S16_long_fam <- selected_16S_family_taxa_profile %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+update_S16_long_fam <- update_S16_long_fam %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Combine left families into Other taxa
+update_S16_plot_df <- update_S16_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% top_fam_union, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(
+    Abundance = sum(Abundance, na.rm = TRUE),
+    Rel_Abundance = sum(Rel_Abundance, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+head(update_S16_plot_df)
+### Calculate relative abundance
+
+
+###### Barplots
+### Using a same color set for both 16S data and MG data
+all_taxa <- unique(c(sort(unique(top_fam_union)), "Other"))
+# pal <- colorRampPalette(brewer.pal(12, "Set3"))(length(all_taxa))
+# names(pal) <- all_taxa
+# # Reorder palette to match all_taxa order
+# pal <- pal[all_taxa]
+# names(pal) <- all_taxa
+# pal["Other"] <- "grey70"   # force grey (safe even if already grey)
+
+taxa_no_other <- setdiff(all_taxa, "Other")
+
+base_cols <- c(
+  brewer.pal(8, "Set2"),
+  brewer.pal(12, "Set3"),
+  brewer.pal(8, "Dark2"),
+  brewer.pal(9, "Set1")
+)
+
+bad_cols <- c(
+  "#D9D9D9", # grey, too close to Other
+  "#B3B3B3", # grey, too close to Other
+  "#FFFFB3", # very pale yellow
+  "#B3DE69", # green, too close to other greens
+  "#FFED6F"  # yellow, sometimes too close to other yellows
+)
+
+base_cols <- base_cols[!toupper(base_cols) %in% toupper(bad_cols)]
+
+pal <- base_cols[seq_along(taxa_no_other)]
+names(pal) <- taxa_no_other
+
+pal <- c(pal, Other = "grey70")
+pal <- pal[all_taxa]
+
+
+# Fix Taxon order (optional but recommended)
+update_MG_plot_df <- update_MG_plot_df %>%
+  mutate(Family_plot = factor(Family_plot, levels = all_taxa))
+update_S16_plot_df <- update_S16_plot_df %>%
+  mutate(Family_plot = factor(Family_plot, levels = all_taxa))
+
+
+### Plot (MG)
+update_MG_plot_df <- update_MG_plot_df %>% mutate(Sample = Sample %>%
+      gsub("_all$", "", .) %>%
+      gsub("_", "-", .))
+
+p_fam_MG <- ggplot(update_MG_plot_df, aes(x = Sample, y = Abundance, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = pal) +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Family") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+    panel.grid.major.x = element_blank()
+  )
+print(p_fam_MG)
+
+### Saving MG Family Figures
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot/", "recolored_MG_based_family_level_tax_profile.jpg")
+# ggsave(figure_file, p_fam_MG, width = 12, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot/", "recolored_MG_based_family_level_tax_profile.pdf")
+# ggsave(figure_file, p_fam_MG, width = 12, height = 6)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_MG_based_family_level_tax_profile.svg")
+# ggsave(figure_file, p_fam_MG, width = 12, height = 6)
+
+
+### Plot (16S)
+p_fam_S16 <- ggplot(update_S16_plot_df, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = pal) +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Family") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+    panel.grid.major.x = element_blank()
+  )
+print(p_fam_S16)
+
+### Saving S16 Family Figures
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot/", "recolored_S16_based_family_level_tax_profile.jpg")
+# ggsave(figure_file, p_fam_S16, width = 12, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot/", "recolored_S16_based_family_level_tax_profile.pdf")
+# ggsave(figure_file, p_fam_S16, width = 12, height = 6)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_S16_based_family_level_tax_profile.svg")
+# ggsave(figure_file, p_fam_S16, width = 12, height = 6)
+
+
+# Saving family level plot dataframe
+update_MG_fam_plot_df <- update_MG_plot_df
+update_S16_fam_plot_df <- update_S16_plot_df
+fam_pal <- pal
+
+# ###### 16S and MG Grouped Plots
+# library(dplyr)
+# library(ggplot2)
+# 
+# ### Make sure MG sample names match 16S style
+# update_MG_plot_df <- update_MG_plot_df %>%
+#   mutate(
+#     Sample = Sample %>%
+#       gsub("_all$", "", .) %>%
+#       gsub("_", "-", .)
+#   )
+# 
+# ### If MG already has relative abundance in percent, rename it clearly;
+# ### otherwise replace MG_abundance_pct with the correct relative abundance column
+# MG_plot_ready <- update_MG_plot_df %>%
+#   mutate(
+#     Method = "Metagenomics",
+#     Abundance_pct = Abundance   # 推荐这样；如果你现在只有百分比原值，再相应替换
+#   ) %>%
+#   select(Sample, Family_plot, Method, Abundance_pct)
+# 
+# S16_plot_ready <- update_S16_plot_df %>%
+#   mutate(
+#     Method = "16S rRNA",
+#     Abundance_pct = Rel_Abundance * 100
+#   ) %>%
+#   select(Sample, Family_plot, Method, Abundance_pct)
+# 
+# ### Combine two tables
+# plot_df <- bind_rows(MG_plot_ready, S16_plot_ready)
+# 
+# ### Fix sample order
+# sample_order <- sort(unique(plot_df$Sample))
+# plot_df <- plot_df %>%
+#   mutate(
+#     Sample = factor(Sample, levels = sample_order),
+#     Method = factor(Method, levels = c("16S rRNA", "Metagenomics")),
+#     Family_plot = factor(Family_plot, levels = all_taxa)
+#   )
+# 
+# ### Combined plot
+# p_combined <- ggplot(plot_df, aes(x = Sample, y = Abundance_pct, fill = Family_plot)) +
+#   geom_col(width = 0.9) +
+#   facet_wrap(~ Method, ncol = 1) +
+#   scale_fill_manual(values = pal) +
+#   labs(x = "Sample", y = "Relative abundance (%)", fill = "Family") +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+#     panel.grid.major.x = element_blank(),
+#     strip.text = element_text(face = "bold"),
+#     legend.position = "right"
+#   )
+# 
+# print(p_combined)
+# 
+# # figure_file <- file.path("../../tmp_figures/", "recolored_S16_MG_family_level_tax_profile.jpg")
+# # ggsave(figure_file, p_combined, width = 12, height = 8, dpi = 300)
+```
+
+
+
+### 16S- and MG-based taxonomic Profiling (Genus Level)
+```{r}
+setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
+
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(ggplot2)
+library(RColorBrewer)
+
+###### Read in Metagenomics-based taxonomic profilings
+### MG taxonomic profiling from MetaPhlAn4
+MG_tax_file <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
+df <- read.delim(MG_tax_file, comment.char = "#", check.names = FALSE)
+
+# Column Name Checking
+stopifnot("clade_name" %in% colnames(df))
+head(df)
+nrow(df)
+
+# Keep Genus-level Taxa Anno
+df_fam <- df %>%
+  filter(str_detect(clade_name, "\\|g__")) %>%
+  filter(!str_detect(clade_name, "\\|s__"))
+nrow(df_fam)
+
+# Extract Genus Name
+df_fam <- df_fam %>%
+  mutate(Family = str_replace(clade_name, ".*\\|g__", "")) %>%
+  select(Family, everything(), -clade_name)
+
+head(df_fam)
+tail(df_fam)
+ncol(df_fam)
+
+
+
+###### Read in 16S-based taxonomic profilings
+S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
+head(S16_family_taxa_profile)
+S16_samples <- colnames(S16_family_taxa_profile)
+
+### Extract 16S samples with MG data
+# Get MG sample names
+MG_df_fam <- df_fam
+MG_samples <- colnames(MG_df_fam)
+MG_samples
+MG_samples <- MG_samples[MG_samples != "Family"]
+# Convert MG sample names to 16S-style sample IDs
+MG_samples_16S_style <- MG_samples %>%
+  gsub("_all$", "", .) %>%   # remove trailing "_all"
+  gsub("_", "-", .)          # replace "_" with "-"
+
+MG_samples_16S_style
+
+### Select 16S samples that having MG-based profilings
+selected_16S_cols <- c("Genus", intersect(S16_samples, MG_samples_16S_style))
+selected_16S_family_taxa_profile <- S16_family_taxa_profile[, selected_16S_cols]
+# Check results
+colnames(selected_16S_family_taxa_profile)
+dim(selected_16S_family_taxa_profile)
+
+
+top_n = 15
+### Top 15 Families and Other Families in MG samples
+# Convert into long table
+MG_long_fam <- MG_df_fam %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+# Top families in MG data
+MG_top_fam <- MG_long_fam %>%
+  group_by(Family) %>%
+  summarise(total = sum(Abundance, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(total)) %>%
+  slice_head(n = top_n) %>%
+  pull(Family)
+
+# Combine left families into Other taxa
+MG_plot_df <- MG_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% MG_top_fam, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), .groups = "drop")
+
+head(MG_plot_df)
+# Convert MG sample names to 16S-style sample IDs
+MG_plot_df <- MG_plot_df %>%
+  mutate(
+    Sample = Sample %>%
+      gsub("_all$", "", .) %>%
+      gsub("_", "-", .)
+  )
+
+head(MG_plot_df)
+tail(MG_plot_df)
+
+
+
+
+### Top 15 Families and Other Families in 16S samples
+head(selected_16S_family_taxa_profile)
+
+# Convert into long table
+S16_long_fam <- selected_16S_family_taxa_profile %>%
+  pivot_longer(
+    cols = -Genus,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+# Calculate family relative abundance in the samples
+S16_long_fam <- S16_long_fam %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Top families in 16S data
+S16_top_fam <- S16_long_fam %>%
+  group_by(Genus) %>%
+  summarise(total = sum(Rel_Abundance, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(total)) %>%
+  slice_head(n = top_n) %>%
+  pull(Genus)
+S16_top_fam
+
+# Combine left families into Other taxa
+S16_plot_df <- S16_long_fam  %>%
+  mutate(Family_plot = if_else(Genus %in% S16_top_fam, Genus, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), Rel_Abundance = sum(Rel_Abundance, na.rm = TRUE), .groups = "drop")
+
+head(S16_plot_df)
+
+
+### Get the name of Top Families in both MG and 16S
+top_genus_union <- union(MG_top_fam, S16_top_fam)
+
+
+###### Regenerate 16S and MG tables
+### MG tables
+# Convert into long table
+update_MG_long_fam <- MG_df_fam %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+# Combine left families into Other taxa
+update_MG_plot_df <- update_MG_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% top_genus_union, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), .groups = "drop")
+
+### S16 tables
+# Convert into long table
+update_S16_long_fam <- selected_16S_family_taxa_profile %>%
+  pivot_longer(
+    cols = -Genus,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+update_S16_long_fam <- update_S16_long_fam %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Combine left families into Other taxa
+update_S16_plot_df <- update_S16_long_fam  %>%
+  mutate(Family_plot = if_else(Genus %in% top_genus_union, Genus, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(
+    Abundance = sum(Abundance, na.rm = TRUE),
+    Rel_Abundance = sum(Rel_Abundance, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+head(update_S16_plot_df)
+### Calculate relative abundance
+
+
+###### Barplots
+### Using a same color set for both 16S data and MG data
+all_taxa <- unique(c(sort(unique(top_genus_union)), "Other"))
+# pal <- colorRampPalette(brewer.pal(12, "Set3"))(length(all_taxa))
+# names(pal) <- all_taxa
+# # Reorder palette to match all_taxa order
+# pal <- pal[all_taxa]
+# names(pal) <- all_taxa
+# pal["Other"] <- "grey70"   # force grey (safe even if already grey)
+
+taxa_no_other <- setdiff(all_taxa, "Other")
+
+base_cols <- c(
+  brewer.pal(8, "Set2"),
+  brewer.pal(12, "Set3"),
+  brewer.pal(8, "Dark2"),
+  brewer.pal(9, "Set1")
+)
+
+bad_cols <- c(
+  "#D9D9D9", # grey, too close to Other
+  "#B3B3B3", # grey, too close to Other
+  "#FFFFB3", # very pale yellow
+  "#B3DE69", # green, too close to other greens
+  "#FFED6F"  # yellow, sometimes too close to other yellows
+)
+
+
+base_cols <- base_cols[!toupper(base_cols) %in% toupper(bad_cols)]
+
+pal <- base_cols[seq_along(taxa_no_other)]
+names(pal) <- taxa_no_other
+
+pal <- c(pal, Other = "grey70")
+pal <- pal[all_taxa]
+
+
+# Fix Taxon order (optional but recommended)
+update_MG_plot_df <- update_MG_plot_df %>%
+  mutate(Family_plot = factor(Family_plot, levels = all_taxa))
+update_S16_plot_df <- update_S16_plot_df %>%
+  mutate(Family_plot = factor(Family_plot, levels = all_taxa))
+
+
+### Plot (MG)
+update_MG_plot_df <- update_MG_plot_df %>% mutate(Sample = Sample %>%
+      gsub("_all$", "", .) %>%
+      gsub("_", "-", .))
+
+p_genus_MG <- ggplot(update_MG_plot_df, aes(x = Sample, y = Abundance, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = pal) +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+    panel.grid.major.x = element_blank()
+  )
+print(p_genus_MG)
+
+### Saving MG Genus Figures
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_MG_based_genus_level_tax_profile.jpg")
+# ggsave(figure_file, p_genus_MG, width = 12, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_MG_based_genus_level_tax_profile.pdf")
+# ggsave(figure_file, p_genus_MG, width = 12, height = 6)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_MG_based_genus_level_tax_profile.svg")
+# ggsave(figure_file,p_genus_MG, width = 12, height = 6)
+
+
+### Plot (16S)
+p_genus_S16 <- ggplot(update_S16_plot_df, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = pal) +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+    panel.grid.major.x = element_blank()
+  )
+print(p_genus_S16)
+
+### Saving S16 Genus Figures
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_S16_based_genus_level_tax_profile.jpg")
+# ggsave(figure_file, p_genus_S16, width = 12, height = 6, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_S16_based_genus_level_tax_profile.pdf")
+# ggsave(figure_file, p_genus_S16, width = 12, height = 6)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "recolored_S16_based_genus_level_tax_profile.svg")
+# ggsave(figure_file, p_genus_S16, width = 12, height = 6)
+
+
+# Saving family level plot dataframe
+update_MG_genus_plot_df <- update_MG_plot_df
+update_S16_genus_plot_df <- update_S16_plot_df
+genus_pal <- pal
+
+# ###### 16S and MG Grouped Plots
+# library(dplyr)
+# library(ggplot2)
+# 
+# ### Make sure MG sample names match 16S style
+# update_MG_plot_df <- update_MG_plot_df %>%
+#   mutate(
+#     Sample = Sample %>%
+#       gsub("_all$", "", .) %>%
+#       gsub("_", "-", .)
+#   )
+# 
+# ### If MG already has relative abundance in percent, rename it clearly;
+# ### otherwise replace MG_abundance_pct with the correct relative abundance column
+# MG_plot_ready <- update_MG_plot_df %>%
+#   mutate(
+#     Method = "Metagenomics",
+#     Abundance_pct = Abundance   # 推荐这样；如果你现在只有百分比原值，再相应替换
+#   ) %>%
+#   select(Sample, Family_plot, Method, Abundance_pct)
+# 
+# S16_plot_ready <- update_S16_plot_df %>%
+#   mutate(
+#     Method = "16S rRNA",
+#     Abundance_pct = Rel_Abundance * 100
+#   ) %>%
+#   select(Sample, Family_plot, Method, Abundance_pct)
+# 
+# ### Combine two tables
+# plot_df <- bind_rows(MG_plot_ready, S16_plot_ready)
+# 
+# ### Fix sample order
+# sample_order <- sort(unique(plot_df$Sample))
+# plot_df <- plot_df %>%
+#   mutate(
+#     Sample = factor(Sample, levels = sample_order),
+#     Method = factor(Method, levels = c("16S rRNA", "Metagenomics")),
+#     Family_plot = factor(Family_plot, levels = all_taxa)
+#   )
+# 
+# ### Combined plot
+# p_combined <- ggplot(plot_df, aes(x = Sample, y = Abundance_pct, fill = Family_plot)) +
+#   geom_col(width = 0.9) +
+#   facet_wrap(~ Method, ncol = 1) +
+#   scale_fill_manual(values = pal, guide = guide_legend(ncol = 1)) +
+#   labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+#     panel.grid.major.x = element_blank(),
+#     strip.text = element_text(face = "bold"),
+#     legend.position = "right"
+#   )
+# 
+# print(p_combined)
+
+# figure_file <- file.path("../../tmp_figures/", "recolored_S16_MG_genus_level_tax_profile.jpg")
+# ggsave(figure_file, p_combined, width = 12, height = 8, dpi = 300)
+```
+
+
+
+### Combine 16S and MG taxonomic results at both Family and Genus Level
+```{r}
+library(patchwork)
+library(ggtext)
+# Get the following figures from previous two sections
+# p_fam_MG, p_fam_S16, p_genus_MG, p_genus_S16
+
+# Get the following plot dataframe from previous two sections
+#update_MG_family_plot_df, update_S16_family_plot_df
+#update_MG_genus_plot_df, update_S16_genus_plot_df
+
+# Get the following color assignment from previous two sections
+# fam_pal, genus_pal
+
+# Set Figure Theme
+pub_theme <- theme_bw(base_size = 12) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold", size = 14),
+    axis.title = element_text(face = "bold"),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right",
+    legend.box = "vertical",
+    legend.text = element_text(size = 9)
+  )
+
+top_theme <- pub_theme +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.x = element_blank()
+  )
+
+bottom_theme <- pub_theme +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1)
+  )
+
+
+# Update 16S Genus Names
+final_update_S16_genus_plot_df <- update_S16_genus_plot_df %>%
+  mutate(
+    Family_plot = recode(
+      Family_plot,
+      "[Ruminococcus]_torques_group" = "[Ruminococcus] torques\ngroup",
+      "Tannerellaceae" = "Unclassified Tannerellaceae"
+    )
+  )
+
+S16_genus_pal <- genus_pal
+names(S16_genus_pal)[names(S16_genus_pal) == "[Ruminococcus]_torques_group"] <- "[Ruminococcus] torques\ngroup"
+names(S16_genus_pal)[names(S16_genus_pal) == "Tannerellaceae"] <- "Unclassified Tannerellaceae"
+
+# Set text format of the 16S Genus Figure
+S16_genus_labels <- c(
+  "[Ruminococcus] torques\ngroup" = "[Ruminococcus] torques\ngroup",
+  "Agathobacter" = "<i>Agathobacter</i>",
+  "Akkermansia" = "<i>Akkermansia</i>",
+  "Alistipes" = "<i>Alistipes</i>",
+  "Bacteroides" = "<i>Bacteroides</i>",
+  "Bifidobacterium" = "<i>Bifidobacterium</i>",
+  "Blautia" = "<i>Blautia</i>",
+  "Collinsella" = "<i>Collinsella</i>",
+  "Escherichia-Shigella" = "<i>Escherichia</i>-<i>Shigella</i>",
+  "Faecalibacterium" = "<i>Faecalibacterium</i>",
+  "Odoribacter" = "<i>Odoribacter</i>",
+  "Parabacteroides" = "<i>Parabacteroides</i>",
+  "Roseburia" = "<i>Roseburia</i>",
+  "Ruminococcus" = "<i>Ruminococcus</i>",
+  "Streptococcus" = "<i>Streptococcus</i>",
+  "Unclassified Tannerellaceae" = "Unclassified Tannerellaceae",
+  "Unknown" = "Unknown",
+  "Other" = "Other"
+)
+
+
+# Update 16S Genus Names
+final_update_MG_genus_plot_df <- update_MG_genus_plot_df %>%
+  mutate(
+    Family_plot = recode(
+      Family_plot,
+      "Lachnospiraceae_unclassified" = "Unclassified Lachnospiraceae"
+    )
+  )
+
+MG_genus_pal <- genus_pal
+names(MG_genus_pal)[names(MG_genus_pal) == "Lachnospiraceae_unclassified"] <- "Unclassified Lachnospiraceae"
+
+
+# Set text format of the MG Genus Figure
+MG_genus_labels <- c(
+  "Akkermansia" = "<i>Akkermansia</i>",
+  "Alistipes" = "<i>Alistipes</i>",
+  "Bacteroides" = "<i>Bacteroides</i>",
+  "Bifidobacterium" = "<i>Bifidobacterium</i>",
+  "Blautia" = "<i>Blautia</i>",
+  "Clostridium" = "<i>Clostridium</i>",
+  "Collinsella" = "<i>Collinsella</i>",
+  "Escherichia" = "<i>Escherichia</i>",
+  "Faecalibacterium" = "<i>Faecalibacterium</i>",
+  "Unclassified Lachnospiraceae" = "Unclassified Lachnospiraceae",
+  "Mediterraneibacter" = "<i>Mediterraneibacter</i>",
+  "Odoribacter" = "<i>Odoribacter</i>",
+  "Parabacteroides" = "<i>Parabacteroides</i>",
+  "Phocaeicola" = "<i>Phocaeicola</i>",
+  "Roseburia" = "<i>Roseburia</i>",
+  "Ruminococcus" = "<i>Ruminococcus</i>",
+  "Streptococcus" = "<i>Streptococcus</i>",
+  "Other" = "Other"
+)
+
+
+p_fam_MG <- ggplot(update_MG_fam_plot_df, aes(x = Sample, y = Abundance, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = fam_pal) +
+  # labs(title = "MG-based family profile",
+  #      x = NULL, y = "Relative abundance (%)", fill = "Family") +
+  labs(x = NULL, y = "Relative abundance (%)", fill = "Family") +
+  top_theme
+p_fam_MG 
+
+p_fam_S16 <- ggplot(update_S16_fam_plot_df, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = fam_pal) +
+  # labs(title = "16S-based family profile",
+  #      x = NULL, y = "Relative abundance (%)", fill = "Family") +
+  labs(x = NULL, y = "Relative abundance (%)", fill = "Family") +
+  top_theme
+p_fam_S16
+
+p_genus_MG <- ggplot(final_update_MG_genus_plot_df, aes(x = Sample, y = Abundance, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = MG_genus_pal, labels = MG_genus_labels) +
+  # labs(title = "MG-based genus profile",
+  #      x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +  
+  bottom_theme +
+  theme(legend.text = ggtext::element_markdown())
+p_genus_MG
+
+p_genus_S16 <- ggplot(final_update_S16_genus_plot_df, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  scale_fill_manual(values = S16_genus_pal, labels = S16_genus_labels) +
+  # labs(title = "16S-based genus profile",
+  #      x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+  bottom_theme + 
+  theme(legend.text = ggtext::element_markdown())
+p_genus_S16
+
+combined_S16 <- p_fam_S16 / p_genus_S16 +
+  plot_layout(heights = c(1, 1))
+combined_S16
+
+### Saving combined S16 Plots
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "S16_based_both_level_tax_profile.jpg")
+# ggsave(figure_file, combined_S16, width = 12, height = 12, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "S16_based_both_level_tax_profile.pdf")
+# ggsave(figure_file, combined_S16, width = 12, height = 12)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "S16_based_both_level_tax_profile.svg")
+# ggsave(figure_file,combined_S16, width = 12, height = 12)
+
+
+combined_MG <- p_fam_MG / p_genus_MG +
+  plot_layout(heights = c(1, 1))
+combined_MG
+
+### Saving combined MG Plots
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "MG_based_both_level_tax_profile.jpg")
+# ggsave(figure_file, combined_MG, width = 12, height = 12, dpi = 300)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "MG_based_both_level_tax_profile.pdf")
+# ggsave(figure_file, combined_MG, width = 12, height = 12)
+# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "MG_based_both_level_tax_profile.svg")
+# ggsave(figure_file,combined_MG, width = 12, height = 12)
+```
+
+
+
+### 16S Taxonomic Profiling for All Samples (Family Level)
+```{r}
+library(ggplot2)
+
+###### Read in 16S-based taxonomic profilings
+#S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "16S_Family_Profiling.tsv")
+S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
+
+# S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+
+S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
+head(S16_family_taxa_profile)
+
+colnames(S16_family_taxa_profile)
+head(S16_family_taxa_profile)
+
+
+### Assign Top Taxa (From the Previous Family Section)
+top_fam_union
+
+### Taxa Color Assignment (From the Previous Family Section)
+fam_pal
+
+# Convert into long table
+all_S16_long_fam <- S16_family_taxa_profile %>%
+  pivot_longer(
+    cols = -Family,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+# Calculate family relative abundance in the samples
+all_S16_long_fam <- all_S16_long_fam %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+
+# Combine left families into Other taxa
+all_S16_plot_df <- all_S16_long_fam  %>%
+  mutate(Family_plot = if_else(Family %in% top_fam_union, Family, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), Rel_Abundance = sum(Rel_Abundance, na.rm = TRUE), .groups = "drop")
+
+all_S16_plot_df <- all_S16_plot_df %>%
+  mutate(Individual = str_extract(Sample, "^[^-]+"))
+
+head(all_S16_plot_df)
+tail(all_S16_plot_df)
+
+
+### Update Family Names
+final_all_S16_plot_df <- all_S16_plot_df %>%
+  mutate(
+    Family_plot = recode(
+      Family_plot,
+      "Eubacteriales_unclassified" = "Unclassified Eubacteriales"
+    )
+  )
+
+final_fam_pal <- fam_pal
+names(final_fam_pal)[names(final_fam_pal) == "Eubacteriales_unclassified"] <- "Unclassified Eubacteriales"
+
+### Set Family Orders
+fam_order <- c(
+  setdiff(names(final_fam_pal), "Other"),
+  "Other"
+)
+
+final_all_S16_plot_df <- final_all_S16_plot_df %>%
+  mutate(
+    Family_plot = factor(Family_plot, levels = fam_order)
+  )
+
+
+
+
+
+# ###### Save into Six Different Figures
+n_per_page <- 8   # 改成 8 或 10
+out_dir <- "../../tmp_figures/16S_Plot"
+dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+# # 1)（可选）让 Sample 在每个 Individual 内按编号排序，避免 NW001-10 排在 NW001-2 前面
+plot_df <- final_all_S16_plot_df %>%
+  mutate(
+    Sample_num = as.integer(str_extract(Sample, "(?<=-)\\d+$"))
+  ) %>%
+  arrange(Individual, Sample_num) %>%
+  mutate(Sample = factor(Sample, levels = unique(Sample)))
+#
+# # 2) 给 Individual 分页编号：每 n_per_page 个为一组
+ind_levels <- sort(unique(plot_df$Individual))
+ind_page_map <- tibble(
+  Individual = ind_levels,
+  Page = ceiling(seq_along(ind_levels) / n_per_page)
+)
+
+plot_df <- plot_df %>%
+  left_join(ind_page_map, by = "Individual")
+
+n_pages <- max(plot_df$Page)
+
+# # 3) 循环画图 + 保存
+for (pg in seq_len(n_pages)) {
+  df_pg <- plot_df %>% filter(Page == pg)
+
+  p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
+    geom_col(width = 0.9) +
+    facet_wrap(~ Individual, ncol = 4, scales = "free_x") +  # ncol可调，比如 2/3/4
+    scale_fill_manual(values = final_fam_pal) +
+    labs(
+      title = paste0("Taxonomic profiling (Individuals ", (pg-1)*n_per_page + 1, "–", min(pg*n_per_page, length(ind_levels)), ")"),
+      x = "Sample", y = "Relative abundance (%)", fill = "Family"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(
+      axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+      panel.grid.major.x = element_blank(),
+      strip.text = element_text(face = "bold"),
+      legend.position = "right"
+    )
+
+  print(p)
+
+  ggsave(
+    filename = file.path(out_dir, sprintf("S16_tax_profile_page_%02d.jpg", pg)),
+    plot = p, width = 14, height = 8, dpi = 300
+  )
+}
+
+
+
+###### Save into One Large Figure
+plot_df <- final_all_S16_plot_df %>%
+  mutate(
+    Sample_num1 = as.integer(str_extract(Sample, "(?<=-)\\d+")),
+    Sample_num2 = as.integer(str_extract(Sample, "(?<=-\\d-)\\d+$")),
+    Sample_num2 = ifelse(is.na(Sample_num2), 0, Sample_num2)
+  ) %>%
+  arrange(Individual, Sample_num1, Sample_num2) %>%
+  mutate(Sample = factor(Sample, levels = unique(Sample)))
+
+n_per_page <- 8
+
+ind_levels <- sort(unique(plot_df$Individual))
+
+ind_page_map <- tibble(
+  Individual = ind_levels,
+  Page = ceiling(seq_along(ind_levels) / n_per_page)
+)
+
+plot_df <- plot_df %>%
+  left_join(ind_page_map, by = "Individual")
+
+n_pages <- max(plot_df$Page)
+
+pub_theme <- theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1, size = 11),
+    axis.text.y = element_text(size = 11),
+    axis.title = element_text(face = "bold", size = 13),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold", size = 13),
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    legend.title = element_text(face = "bold", size = 16),
+    legend.text = element_text(size = 14)
+  )
+
+
+legend_plot <- ggplot(plot_df, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  facet_wrap(~ Individual, ncol = 3, scales = "free_x") +
+  scale_fill_manual(values = final_fam_pal) +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Family") +
+  pub_theme +
+  theme(legend.position = "right")
+
+legend_grob <- cowplot::get_legend(legend_plot)
+
+plot_list <- vector("list", n_pages)
+
+for (pg in seq_len(n_pages)) {
+  df_pg <- plot_df %>% filter(Page == pg)
+
+  p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
+    geom_col(width = 0.9) +
+    facet_wrap(~ Individual, ncol = 4, scales = "free_x") +
+    scale_fill_manual(values = final_fam_pal) +
+    labs(
+      x = "Sample",
+      y = "Relative abundance (%)",
+      fill = "Family"
+    ) +
+    pub_theme +
+    theme(legend.position = "none")
+
+  plot_list[[pg]] <- p
+}
+
+combined_panels <- cowplot::plot_grid(
+  plotlist = plot_list,
+  ncol = 2,
+  align = "hv"
+)
+
+final_combined_plot <- cowplot::plot_grid(
+  combined_panels,
+  legend_grob,
+  ncol = 2,
+  rel_widths = c(4.5, 1.2)
+)
+
+final_combined_plot
+
+
+
+out_dir <- "../../tmp_figures/16S_Plot"
+dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+ggsave(
+  filename = file.path(out_dir, "All_S16_tax_profile_combined.jpg"),
+  plot = final_combined_plot,
+  width = 16,
+  height = 20,
+  dpi = 300
+)
+
+ggsave(
+  filename = file.path(out_dir, "All_S16_tax_profile_combined.pdf"),
+  plot = final_combined_plot,
+  width = 16,
+  height = 20,
+)
+
+ggsave(
+  filename = file.path(out_dir, "All_S16_tax_profile_combined.svg"),
+  plot = final_combined_plot,
+  width = 16,
+  height = 20,
+)
+
+```
+
+
+
+### 16S Taxonomic Profiling for All Samples (Genus Level)
+```{r}
+library(ggplot2)
+library(ggtext)
+
+###### Read in 16S-based taxonomic profilings
+S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+
+S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
+head(S16_family_taxa_profile)
+
+colnames(S16_family_taxa_profile)
+head(S16_family_taxa_profile)
+
+
+### Assign Top Taxa (From the Previous Genus Section)
+top_fam_union <- top_genus_union
+
+### Taxa Color Assignment (From the Previous Family Section)
+fam_pal <- genus_pal
+
+# Convert into long table
+all_S16_long_fam <- S16_family_taxa_profile %>%
+  pivot_longer(
+    cols = -Genus,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+# Calculate family relative abundance in the samples
+all_S16_long_fam <- all_S16_long_fam %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+
+# Combine left families into Other taxa
+all_S16_plot_df <- all_S16_long_fam  %>%
+  mutate(Family_plot = if_else(Genus %in% top_fam_union, Genus, "Other")) %>%
+  group_by(Sample, Family_plot) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), Rel_Abundance = sum(Rel_Abundance, na.rm = TRUE), .groups = "drop")
+
+all_S16_plot_df <- all_S16_plot_df %>%
+  mutate(Individual = str_extract(Sample, "^[^-]+"))
+
+head(all_S16_plot_df)
+tail(all_S16_plot_df)
+
+
+
+unique(all_S16_plot_df$Family_plot)
+
+### Update Genus Names
+final_all_S16_plot_df <- all_S16_plot_df %>%
+  mutate(
+    Family_plot = recode(
+      Family_plot,
+      "[Ruminococcus]_torques_group" = "[Ruminococcus] torques group",
+      "Tannerellaceae" = "Unclassified Tannerellaceae"
+    )
+  )
+
+
+final_fam_pal <- fam_pal
+names(final_fam_pal)[names(final_fam_pal) == "[Ruminococcus]_torques_group"] <- "[Ruminococcus] torques group" %<%
+names(final_fam_pal)[names(final_fam_pal) == "Tannerellaceae"] <- "Unclassified Tannerellaceae"
+
+
+### Set Family Orders
+fam_order <- c(
+  setdiff(names(final_fam_pal), "Other"),
+  "Other"
+)
+
+final_all_S16_plot_df <- final_all_S16_plot_df %>%
+  mutate(
+    Family_plot = factor(Family_plot, levels = fam_order)
+  )
+
+
+
+
+
+# ###### Save into Six Different Figures
+n_per_page <- 8   # 改成 8 或 10
+out_dir <- "../../tmp_figures/16S_Plot"
+dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+# # 1)（可选）让 Sample 在每个 Individual 内按编号排序，避免 NW001-10 排在 NW001-2 前面
+plot_df <- final_all_S16_plot_df %>%
+  mutate(
+    Sample_num1 = as.integer(str_extract(Sample, "(?<=-)\\d+")),
+    Sample_num2 = as.integer(str_extract(Sample, "(?<=-\\d-)\\d+$")),
+    Sample_num2 = ifelse(is.na(Sample_num2), 0, Sample_num2)
+  ) %>%
+  arrange(Individual, Sample_num1, Sample_num2) %>%
+  mutate(Sample = factor(Sample, levels = unique(Sample)))
+
+#
+# # 2) 给 Individual 分页编号：每 n_per_page 个为一组
+ind_levels <- sort(unique(plot_df$Individual))
+ind_page_map <- tibble(
+  Individual = ind_levels,
+  Page = ceiling(seq_along(ind_levels) / n_per_page)
+)
+
+plot_df <- plot_df %>%
+  left_join(ind_page_map, by = "Individual")
+
+n_pages <- max(plot_df$Page)
+
+
+# Set text format of the Genus Figure
+S16_genus_labels <- c(
+  "[Ruminococcus] torques group" = "[Ruminococcus] torques group",
+  "Agathobacter" = "<i>Agathobacter</i>",
+  "Akkermansia" = "<i>Akkermansia</i>",
+  "Alistipes" = "<i>Alistipes</i>",
+  "Bacteroides" = "<i>Bacteroides</i>",
+  "Bifidobacterium" = "<i>Bifidobacterium</i>",
+  "Blautia" = "<i>Blautia</i>",
+  "Collinsella" = "<i>Collinsella</i>",
+  "Escherichia-Shigella" = "<i>Escherichia</i>-<i>Shigella</i>",
+  "Faecalibacterium" = "<i>Faecalibacterium</i>",
+  "Odoribacter" = "<i>Odoribacter</i>",
+  "Parabacteroides" = "<i>Parabacteroides</i>",
+  "Roseburia" = "<i>Roseburia</i>",
+  "Ruminococcus" = "<i>Ruminococcus</i>",
+  "Streptococcus" = "<i>Streptococcus</i>",
+  "Unclassified Tannerellaceae" = "Unclassified Tannerellaceae",
+  "Unknown" = "Unknown",
+  "Other" = "Other"
+)
+
+# # 3) 循环画图 + 保存
+for (pg in seq_len(n_pages)) {
+  df_pg <- plot_df %>% filter(Page == pg)
+
+  p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
+    geom_col(width = 0.9) +
+    facet_wrap(~ Individual, ncol = 4, scales = "free_x") +  # ncol可调，比如 2/3/4
+    scale_fill_manual(values = final_fam_pal, labels = S16_genus_labels) +
+    labs(
+      title = paste0("Taxonomic profiling (Individuals ", (pg-1)*n_per_page + 1, "–", min(pg*n_per_page, length(ind_levels)), ")"),
+      x = "Sample", y = "Relative abundance (%)", fill = "Genus"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(
+      axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1),
+      panel.grid.major.x = element_blank(),
+      strip.text = element_text(face = "bold"),
+      legend.position = "right",
+      legend.text = ggtext::element_markdown()
+    )
+
+  print(p)
+
+  ggsave(
+    filename = file.path(out_dir, sprintf("S16_tax_genus_profile_page_%02d.jpg", pg)),
+    plot = p, width = 14, height = 8, dpi = 300
+  )
+}
+
+
+
+###### Save into One Large Figure
+plot_df <- final_all_S16_plot_df %>%
+  mutate(
+    Sample_num1 = as.integer(str_extract(Sample, "(?<=-)\\d+")),
+    Sample_num2 = as.integer(str_extract(Sample, "(?<=-\\d-)\\d+$")),
+    Sample_num2 = ifelse(is.na(Sample_num2), 0, Sample_num2)
+  ) %>%
+  arrange(Individual, Sample_num1, Sample_num2) %>%
+  mutate(Sample = factor(Sample, levels = unique(Sample)))
+
+n_per_page <- 8
+
+ind_levels <- sort(unique(plot_df$Individual))
+
+ind_page_map <- tibble(
+  Individual = ind_levels,
+  Page = ceiling(seq_along(ind_levels) / n_per_page)
+)
+
+plot_df <- plot_df %>%
+  left_join(ind_page_map, by = "Individual")
+
+n_pages <- max(plot_df$Page)
+
+pub_theme <- theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 75, hjust = 1, vjust = 1, size = 11),
+    axis.text.y = element_text(size = 11),
+    axis.title = element_text(face = "bold", size = 13),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.text = element_text(face = "bold", size = 13),
+    plot.title = element_text(face = "bold", size = 14, hjust = 0.5),
+    legend.title = element_text(face = "bold", size = 16),
+    legend.text = element_text(size = 14)
+  )
+
+
+legend_plot <- ggplot(plot_df, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
+  geom_col(width = 0.9) +
+  facet_wrap(~ Individual, ncol = 3, scales = "free_x") +
+  scale_fill_manual(values = final_fam_pal, labels = S16_genus_labels) +
+  labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
+  pub_theme +
+  theme(legend.position = "right", legend.text = ggtext::element_markdown())
+
+legend_grob <- cowplot::get_legend(legend_plot)
+
+plot_list <- vector("list", n_pages)
+
+for (pg in seq_len(n_pages)) {
+  df_pg <- plot_df %>% filter(Page == pg)
+
+  p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
+    geom_col(width = 0.9) +
+    facet_wrap(~ Individual, ncol = 4, scales = "free_x") +
+    scale_fill_manual(values = final_fam_pal) +
+    labs(
+      x = "Sample",
+      y = "Relative abundance (%)",
+      fill = "Family"
+    ) +
+    pub_theme +
+    theme(legend.position = "none")
+
+  plot_list[[pg]] <- p
+}
+
+combined_panels <- cowplot::plot_grid(
+  plotlist = plot_list,
+  ncol = 2,
+  align = "hv"
+)
+
+final_combined_plot <- cowplot::plot_grid(
+  combined_panels,
+  legend_grob,
+  ncol = 2,
+  rel_widths = c(4.5, 1.2)
+)
+
+final_combined_plot
+
+
+
+out_dir <- "../../tmp_figures/16S_Plot"
+dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+ggsave(
+  filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.jpg"),
+  plot = final_combined_plot,
+  width = 16,
+  height = 20,
+  dpi = 300
+)
+
+ggsave(
+  filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.pdf"),
+  plot = final_combined_plot,
+  width = 16,
+  height = 20,
+)
+
+ggsave(
+  filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.svg"),
+  plot = final_combined_plot,
+  width = 16,
+  height = 20,
+)
+
+```
+
+
+
+
+
+### Aitchison and Bray-Curtis distance between metagenomics and 16S-based family level taxonomic profiling
+```{r}
+S16_plot_df
+
+MG_plot_df
+
+### Calculate Family-level Aitchison distance between matched samples
+
+### Calculate Family-level Bray-Curtis distance between matched samples
+
+
+### Scatter plot for Bray-Curtis distance against Aitchison distance and boxplot plot for each axis
+
+# Report average value and standard error for Aitchison distance
+
+
+
+library(tidyverse)
+library(vegan)
+library(compositions)
+library(ggplot2)
+library(cowplot)
+library(tibble)
+
+### Step 1. Prepare relative abundance for MG
+MG_plot_df2 <- MG_plot_df %>%
+  group_by(Sample) %>%
+  mutate(Rel_Abundance = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+### Step 2. Keep matched samples
+matched_samples <- intersect(unique(S16_plot_df$Sample), unique(MG_plot_df2$Sample))
+
+S16_sub <- S16_plot_df %>% filter(Sample %in% matched_samples)
+MG_sub  <- MG_plot_df2 %>% filter(Sample %in% matched_samples)
+
+### Step 3. Union of families
+all_families <- union(unique(S16_sub$Family_plot), unique(MG_sub$Family_plot))
+
+### Step 4. Wide matrices
+S16_mat <- S16_sub %>%
+  select(Sample, Family_plot, Rel_Abundance) %>%
+  complete(Sample = matched_samples, Family_plot = all_families, fill = list(Rel_Abundance = 0)) %>%
+  pivot_wider(names_from = Family_plot, values_from = Rel_Abundance) %>%
+  arrange(Sample)
+
+MG_mat <- MG_sub %>%
+  select(Sample, Family_plot, Rel_Abundance) %>%
+  complete(Sample = matched_samples, Family_plot = all_families, fill = list(Rel_Abundance = 0)) %>%
+  pivot_wider(names_from = Family_plot, values_from = Rel_Abundance) %>%
+  arrange(Sample)
+
+stopifnot(all(S16_mat$Sample == MG_mat$Sample))
+
+S16_mat2 <- S16_mat %>%
+  column_to_rownames("Sample") %>%
+  as.matrix()
+
+MG_mat2 <- MG_mat %>%
+  column_to_rownames("Sample") %>%
+  as.matrix()
+
+### Step 5. Distance functions
+calc_aitchison <- function(x, y, pseudocount = 1e-6) {
+  x <- x + pseudocount
+  y <- y + pseudocount
+  x <- x / sum(x)
+  y <- y / sum(y)
+  x_clr <- compositions::clr(x)
+  y_clr <- compositions::clr(y)
+  sqrt(sum((x_clr - y_clr)^2))
+}
+
+calc_bray <- function(x, y) {
+  as.numeric(vegan::vegdist(rbind(x, y), method = "bray")[1])
+}
+
+### Step 6. Calculate distances
+dist_df <- map_dfr(seq_len(nrow(S16_mat2)), function(i) {
+  x <- S16_mat2[i, ]
+  y <- MG_mat2[i, ]
+  
+  tibble(
+    Sample = rownames(S16_mat2)[i],
+    Bray_Curtis = calc_bray(x, y),
+    Aitchison = calc_aitchison(x, y, pseudocount = 1e-6)
+  )
+})
+
+print(dist_df)
+
+### Step 7. Summary stats
+aitchison_mean <- mean(dist_df$Aitchison, na.rm = TRUE)
+aitchison_se <- sd(dist_df$Aitchison, na.rm = TRUE) / sqrt(sum(!is.na(dist_df$Aitchison)))
+
+cat("Average Aitchison distance =", round(aitchison_mean, 4), "\n")
+cat("SE =", round(aitchison_se, 4), "\n")
+
+bc_mean <- mean(dist_df$Bray_Curtis, na.rm = TRUE)
+bc_se <- sd(dist_df$Bray_Curtis, na.rm = TRUE) / sqrt(sum(!is.na(dist_df$Bray_Curtis)))
+
+cat("Average Bray-Curtis distance =", round(bc_mean, 4), "\n")
+cat("SE =", round(bc_se, 4), "\n")
+
+### Step 8. Correlation
+cor_res <- cor.test(dist_df$Bray_Curtis, dist_df$Aitchison, method = "spearman")
+
+## correlation text
+cor_label <- paste0(
+  "Spearman's rho = ", round(cor_res$estimate, 3),
+  "\nP = ", signif(cor_res$p.value, 3)
+)
+
+### Main scatter plot
+p_scatter <- ggplot(dist_df, aes(x = Bray_Curtis, y = Aitchison)) +
+  geom_point(size = 2.2, alpha = 0.8) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.7, linetype = 2) +
+  annotate(
+    "text",
+    x = Inf, y = 20,
+    label = cor_label,
+    hjust = 1.05, vjust = 1.3,
+    size = 4
+  ) +
+  labs(
+    x = "Bray-Curtis distance",
+    y = "Aitchison distance"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.title = element_text(size = 12),
+    axis.text = element_text(size = 10),
+    plot.margin = margin(5.5, 5.5, 5.5, 5.5)
+  )
+
+### Top marginal boxplot for Bray-Curtis
+p_top <- ggplot(dist_df, aes(x = Bray_Curtis, y = "")) +
+  geom_boxplot(width = 0.25, outlier.shape = NA) +
+  geom_jitter(height = 0.08, width = 0, alpha = 0.7, size = 1.5) +
+  labs(x = NULL, y = NULL) +
+  theme_classic(base_size = 11) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.line.y = element_blank(),
+    plot.margin = margin(5.5, 5.5, 0, 5.5)
+  )
+
+### Right marginal boxplot for Aitchison
+p_right <- ggplot(dist_df, aes(x = "", y = Aitchison)) +
+  geom_boxplot(width = 0.25, outlier.shape = NA) +
+  geom_jitter(width = 0.08, height = 0, alpha = 0.7, size = 1.5) +
+  labs(x = NULL, y = NULL) +
+  theme_classic(base_size = 11) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.line.y = element_blank(),
+    plot.margin = margin(5.5, 5.5, 5.5, 0)
+  )
+
+### Empty plot
+p_empty <- ggplot() + theme_void()
+
+### Combine
+top_row <- plot_grid(
+  p_top, p_empty,
+  ncol = 2,
+  rel_widths = c(4, 1),
+  align = "h"
+)
+
+bottom_row <- plot_grid(
+  p_scatter, p_right,
+  ncol = 2,
+  rel_widths = c(4, 1),
+  align = "h"
+)
+
+combined_plot <- plot_grid(
+  top_row, bottom_row,
+  nrow = 2,
+  rel_heights = c(1, 4),
+  align = "v"
+)
+
+print(combined_plot)
+
+# ### Step 10. Save
+figure_file <- file.path("../../tmp_figures", "Family_level_Bray_vs_Aitchison_distance.jpg")
+ggsave(figure_file, combined_plot, width = 8, height = 7, dpi = 300)
+# write.table(dist_df, "Family_level_matched_sample_distances.txt", sep = "\t", quote = FALSE, row.names = FALSE)
+
+
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

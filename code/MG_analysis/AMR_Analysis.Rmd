@@ -1,0 +1,1454 @@
+---
+title: "AMR_Analysis"
+author: "Zhongzhi"
+date: "2026-04-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## AMR Drug Class Plots
+```{r}
+library(tidyr)
+library(purrr)
+library(data.table)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(RColorBrewer)
+library(data.table)
+library(stringr)
+library(tidyr)
+library(compositions)
+library(vegan)
+
+
+amr_file_dir <- "../../data/Metagenomics/CARD_amr/allele_mapping"
+
+### Read in all AMR annotation files
+amr_files <- list.files(
+  path = amr_file_dir,
+  pattern = "\\.allele_mapping_data\\.txt$",
+  full.names = TRUE
+)
+print(amr_files)
+
+
+#-----------------------------
+# 2) Function to read in amr anno file
+#-----------------------------
+read_one_amr <- function(f) {
+  dt <- fread(f, sep = "\t", header = TRUE, data.table = FALSE)
+
+  # 样品名提取：NW001_3（允许 NWxxx_x 或 NWxxx_x_x 这种）
+  base <- basename(f)
+  sample <- str_replace(base, "\\.allele_mapping_data\\.txt$", "")
+  sample <- str_replace(sample, "_all$", "")
+  print(sample)
+
+  # 必要列检查（允许列名轻微变化时你可以在这里扩展）
+  required <- c("ARO Accession", "ARO Term", "Completely Mapped Reads")
+  missing <- setdiff(required, colnames(dt))
+  if (length(missing) > 0) {
+    stop(paste0("File missing columns: ", paste(missing, collapse = ", "),
+                " | file = ", f))
+  }
+
+  dt %>%
+    transmute(
+      Sample = sample,
+      ARO_Accession = `ARO Accession`,
+      ARO_Term = `ARO Term`,
+      Completely_Mapped_Reads = as.numeric(`Completely Mapped Reads`),
+      Drug_Class = `Drug Class`
+    )
+}
+
+
+# Combining all files into one large table
+amr_all <- bind_rows(lapply(amr_files, read_one_amr)) %>%
+  filter(is.finite(Completely_Mapped_Reads))
+
+
+
+###### Analysis based on "Drug Class"
+# ### Using Original Combined Drug Class
+# # Calculate the relative reads contribution of specific "Drug Class" in each sample
+# amr_term_by_sample <- amr_all %>%
+#   group_by(Sample, Drug_Class) %>%
+#   summarise(reads = sum(Completely_Mapped_Reads, na.rm = TRUE), .groups = "drop") %>%
+#   group_by(Sample) %>%
+#   mutate(
+#     total_reads = sum(reads, na.rm = TRUE),
+#     rel_reads = if_else(total_reads > 0, reads / total_reads, 0)
+#   ) %>%
+#   ungroup()
+
+### Using Seperated Drug Class
+amr_all_expanded <- amr_all %>%
+  mutate(.row_id = row_number(),
+         Drug_Class = na_if(Drug_Class, ""),
+         Drug_Class = str_replace_all(Drug_Class, "\\s*;\\s*", "; ")) %>%
+  filter(!is.na(Drug_Class)) %>%
+  separate_rows(Drug_Class, sep = ";\\s*") %>%
+  mutate(Drug_Class = str_trim(Drug_Class)) %>%
+  group_by(.row_id) %>%
+  mutate(n_class = n(),
+         Completely_Mapped_Reads_adj = Completely_Mapped_Reads / n_class) %>%
+  ungroup()
+
+# Calculate the relative reads contribution of specific "Drug Class" in each sample
+amr_term_by_sample <- amr_all_expanded %>%
+  group_by(Sample, Drug_Class) %>%
+  summarise(reads = sum(Completely_Mapped_Reads_adj, na.rm = TRUE), .groups = "drop") %>%
+  group_by(Sample) %>%
+  mutate(
+    total_reads = sum(reads, na.rm = TRUE),
+    rel_reads = if_else(total_reads > 0, reads / total_reads, 0)
+  ) %>%
+  ungroup()
+
+# Convert to AMR wide table for clustering
+amr_mat <- amr_term_by_sample %>%
+  select(Sample, Drug_Class, rel_reads) %>%
+  pivot_wider(
+    names_from = Drug_Class,
+    values_from = rel_reads,
+    values_fill = 0
+  ) %>%
+  as.data.frame()
+
+rownames(amr_mat) <- amr_mat$Sample
+amr_mat$Sample <- NULL
+
+
+# # Calculate and analysis with Aitchison distance
+# pseudo <- 1e-6
+# amr_mat_clr <- clr(amr_mat + pseudo)
+# 
+# dist_aitch <- dist(amr_mat_clr, method = "euclidean")
+# hc_aitch <- hclust(dist_aitch, method = "average")
+# 
+# plot(hc_aitch, main = "Hierarchical clustering of samples (Aitchison distance)")
+# cluster_order <- hc_aitch$labels[hc_aitch$order]
+# cluster_order
+
+
+# Calculate and analysis with Bray-Curtis distance
+dist_bray <- vegdist(amr_mat, method = "bray")
+hc_bray <- hclust(dist_bray, method = "average")
+
+plot(hc_bray, main = "Hierarchical clustering of samples (Bray-Curtis distance)")
+cluster_order <- hc_bray$labels[hc_bray$order]
+cluster_order
+
+
+
+
+
+# Select top 16 Drug Classes with highest relative reads contribution across all samples
+#top_n <- 16
+top_n <- 15
+top_terms <- amr_term_by_sample %>%
+  group_by(Drug_Class) %>%
+  summarise(score = sum(rel_reads, na.rm = TRUE), .groups = "drop") %>%
+  arrange(desc(score)) %>%
+  slice_head(n = top_n) %>%
+  pull(Drug_Class)
+
+# Barplot for all samples of Drug Class contriutions (relative), Colored with "Drug Class"
+#-----------------------------
+# 6) 其它 class 合并为 Other（便于图更清晰）
+#-----------------------------
+plot_df <- amr_term_by_sample %>%
+  mutate(Drug_Class_plot = if_else(Drug_Class %in% top_terms, Drug_Class, "Other")) %>%
+  group_by(Sample, Drug_Class_plot) %>%
+  summarise(rel_reads = sum(rel_reads, na.rm = TRUE), .groups = "drop")
+
+# 固定 factor 顺序：Top classes + Other
+levels_all <- c(top_terms, "Other")
+plot_df <- plot_df %>%
+  mutate(Drug_Class_plot = factor(Drug_Class_plot, levels = levels_all))
+
+#-----------------------------
+# 7) 颜色：Top classes 用区分度更强的 HCL，Other 灰色
+#-----------------------------
+cols <- colorRampPalette(brewer.pal(12, "Set3"))(length(top_terms))
+term_colors <- setNames(c(cols, "grey70"), levels_all)
+
+label_map <- setNames(
+  ifelse(nchar(levels_all) > 40, paste0(substr(levels_all, 1, 40), "..."), levels_all),
+  levels_all
+)
+
+#-----------------------------
+# 8) 堆叠柱状图：所有样品（相对贡献）
+#-----------------------------
+# Set sample order as cluster results
+plot_df <- plot_df %>%
+  mutate(Sample = factor(Sample, levels = cluster_order))
+
+p_bar <- ggplot(plot_df, aes(x = Sample, y = rel_reads, fill = Drug_Class_plot)) +
+  geom_col(width = 0.9) +
+  labs(
+    title = paste0("Top ", top_n, " Drug classes by relative mapped reads"),
+    x = NULL,
+    y = "AMR Drug Class Relative Abundance",
+    fill = "AMR Drug Class"
+  ) +
+  scale_fill_manual(
+    values = term_colors,
+    breaks = levels_all,
+    labels = unname(label_map[levels_all]),
+    drop = FALSE
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1),
+    plot.title = element_text(hjust = 0.5)
+  )
+
+p_bar
+
+
+# ### Trying to add cluster info
+# cluster_k <- 4
+# sample_cluster <- cutree(hc_aitch, k = cluster_k)
+# 
+# cluster_df <- data.frame(
+#   Sample = names(sample_cluster),
+#   Cluster = factor(sample_cluster)
+# )
+# 
+# plot_df2 <- plot_df %>%
+#   left_join(cluster_df, by = "Sample")
+# 
+# p_bar_cluster <- ggplot(plot_df2, aes(x = Sample, y = rel_reads, fill = Drug_Class_plot)) +
+#   geom_col(width = 0.9) +
+#   facet_grid(~ Cluster, scales = "free_x", space = "free_x") +
+#   labs(
+#     title = paste0("Top ", top_n, " Drug classes by relative mapped reads"),
+#     x = NULL,
+#     y = "AMR Drug Class Relative Abundance",
+#     fill = "AMR Drug Class"
+#   ) +
+#   scale_fill_manual(
+#     values = term_colors,
+#     breaks = levels_all,
+#     labels = unname(label_map[levels_all]),
+#     drop = FALSE
+#   ) +
+#   theme_bw(base_size = 12) +
+#   theme(
+#     axis.text.x = element_text(angle = 60, hjust = 1),
+#     plot.title = element_text(hjust = 0.5),
+#     panel.spacing.x = unit(0.5, "lines")
+#   )
+# 
+# p_bar_cluster
+
+```
+
+
+
+### AMR relative abundance plot
+```{r}
+library(patchwork)
+library(dplyr)
+
+### Read in CARD-kmer results
+card_result_file <- file.path("../../data/Metagenomics/CARD_amr", "mapping_summary.tsv")
+card_result <- read.table(card_result_file, header = TRUE, sep = "\t")
+head(card_result)
+# Extract Individual Name from Sample Name
+card_result <- card_result %>%
+  mutate(
+    individual = str_extract(sample, "^[^_]+")
+  )
+
+card_result$mapped_reads_percentage <- card_result$Mapped_reads/card_result$Total_reads
+head(card_result)
+
+
+card_result <- card_result %>%
+  rename(Sample = sample) %>%
+  mutate(Sample = str_remove(Sample, "_all\\.txt$"))
+
+head(card_result)
+
+
+# Set sample order
+sample_order <- unique(plot_df$Sample)
+
+plot_df <- plot_df %>%
+  mutate(Sample = factor(Sample, levels = sample_order))
+
+card_result <- card_result %>%
+  mutate(Sample = factor(Sample, levels = sample_order))
+
+
+
+### Final Modification on the AMR data
+# Convert drug class name into upper letter
+capitalize_first <- function(x) {
+  str_replace(as.character(x), "^([a-z])", ~ str_to_upper(.x))
+}
+
+levels_all <- capitalize_first(c(top_terms, "Other"))
+
+plot_df <- plot_df %>%
+  mutate(
+    Drug_Class_plot = capitalize_first(Drug_Class_plot),
+    Drug_Class_plot = factor(Drug_Class_plot, levels = levels_all)
+  )
+
+# # 3. 再基于更新后的 levels_all 生成颜色
+# cols <- colorRampPalette(brewer.pal(12, "Set3"))(length(top_terms))
+# 
+# term_colors <- setNames(
+#   c(cols, "grey70"),
+#   levels_all
+# )
+# 
+# # 4. 再基于更新后的 levels_all 生成 label_map
+# label_map <- setNames(
+#   ifelse(
+#     nchar(levels_all) > 40,
+#     paste0(substr(levels_all, 1, 40), "..."),
+#     levels_all
+#   ),
+#   levels_all
+# )
+
+
+### New set of colors to keep consistent with taxa figures
+# Unified palette
+taxa_no_other <- setdiff(levels_all, "Other")
+
+base_cols <- c(
+  brewer.pal(8, "Set2"),
+  brewer.pal(12, "Set3"),
+  brewer.pal(8, "Dark2"),
+  brewer.pal(9, "Set1")
+)
+
+bad_cols <- c(
+  "#D9D9D9",
+  "#B3B3B3",
+  "#FFFFB3",
+  "#B3DE69",
+  "#FFED6F"
+)
+
+base_cols <- base_cols[!toupper(base_cols) %in% toupper(bad_cols)]
+
+if (length(taxa_no_other) > length(base_cols)) {
+  stop("Not enough colors in base_cols for all drug classes.")
+}
+
+term_colors <- base_cols[seq_along(taxa_no_other)]
+names(term_colors) <- taxa_no_other
+
+term_colors <- c(term_colors, Other = "grey70")
+term_colors <- term_colors[levels_all]
+
+# Labels
+label_map <- setNames(
+  ifelse(
+    nchar(levels_all) > 40,
+    paste0(substr(levels_all, 1, 40), "..."),
+    levels_all
+  ),
+  levels_all
+)
+
+
+# Remove not interested samples
+filtered_plot_df <- plot_df %>% filter(!Sample %in% c("NW046_5", "NW016_2_2", "NW016_5"))
+
+filtered_card_result <- card_result %>% filter(!Sample  %in% c("NW046_5", "NW016_2_2", "NW016_5"))
+
+
+# Set sample order as clustered result
+samples_to_remove <- c("NW046_5", "NW016_2_2", "NW016_5")
+sample_order_chr <- as.character(cluster_order)
+filtered_sample_order <- sample_order_chr[!sample_order_chr %in% samples_to_remove]
+
+filtered_plot_df <- filtered_plot_df %>% mutate(Sample = factor(as.character(Sample), levels = filtered_sample_order))
+filtered_card_result <- filtered_card_result %>%
+  filter(!Sample %in% samples_to_remove) %>%
+  mutate(Sample = factor(as.character(Sample), levels = filtered_sample_order))
+
+
+
+# 主图：Drug class composition
+p_bar <- ggplot(filtered_plot_df, aes(x = Sample, y = rel_reads, fill = Drug_Class_plot)) +
+  geom_col(width = 0.9) +
+  labs(
+    #title = paste0("Top ", top_n, " Drug classes by relative mapped reads"),
+    x = NULL,
+    y = "AMR Drug Class\nRelative Abundance",
+    fill = "AMR Drug Class"
+  ) +
+  scale_fill_manual(
+    values = term_colors,
+    breaks = levels_all,
+    labels = unname(label_map[levels_all]),
+    drop = FALSE
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    plot.title = element_text(hjust = 0.5)
+  )
+
+p_bar
+
+
+# 下方图：sample-level AMR rel_reads
+p_sample_rel <- ggplot(filtered_card_result, aes(x = Sample, y = mapped_reads_percentage)) +
+  geom_col(width = 0.9, fill = "grey40") +
+  labs(
+    x = NULL,
+    y = "AMR\nRelative Abundance"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1)
+  )
+
+p_sample_rel
+
+
+# 拼接
+p_combined <- p_bar / p_sample_rel +
+  plot_layout(heights = c(4, 1))
+
+p_combined
+
+
+
+
+figure_file <- file.path("../../tmp_figures/AMR_results", "AMR_update_plot.jpg")
+ggsave(filename = figure_file, plot = p_combined, width = 10, height = 8, dpi = 300)
+figure_file <- file.path("../../tmp_figures/AMR_results", "AMR_update_plot.pdf")
+ggsave(filename = figure_file, plot = p_combined, width = 10, height = 8)
+figure_file <- file.path("../../tmp_figures/AMR_results", "AMR_update_plot.svg")
+ggsave(filename = figure_file, plot = p_combined, width = 10, height = 8)
+
+
+# Saving data file
+table_file <- file.path("../../data/Metagenomics/CARD_amr/", "AMR_drug_class_bar_plot_table.csv")
+write.csv(filtered_plot_df, file = table_file, quote = FALSE, row.names = FALSE)
+```
+
+
+
+### Study association between AMR drug class relative abundance and total AMR relative abundance
+```{r}
+### Read in AMR relative abundance from the previous section
+head(filtered_card_result)
+nrow(filtered_card_result)
+
+
+### Read in Drug Class relative abundance
+table_file <- file.path("../../data/Metagenomics/CARD_amr/", "AMR_drug_class_bar_plot_table.csv")
+drug_class_table <- read.csv(table_file)
+head(drug_class_table)
+
+
+
+
+# Check whether sample IDs match
+setdiff(unique(drug_class_table$Sample), unique(filtered_card_result$Sample))
+setdiff(unique(filtered_card_result$Sample), unique(drug_class_table$Sample))
+
+# Merge total AMR relative abundance into the drug-class table
+combined_table <- drug_class_table %>%
+  left_join(filtered_card_result, by = "Sample")
+
+head(combined_table)
+nrow(combined_table)
+
+
+
+### Studying association between Drug Class relative abundance and AMR relative abundance, calculate spearman correlation coefficient
+
+drug_class_cor_result <- combined_table %>%
+  group_by(Drug_Class_plot) %>%
+  summarise(
+    n_samples = sum(!is.na(rel_reads) & !is.na(mapped_reads_percentage)),
+    spearman_rho = suppressWarnings(
+      cor(rel_reads, mapped_reads_percentage,
+          method = "spearman",
+          use = "complete.obs")
+    ),
+    p_value = suppressWarnings(
+      cor.test(rel_reads, mapped_reads_percentage,
+               method = "spearman",
+               exact = FALSE)$p.value
+    ),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    p_adj_BH = p.adjust(p_value, method = "BH")
+  ) %>%
+  arrange(p_adj_BH, p_value)
+
+drug_class_cor_result
+head(drug_class_cor_result)
+
+
+### Optional: save results
+write.csv(
+  drug_class_cor_result,
+  file.path("../../data/Metagenomics/CARD_amr/", "AMR_drug_class_vs_total_AMR_spearman.csv"),
+  row.names = FALSE
+)
+
+
+
+### Optional: visualize correlation coefficients
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(scales)
+
+
+plot_df <- drug_class_cor_result %>%
+  mutate(
+    sig_label = case_when(
+      p_adj_BH < 0.001 ~ "***",
+      p_adj_BH < 0.01  ~ "**",
+      p_adj_BH < 0.05  ~ "*",
+      TRUE ~ ""
+    ),
+    Drug_Class_plot = fct_reorder(Drug_Class_plot, spearman_rho)
+  )
+
+p_drug_class_cor <- ggplot(plot_df, aes(x = Drug_Class_plot, y = spearman_rho)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey50", linewidth = 0.5) +
+  geom_col(width = 0.75, fill = "steelblue") +
+  geom_text(
+    aes(label = sig_label),
+    hjust = ifelse(plot_df$spearman_rho >= 0, -0.2, 1.2),
+    size = 4.5
+  ) +
+  scale_x_discrete(position = "top") +
+  coord_flip() +
+  scale_y_continuous(
+    limits = c(
+      min(-0.6, min(plot_df$spearman_rho, na.rm = TRUE) - 0.08),
+      max( 0.6, max(plot_df$spearman_rho, na.rm = TRUE) + 0.08)
+    ),
+    expand = expansion(mult = c(0.02, 0.08))
+  ) +
+  labs(
+    # title = "Association between the relative abundance of \nspecific AMR drug classes and total AMR relative abundance",
+    x = "Drug class",
+    y = "Spearman's rho"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 12),
+    axis.title = element_text(face = "bold", size = 14),
+    axis.text = element_text(size = 12, color = "black"),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_rect(color = "black", linewidth = 0.8),
+    axis.line = element_line(color = "black"),
+    plot.margin = margin(8, 12, 8, 8)
+  )
+
+p_drug_class_cor
+
+
+ggsave(
+  filename = file.path("../../tmp_figures/AMR_results/", "AMR_drug_class_vs_total_AMR_spearman.jpg"),
+  plot = p_drug_class_cor,
+  width = 8,
+  height = 6,
+  units = "in",
+  dpi = 600)
+
+ggsave(
+  filename = file.path("../../tmp_figures/AMR_results/", "AMR_drug_class_vs_total_AMR_spearman.pdf"),
+  plot = p_drug_class_cor,
+  width = 8,
+  height = 6,
+  units = "in")
+
+ggsave(
+  filename = file.path("../../tmp_figures/AMR_results/", "AMR_drug_class_vs_total_AMR_spearman.svg"),
+  plot = p_drug_class_cor,
+  width = 8,
+  height = 6,
+  units = "in")
+
+
+
+### Scatter plot between drug class relative abundance and AMR abundance
+head(combined_table)
+
+### 1. Prepare plotting data
+plot_df <- combined_table %>%
+  mutate(
+    mapped_pct = `mapped_reads_percentage`
+  ) %>%
+  filter(!is.na(mapped_pct), !is.na(rel_reads), !is.na(Drug_Class_plot))
+
+### 2. Make sure statistics table has the same Drug_Class_plot names
+stat_df <- drug_class_cor_result %>%
+  mutate(
+    label = paste0(
+      #"n = ", n_samples,
+      "\nSpearman rho = ", round(spearman_rho, 3),
+      "\np = ", signif(p_value, 3),
+      "\nBH-adjusted p = ", signif(p_adj_BH, 3)
+    )
+  )
+
+### 3. Get all drug classes
+drug_classes <- unique(plot_df$Drug_Class_plot)
+
+### 4. Create one plot for each drug class
+plot_list <- lapply(drug_classes, function(dc) {
+  
+  df_sub <- plot_df %>%
+    filter(Drug_Class_plot == dc)
+  
+  stat_sub <- stat_df %>%
+    filter(Drug_Class_plot == dc)
+  
+  # If there is no matching stat row, create empty label
+  ann_label <- if (nrow(stat_sub) > 0) stat_sub$label[1] else ""
+  
+  p <- ggplot(df_sub, aes(x = mapped_pct, y = rel_reads)) +
+    geom_point(size = 2.5, alpha = 0.8) +
+    geom_smooth(method = "lm", se = FALSE, linewidth = 0.8, linetype = 2) +
+    annotate(
+      "text",
+      x = Inf, y = Inf,
+      label = ann_label,
+      hjust = 1.05, vjust = 1.1,
+      size = 5
+    ) +
+    scale_x_continuous(
+      labels = percent_format(accuracy = 0.01)
+    ) +
+    scale_y_continuous(
+      labels = percent_format(accuracy = 1)
+    ) +
+    labs(
+      title = dc,
+      x = "AMR Relative Abundance (%)",
+      y = "AMR Drug Class Relative Reads (%)"
+    ) +
+    theme_bw(base_size = 14) +
+    theme(
+      axis.title = element_text(face = "bold", size = 14),
+      axis.text = element_text(size = 12, color = "black"),
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      panel.grid.minor = element_blank()
+    )
+  
+  return(p)
+})
+
+### 5. Name the list by drug class
+names(plot_list) <- drug_classes
+
+### 6. Example: show one plot
+plot_list[["Rifamycin antibiotic"]]
+
+### 7. Example: show another plot
+plot_list[["Macrolide antibiotic"]]
+
+
+for (dc in names(plot_list)) {
+  file_name <- paste0(
+    "../../tmp_figures/AMR_results/",
+    str_replace_all(dc, "[^A-Za-z0-9]+", "_"),
+    "_scatterplot.jpg"
+  )
+  
+  ggsave(
+    filename = file_name,
+    plot = plot_list[[dc]],
+    width = 6,
+    height = 6,
+    dpi = 300
+  )
+}
+
+
+```
+
+
+
+### Study the Association between AMRs Abundances and Metadata Factors
+```{r}
+library(dplyr)
+library(stringr)
+library(readr)
+library(ggplot2)
+library(scales)
+library(ggrepel)
+
+### Read in CARD-kmer results
+card_result_file <- file.path("../../data/Metagenomics/CARD_amr", "mapping_summary.tsv")
+card_result <- read.table(card_result_file, header = TRUE, sep = "\t")
+head(card_result)
+# Extract Individual Name from Sample Name
+card_result <- card_result %>%
+  mutate(
+    individual = str_extract(sample, "^[^_]+")
+  )
+head(card_result)
+
+
+### Read in Individual Meta data
+meta_data_file <- file.path("../../data/Metadata", "selected_northwood_map.txt")
+#meta_data <- read.table(meta_data_file, header = TRUE, sep = "\t")
+meta_data <- read_tsv(meta_data_file)
+head(meta_data)
+# Extract Individual Name from Sample Name
+meta_data <- meta_data %>%
+  mutate(
+    individual = str_extract(`#SampleID`, "^[^-]+")  # 取第一个 "-" 前的部分，如 NW001
+  )
+head(meta_data)
+
+
+### Study the association between AMR abundance and other factors
+meta_card_result <- card_result %>% left_join(meta_data, by = "individual")
+meta_card_result$mapped_reads_percentage <- meta_card_result$Mapped_reads/meta_card_result$Total_reads
+head(meta_card_result)
+
+# Sta the average and standard deviation of AMR Reads Percentages
+summary(meta_card_result$mapped_reads_percentage)
+meta_card_result %>% summarise(mapped_reads_percentage = sd(mapped_reads_percentage, na.rm = TRUE))
+
+### Box Plot for the Percentage of AMR reads
+AMR_boxplot <- ggplot(meta_card_result, aes(x = "", y = mapped_reads_percentage)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.15, alpha = 0.7) +
+  theme_bw(base_size = 12) + 
+  scale_y_continuous(labels = percent_format(accuracy = 0.01)) +
+  labs(
+    title = "AMR Reads Percentage",
+    x = "All Samples",
+    y = "AMR Reads Percentage"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    legend.position = "none"
+  ) +
+  geom_text(
+    data = meta_card_result %>% 
+      filter(mapped_reads_percentage > 0.002),
+    aes(label = individual),
+    size = 3,
+    nudge_x = 0.15,   # 固定横向偏移
+    hjust = 0,
+    vjust = 0.5
+  )
+AMR_boxplot
+
+# figure_name <- file.path("../../figures/AMR_Results", "AMR_reads_percentage_boxplot.jpg")
+# ggsave(figure_name, AMR_boxplot, width = 5, height = 5)
+
+
+### Scatter Plot for Total reads number and AMR mapped reads number
+# 5) 画图
+# 1) 先拟合线性回归，提取斜率/截距/R2/p
+fit <- lm(Mapped_reads ~ Total_reads, data = meta_card_result)
+coefs <- coef(fit)
+slope <- coefs[["Total_reads"]]
+intercept <- coefs[["(Intercept)"]]
+r2 <- summary(fit)$r.squared
+pval <- summary(fit)$coefficients["Total_reads", "Pr(>|t|)"]
+
+label_lm <- sprintf("y = %.3g x %+.3g\nR² = %.3f, p = %.2g",
+                    slope, intercept, r2, pval)
+
+# 2) 画图
+AMR_scatter_plot <- ggplot(meta_card_result, aes(x = Total_reads, y = Mapped_reads)) + 
+  geom_point(alpha = 0.85, size = 2) +
+  
+  # 回归直线 + 置信区间
+  geom_smooth(method = "lm", se = TRUE, linewidth = 0.8) +
+  
+  # 只给阈值以上点加标签
+  geom_text_repel(
+    data = meta_card_result %>% filter(Mapped_reads > 5000),
+    aes(label = individual),
+    size = 3,
+    max.overlaps = Inf,
+    box.padding = 0.20,
+    point.padding = 0.15,
+    segment.alpha = 0.5
+  ) +
+  
+  # 斜率/方程标注（放在左上角）
+  annotate(
+    "text",
+    x = max(meta_card_result$Total_reads) * 0.95,
+    y = max(meta_card_result$Mapped_reads) * 0.95,
+    label = label_lm,
+    hjust = 1,
+    vjust = 1,
+    size = 4
+  ) +
+  
+  # 轴从 0 起点（常用于 reads 这种非负数据）
+  scale_x_continuous(
+    limits = c(0, NA),
+    labels = label_number(big.mark = ",")
+  ) +
+  scale_y_continuous(
+    limits = c(0, NA),
+    labels = label_number(big.mark = ",")
+  ) +
+  
+  labs(
+    title = "AMR reads vs Total reads",
+    x = "Total reads",
+    y = "AMR reads"
+  ) +
+  
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(linewidth = 0.25),
+    axis.title = element_text(face = "bold"),
+    axis.text = element_text(color = "black"),
+    plot.margin = margin(8, 10, 8, 8)
+  )
+
+AMR_scatter_plot
+# figure_name <- file.path("../../figures/AMR_Results", "AMR_reads_percentage_scatter_plot.jpg")
+# ggsave(figure_name, AMR_scatter_plot, width = 6, height = 6)
+
+
+
+###### Study Factors: Age, TimeNW, FIScore, Location (Factor), Sex(Factor)
+# Scatter plots for general factors and group boxplot for factor factors
+
+# Using average value for individual with multiple samples
+meta_card_indiv <- meta_card_result %>%
+  group_by(individual) %>%
+  summarise(
+    average_mapped_reads_percentage = mean(mapped_reads_percentage, na.rm = TRUE),
+    n_samples = n(),
+    Sex = first(Sex),
+    Age = first(Age),
+    TimeNW = first(TimeNW),
+    FIScore = first(FIScore),
+    Location = first(Location),
+    .groups = "drop"
+  )
+head(meta_card_indiv)
+
+
+### Numeric Variants
+num_vars <- c("Age", "TimeNW", "FIScore")
+corr_table <- purrr::map_dfr(num_vars, function(v) {
+  df <- meta_card_indiv %>% select(average_mapped_reads_percentage, all_of(v)) %>% na.omit()
+  if (nrow(df) < 3) return(NULL)
+
+  ct <- cor.test(df$average_mapped_reads_percentage, df[[v]], method = "spearman")
+  tibble(
+    variable = v,
+    n = nrow(df),
+    rho = unname(ct$estimate),
+    p_value = ct$p.value
+  )
+}) %>%
+  mutate(p_adj = p.adjust(p_value, method = "BH")) %>%
+  arrange(p_value)
+
+corr_table
+head(corr_table)
+
+
+### Factor Variants
+factor_vars <- c("Sex", "Location")
+
+group_test <- purrr::map_dfr(factor_vars, function(v) {
+
+  df <- meta_card_indiv %>%
+    select(average_mapped_reads_percentage, all_of(v)) %>%
+    filter(!is.na(.data[[v]])) %>%
+    mutate(group = as.factor(.data[[v]])) %>%
+    filter(!is.na(average_mapped_reads_percentage))
+
+  k <- n_distinct(df$group)
+  if (k < 2) return(NULL)
+
+  p <- if (k == 2) {
+    wilcox.test(average_mapped_reads_percentage ~ group, data = df, exact = FALSE)$p.value
+  } else {
+    kruskal.test(average_mapped_reads_percentage ~ group, data = df)$p.value
+  }
+
+  tibble(
+    variable  = v,
+    n         = nrow(df),
+    n_groups  = k,
+    p_value   = p
+  )
+}) %>%
+  mutate(p_adj = p.adjust(p_value, method = "BH")) %>%
+  arrange(p_value)
+
+group_test
+
+
+### Scatter Plots for Numeric Factors
+plot_scatter_pub <- function(df, xvar,
+                             yvar = "average_mapped_reads_percentage",
+                             label_var = "individual",
+                             label_thr = 0.002,   # 0.2% = 0.002
+                             point_size = 2.2) {
+
+  # 1) 取出用于拟合的数据（去掉 NA）
+  df_fit <- df %>%
+    select(all_of(c(xvar, yvar, label_var))) %>%
+    filter(!is.na(.data[[xvar]]), !is.na(.data[[yvar]]))
+
+  # # 2) 线性回归 & 提取统计量
+  # m <- lm(reformulate(xvar, response = yvar), data = df_fit)
+  # sm <- summary(m)
+  # 
+  # slope <- unname(coef(m)[2])
+  # intercept <- unname(coef(m)[1])
+  # r2 <- sm$r.squared
+  # pval <- sm$coefficients[2, 4]
+  # 
+  # # 3) 注释文本（斜率、p、R2）
+  # info_txt <- paste0(
+  #   "Slope = ", signif(slope, 3),
+  #   "\nR² = ", signif(r2, 3),
+  #   "\np = ", format.pval(pval, digits = 2, eps = 1e-3)
+  # )
+
+  cor_res <- suppressWarnings(
+    cor.test(df_fit[[xvar]], df_fit[[yvar]], method = "spearman", exact = FALSE)
+  )
+
+  rho <- unname(cor_res$estimate)
+  pval <- cor_res$p.value
+
+  info_txt <- paste0(
+    #"n = ", nrow(df_fit),
+    "\nSpearman \u03C1 = ", signif(rho, 3),
+    "\nP = ", format.pval(pval, digits = 2, eps = 1e-3)
+  )
+  
+  
+  # 4) 需要标注的点（AMR% > 0.2%）
+  df_lab <- df_fit %>% filter(.data[[yvar]] > label_thr)
+
+  # 5) 画图
+  x_rng <- range(df_fit[[xvar]], na.rm = TRUE)
+  y_rng <- range(df_fit[[yvar]], na.rm = TRUE)
+  
+  x_anno <- 0.95 * x_rng[2]
+  y_anno <- 0.95 * y_rng[2]
+  
+  ggplot(df_fit, aes(x = .data[[xvar]], y = .data[[yvar]])) +
+    geom_point(alpha = 0.85, size = point_size) +
+    
+    # 回归线（更“干净”的线条）
+    geom_smooth(method = "lm", se = TRUE, linewidth = 0.8) +
+
+    # 高于阈值点加标签
+    geom_text_repel(
+      data = df_lab,
+      aes(label = .data[[label_var]]),
+      size = 4,
+      max.overlaps = Inf,
+      box.padding = 0.35,
+      point.padding = 0.25,
+      segment.alpha = 0.4
+    ) +
+
+    # 纵轴转百分比
+    scale_y_continuous(labels = percent_format(accuracy = 0.01)) +
+
+    # 回归信息写到图右上角
+    annotate("text",
+      x = x_anno, y = y_anno,
+      label = info_txt,
+      hjust = 1, vjust = 1,
+      size = 5
+    ) +
+    
+    labs(
+      # title = paste0("AMR reads percentage vs ", xvar),
+      x = xvar,
+      y = "AMR Relative Abundance"
+    ) +
+
+    # 更整洁的出版风格
+    theme_bw(base_size = 14) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_line(linewidth = 0.25),
+      axis.title = element_text(face = "bold", size = 14),
+      axis.text = element_text(color = "black", size = 12),
+      plot.margin = margin(8, 10, 8, 8)
+    )
+}
+
+
+p_age  <- plot_scatter_pub(meta_card_indiv, "Age")
+p_time <- plot_scatter_pub(meta_card_indiv, "TimeNW")
+p_fi   <- plot_scatter_pub(meta_card_indiv, "FIScore")
+
+p_age
+p_time
+p_fi
+
+figure_path <- "../../tmp_figures/AMR_results"
+figure_name <- "AMR_Abundance_against_Age.jpg"
+figure_file <- file.path(figure_path, figure_name)
+ggsave(figure_file, p_age, width = 6, height = 6)
+
+
+figure_name <- "AMR_Abundance_against_TimeNW.jpg"
+figure_file <- file.path(figure_path, figure_name)
+ggsave(figure_file, p_time, width = 6, height = 6)
+
+figure_name <- "AMR_Abundance_against_FIScore.jpg"
+figure_file <- file.path(figure_path, figure_name)
+ggsave(figure_file, p_fi, width = 6, height = 6)
+
+
+
+### Boxplot for factors
+plot_box <- function(df, fvar) {
+
+  df <- df %>%
+    dplyr::filter(
+      !is.na(.data[[fvar]]),
+      !is.na(average_mapped_reads_percentage)
+    ) %>%
+    dplyr::mutate(
+      !!fvar := as.factor(.data[[fvar]])
+    )
+  
+  y_max <- max(df$average_mapped_reads_percentage, na.rm = TRUE)
+  p_y <- 0.95 * y_max
+  m_y <- 0.3 * y_max
+  
+  ggplot(df, aes(x = .data[[fvar]], y = average_mapped_reads_percentage)) +
+    geom_boxplot(outlier.shape = NA) +
+    geom_jitter(width = 0.15, alpha = 0.7) +
+    theme_bw(base_size = 14) + 
+    scale_y_continuous(labels = percent_format(accuracy = 0.01)) +
+    labs(
+      # title = paste("AMR Reads Percentage by", fvar),
+      x = fvar,
+      y = "AMR Relative Abundance"
+    ) +
+    theme(
+      #plot.title = element_text(hjust = 0.5, face = "bold"),
+      #axis.text.x = element_text(angle = 30, hjust = 1),
+      legend.position = "none",
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_line(linewidth = 0.25),
+      axis.title = element_text(face = "bold", size = 14),
+      axis.text = element_text(color = "black", size = 12),
+      plot.margin = margin(8, 10, 8, 8)
+    ) +
+    ggpubr::stat_compare_means(
+      method = "wilcox.test",
+      label = "p.format",
+      label.x = 1.5,
+      label.y = p_y
+    ) +
+    stat_summary(
+      fun = median,
+      geom = "text",
+      aes(label = scales::percent(..y.., accuracy = 0.01)),
+      vjust = -5,
+      size = 5
+    )
+}
+
+p_sex <- plot_box(meta_card_indiv, "Sex")
+p_loc <- plot_box(meta_card_indiv, "Location")
+
+p_sex
+p_loc
+
+figure_path <- "../../tmp_figures/AMR_results"
+figure_name <- "AMR_Abundance_across_Sex.jpg"
+figure_file <- file.path(figure_path, figure_name)
+ggsave(figure_file, p_sex, width = 6, height = 6)
+
+
+figure_name <- "AMR_Abundance_across_Location.jpg"
+figure_file <- file.path(figure_path, figure_name)
+ggsave(figure_file, p_loc, width = 6, height = 6)
+
+```
+
+
+
+### Study the Association between AMRs Abundances and Taxa Abundances
+```{r}
+library(tidyr)
+library(purrr)
+library(ggplot2)
+
+### Read in AMR relative abundance from the previous section
+head(meta_card_result)
+nrow(meta_card_result)
+
+### Read in Genus-level MG-based taxonomic profile
+### MG taxonomic profiling from MetaPhlAn4
+MG_tax_file <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
+df <- read.delim(MG_tax_file, comment.char = "#", check.names = FALSE)
+
+# 确认第一列名（通常是 clade_name）
+stopifnot("clade_name" %in% colnames(df))
+head(df)
+nrow(df)
+
+
+# # # 2) 只保留 Phylum level：clade_name 里包含 "|p__" 且不再有 "|c__"（避免 species 行）
+# df_spec_taxa <- df %>%
+#    filter(str_detect(clade_name, "\\|p__")) %>%
+#    filter(!str_detect(clade_name, "\\|c__"))
+#  nrow(df_spec_taxa)
+# 
+# # # 从 clade 提取 Phylum 名称（p__ 后面的部分）
+# df_spec_taxa <- df_spec_taxa %>%
+#    mutate(Taxa_Name = str_replace(clade_name, ".*\\|p__", "")) %>%
+#    select(Taxa_Name, everything(), -clade_name)
+
+
+# # # 2) 只保留 Class level：clade_name 里包含 "|c__" 且不再有 "|o__"（避免 species 行）
+# df_spec_taxa <- df %>%
+#    filter(str_detect(clade_name, "\\|c__")) %>%
+#    filter(!str_detect(clade_name, "\\|o__"))
+#  nrow(df_spec_taxa)
+# 
+# # # 从 clade 提取 Class 名称（c__ 后面的部分）
+# df_spec_taxa <- df_spec_taxa %>%
+#    mutate(Taxa_Name = str_replace(clade_name, ".*\\|c__", "")) %>%
+#    select(Taxa_Name, everything(), -clade_name)
+
+
+# # # 2) 只保留 Order level：clade_name 里包含 "|o__" 且不再有 "|f__"（避免 species 行）
+# df_spec_taxa <- df %>%
+#    filter(str_detect(clade_name, "\\|o__")) %>%
+#    filter(!str_detect(clade_name, "\\|f__"))
+#  nrow(df_spec_taxa)
+# 
+# # # 从 clade 提取 Order 名称（o__ 后面的部分）
+# df_spec_taxa <- df_spec_taxa %>%
+#    mutate(Taxa_Name = str_replace(clade_name, ".*\\|o__", "")) %>%
+#    select(Taxa_Name, everything(), -clade_name)
+
+
+# # # 2) 只保留 Family level：clade_name 里包含 "|f__" 且不再有 "|g__"（避免 species 行）
+# df_spec_taxa <- df %>%
+#    filter(str_detect(clade_name, "\\|f__")) %>%
+#    filter(!str_detect(clade_name, "\\|g__"))
+#  nrow(df_spec_taxa)
+# 
+# # # 从 clade 提取 Family 名称（f__ 后面的部分）
+# df_spec_taxa <- df_spec_taxa %>%
+#    mutate(Taxa_Name = str_replace(clade_name, ".*\\|f__", "")) %>%
+#    select(Taxa_Name, everything(), -clade_name)
+
+
+
+# # # 2) 只保留 Genus level：clade_name 里包含 "|g__" 且不再有 "|s__"（避免 species 行）
+# df_spec_taxa <- df %>%
+#    filter(str_detect(clade_name, "\\|g__")) %>%
+#    filter(!str_detect(clade_name, "\\|s__"))
+#  nrow(df_spec_taxa)
+# 
+# # # 从 clade 提取 Genus 名称（f__ 后面的部分）
+# df_spec_taxa <- df_spec_taxa %>%
+#    mutate(Taxa_Name = str_replace(clade_name, ".*\\|g__", "")) %>%
+#    select(Taxa_Name, everything(), -clade_name)
+
+
+# 2) 只保留 Species level：clade_name 里包含 "|s__"
+df_spec_taxa <- df %>%
+  filter(str_detect(clade_name, "\\|s__")) %>%
+  filter(!str_detect(clade_name, "\\|t__"))
+nrow(df_spec_taxa)
+
+# 从 clade 提取 Genus 名称（f__ 后面的部分）
+df_spec_taxa <- df_spec_taxa %>%
+  mutate(Taxa_Name = str_replace(clade_name, ".*\\|s__", "")) %>%
+  select(Taxa_Name, everything(), -clade_name)
+
+
+head(df_spec_taxa)
+tail(df_spec_taxa)
+
+
+# 3) 转 long 格式：sample, abundance
+long_spec_taxa <- df_spec_taxa %>%
+  pivot_longer(
+    cols = -Taxa_Name,
+    names_to = "Sample",
+    values_to = "Abundance"
+  ) %>%
+  mutate(
+    Abundance = as.numeric(Abundance),
+    Abundance = replace_na(Abundance, 0)
+  )
+
+head(long_spec_taxa)
+
+# Calculate Taxa Relative abundance in each sample
+long_spec_taxa <- long_spec_taxa %>%
+  group_by(Sample, Taxa_Name) %>%
+  summarise(Abundance = sum(Abundance, na.rm = TRUE), .groups = "drop") %>%
+  group_by(Sample) %>%
+  mutate(RelAbund = Abundance / sum(Abundance, na.rm = TRUE)) %>%
+  ungroup()
+
+# Filter on studied taxa
+taxa_stats <- long_spec_taxa %>%
+  group_by(Taxa_Name) %>%
+  summarise(
+    prevalence = mean(RelAbund > 0, na.rm = TRUE),  # 出现比例
+    mean_rel = mean(RelAbund, na.rm = TRUE),        # 平均相对丰度
+    .groups = "drop"
+  )
+
+
+# 3) 只保留：prevalence > 30% 且 mean_rel > 0.1%（0.005）
+keep_taxa <- taxa_stats %>%
+  filter(prevalence > 0.30, mean_rel > 0.001) %>%
+  pull(Taxa_Name)
+length(keep_taxa)
+
+filtered_long_spec_taxa <- long_spec_taxa %>%
+  filter(Taxa_Name %in% keep_taxa)
+
+# 看一下结果
+n_distinct(long_spec_taxa$Taxa_Name)
+n_distinct(filtered_long_spec_taxa$Taxa_Name)
+head(filtered_long_spec_taxa)
+
+
+
+###### Study correlations between taxa relative abundance and AMR relative abundances
+### Combine Input Tables
+# 1) 给两个表都生成统一的 Sample_key
+taxa_abun2 <- filtered_long_spec_taxa %>%
+  mutate(Sample_key = Sample)  # 已经是 NW001_3_all
+
+meta_card2 <- meta_card_result %>%
+  mutate(Sample_key = str_remove(sample, "\\.txt$"))  # 去掉末尾 .txt
+
+# 2) 检查两边是否一一对应（哪些缺失）
+taxa_abun_only <- setdiff(unique(taxa_abun2$Sample_key), unique(meta_card2$Sample_key))
+meta_card_only <- setdiff(unique(meta_card2$Sample_key), unique(taxa_abun2$Sample_key))
+taxa_abun_only
+meta_card_only
+
+
+# 4) 之后就可以按 Sample_key 合并（每个样品的每个Taxa一行，带上meta信息）
+taxa_meta_card <- taxa_abun2 %>%
+  left_join(
+    meta_card2, by = "Sample_key"
+  )
+head(taxa_meta_card)
+
+
+### Remove Outlier Samples
+filtered_taxa_meta_card <- taxa_meta_card %>% filter(!Sample %in% c("NW050_3_all", "NW053_3_all"))
+
+
+### Calculate Correlations
+# 相关性表：每个 Taxa_Name 一行
+#taxa_corr_table <- filtered_taxa_meta_card %>%
+taxa_corr_table <- taxa_meta_card %>%
+  filter(!is.na(RelAbund), !is.na(mapped_reads_percentage)) %>%
+  group_by(Taxa_Name) %>%
+  summarise(
+    n = n(),                                    # 用到的样本数（行数）
+    prevalence = mean(RelAbund > 0, na.rm = TRUE),  # 出现比例（RelAbund>0 的样本比例）
+    ct = list(if (n() >= 3) cor.test(RelAbund, mapped_reads_percentage, method = "spearman") else NULL),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    rho = map_dbl(ct, function(z) if (is.null(z)) NA_real_ else unname(z$estimate)),
+    p_value = map_dbl(ct, function(z) if (is.null(z)) NA_real_ else z$p.value)
+  ) %>%
+  select(-ct) %>%
+  mutate(p_adj = p.adjust(p_value, method = "BH")) %>%
+  arrange(p_adj)
+
+head(taxa_corr_table)
+
+
+
+
+
+### Plot Figures
+# 画图函数：一个 taxa 一张图
+plot_taxa_corr <- function(dat, taxa, out_dir = "taxa_corr_plots") {
+  taxa_safe_name <- taxa %>%
+  str_replace_all("[^A-Za-z0-9_\\-]+", "_") %>%
+  str_sub(1, 120)
+  
+  df <- dat %>%
+    filter(Taxa_Name == taxa) %>%
+    filter(!is.na(RelAbund), !is.na(mapped_reads_percentage)) %>%
+    distinct(Sample_key, Taxa_Name, .keep_all = TRUE)
+
+  if (nrow(df) < 3) return(NULL)
+
+  # Spearman（与表格一致）
+  ct <- cor.test(df$RelAbund, df$mapped_reads_percentage, method = "spearman")
+
+  # # 线性回归用于画趋势线（展示用）
+  # fit <- lm(mapped_reads_percentage ~ RelAbund, data = df)
+  # slope <- coef(fit)[2]
+  # p_lm  <- summary(fit)$coefficients[2, 4]
+  
+  # Add pseudocounts for log10 scale
+  pseudo_x <- min(df$RelAbund[df$RelAbund > 0], na.rm = TRUE) / 2
+  pseudo_y <- min(df$mapped_reads_percentage[df$mapped_reads_percentage > 0], na.rm = TRUE) / 2
+
+  df <- df %>%
+  mutate(
+    RelAbund_plot = RelAbund + pseudo_x,
+    AMR_plot = mapped_reads_percentage + pseudo_y
+  )
+  
+  # ann <- paste0(
+  #   "Spearman rho = ", round(unname(ct$estimate), 3),
+  #   "\nSpearman p = ", format(ct$p.value, scientific = TRUE, digits = 2),
+  #   "\nLM slope = ", signif(slope, 3),
+  #   "\nLM p = ", format(p_lm, scientific = TRUE, digits = 2),
+  #   "\nN = ", nrow(df)
+  # )
+  
+  ann <- paste0(
+  "Spearman \u03C1 = ", round(unname(ct$estimate), 3),
+  "\nP = ", format.pval(ct$p.value, digits = 2, eps = 1e-3),
+  "\nn = ", nrow(df)
+)
+
+  p <- ggplot(df, aes(x = RelAbund, y = mapped_reads_percentage)) +
+    geom_point(alpha = 0.8, size = 1.8) +
+    geom_smooth(method = "lm", se = TRUE) +
+    geom_smooth(method = "lm", se = TRUE, linewidth = 0.8) +
+    scale_x_log10(labels = percent_format(accuracy = 0.01)) +
+    scale_y_log10(labels = percent_format(accuracy = 0.01)) +
+    labs(
+      title = paste0("Taxa: ", taxa_safe_name),
+      x = "Taxa Relative Abundance",
+      y = "AMR Relative Abundance"
+    ) +
+    annotate("text", x = Inf, y = Inf, label = ann, hjust = 1.05, vjust = 1.1, size = 4) +
+    coord_cartesian(clip = "off") +
+    theme_bw(base_size = 14) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "bold"),
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(face = "bold", size = 14),
+      axis.text = element_text(color = "black", size = 12),
+      plot.margin = margin(8, 16, 8, 8)
+    )
+
+  dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+  ggsave(
+    filename = file.path(out_dir, paste0("TaxaCorr_", taxa_safe_name, ".jpg")),
+    plot = p, width = 6, height = 6
+  )
+
+  p
+}
+
+# # 你可以选择要画的 taxa 列表：
+# # (A) 全部 taxa（可能很多）
+# all_taxa <- sort(unique(taxa_meta_card$Taxa_Name))
+taxa_to_plot <- taxa_corr_table %>% pull(Taxa_Name)
+
+# #(B) 推荐：只画样本数够、且相关显著的（避免生成上千张）
+taxa_to_plot <- taxa_corr_table %>%
+  filter(n >= 10 & prevalence >= 0.30 & p_adj < 0.05) %>%
+  pull(Taxa_Name)
+
+filtered_taxa_meta_card <- taxa_meta_card %>% filter(!Sample %in% c("NW050_3_all", "NW053_3_all"))
+
+# 批量作图并保存
+# With Outliers
+plots <- purrr::map(taxa_to_plot, ~ plot_taxa_corr(taxa_meta_card, .x))
+# write.table(taxa_corr_table, "Taxa_AMR_correlation.out", quote = FALSE, sep = "\t", row.names = FALSE)
+
+# # Remove Outliers
+# plots <- purrr::map(taxa_to_plot, ~ plot_taxa_corr(filtered_taxa_meta_card, .x))
+# write.table(taxa_corr_table, "Taxa_AMR_rm_outlier_correlation.out", quote = FALSE, sep = "\t", row.names = FALSE)
+
+
+
+
+
+### Scatter Plot for Genus relative abundance and AMR reads relative percentage
+head(taxa_meta_card)
+# selected_taxa <- "Escherichia_coli"
+# all_taxa <- c("Escherichia_coli", "Anaerobutyricum_soehngenii", "Ruminococcus_gnavus", "Adlercreutzia_equolifaciens", "Akkermansia_muciniphila", "Alistipes_ihumii")
+
+all_taxa <- c("Blautia_massiliensis", "Anaerostipes_hadrus", "Blautia_faecis")
+
+# Scatter Plot (X-axis: Relbund, Y-axis: mapped_reads_percentage)
+for (selected_taxa in all_taxa){
+  # Select specific species
+  selected_taxa_meta_card <- taxa_meta_card %>% filter(Taxa_Name == selected_taxa)
+  # Remove Outliers
+  selected_taxa_meta_card <- selected_taxa_meta_card %>% filter(!Sample %in% c("NW050_3_all", "NW053_3_all"))
+
+  # Correlation calculation
+  # cor_method <- "pearson"  # 或 "spearman"
+  cor_method <- "spearman"
+  ct <- cor.test(selected_taxa_meta_card$RelAbund, selected_taxa_meta_card$mapped_reads_percentage, method = cor_method)
+  
+  p_scatter <- ggplot(selected_taxa_meta_card, aes(x = RelAbund, y = mapped_reads_percentage)) +
+    geom_point(size = 2, alpha = 0.8) +
+    geom_smooth(method = "lm", se = TRUE) +
+    ggpubr::stat_cor(
+      method = cor_method,
+      label.x.npc = "left",
+      label.y.npc = "top",
+      aes(label = paste(..r.label.., ..p.label.., sep = "~`,`~"))
+    ) +
+    scale_x_continuous(labels = percent_format(accuracy = 0.1)) +
+    scale_y_continuous(labels = percent_format(accuracy = 0.1)) +
+    labs(
+      title = paste0(selected_taxa, ": relative abundance vs AMR mapped reads"),
+      x = "Taxon relative abundance",
+      y = "AMR mapped reads percentage"
+    ) +
+    theme_bw(base_size = 12) +
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  p_scatter
+  
+  figure_file <- file.path("../../figures", paste0("AMR_Abundance_across_Taxon_", selected_taxa, ".jpg"))
+  ggsave(figure_file, p_scatter, width = 6, height = 6)
+}
+
+```
