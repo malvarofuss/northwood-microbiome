@@ -382,16 +382,15 @@ fit_out <- maaslin3(input_data = final_data_table,
 
 
 
-### 16S- and MG-based taxonomic Profiling (Family Level)
+### 16S- and MG-based taxonomic Profiling (Family Level. No figure generated, but serve as input for following sections)
 ```{r}
-setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
-
 library(dplyr)
 library(tidyr)
 library(stringr)
 library(ggplot2)
 library(RColorBrewer)
 
+# setwd()
 ###### Read in Metagenomics-based taxonomic profilings
 ### MG taxonomic profiling from MetaPhlAn4
 MG_tax_file <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
@@ -420,8 +419,7 @@ ncol(df_fam)
 
 
 ###### Read in 16S-based taxonomic profilings
-#S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "16S_Family_Profiling.tsv")
-S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
+S16_family_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Family_Profiling.tsv")
 S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
 head(S16_family_taxa_profile)
 S16_samples <- colnames(S16_family_taxa_profile)
@@ -740,15 +738,15 @@ fam_pal <- pal
 
 
 
-### 16S- and MG-based taxonomic Profiling (Genus Level)
+### 16S- and MG-based taxonomic Profiling (No figure generated, but serve as input for following sections)
 ```{r}
-setwd("C:/Users/dlszz/OneDrive - Dalhousie University/Nursing_House_Project/Git_Project/northwood-microbiome/code/MG_analysis")
-
 library(dplyr)
 library(tidyr)
 library(stringr)
 library(ggplot2)
 library(RColorBrewer)
+
+#setwd()
 
 ###### Read in Metagenomics-based taxonomic profilings
 ### MG taxonomic profiling from MetaPhlAn4
@@ -778,7 +776,7 @@ ncol(df_fam)
 
 
 ###### Read in 16S-based taxonomic profilings
-S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+S16_family_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Genus_Profiling.tsv")
 S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
 head(S16_family_taxa_profile)
 S16_samples <- colnames(S16_family_taxa_profile)
@@ -1254,11 +1252,11 @@ combined_S16 <- p_fam_S16 / p_genus_S16 +
 combined_S16
 
 ### Saving combined S16 Plots
-# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "S16_based_both_level_tax_profile.jpg")
-# ggsave(figure_file, combined_S16, width = 12, height = 12, dpi = 300)
-# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "S16_based_both_level_tax_profile.pdf")
+figure_file <- file.path("../../results/MG_results/Taxonomics_results", "S16_based_both_level_tax_profile.jpg")
+ggsave(figure_file, combined_S16, width = 12, height = 12, dpi = 300)
+# figure_file <- file.path("../../results/MG_results/Taxonomics_results", "S16_based_both_level_tax_profile.pdf")
 # ggsave(figure_file, combined_S16, width = 12, height = 12)
-# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "S16_based_both_level_tax_profile.svg")
+# figure_file <- file.path("../../results/MG_results/Taxonomics_results", "S16_based_both_level_tax_profile.svg")
 # ggsave(figure_file,combined_S16, width = 12, height = 12)
 
 
@@ -1267,11 +1265,11 @@ combined_MG <- p_fam_MG / p_genus_MG +
 combined_MG
 
 ### Saving combined MG Plots
-# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "MG_based_both_level_tax_profile.jpg")
-# ggsave(figure_file, combined_MG, width = 12, height = 12, dpi = 300)
-# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "MG_based_both_level_tax_profile.pdf")
+figure_file <- file.path("../../results/MG_results/Taxonomics_results", "MG_based_both_level_tax_profile.jpg")
+ggsave(figure_file, combined_MG, width = 12, height = 12, dpi = 300)
+# figure_file <- file.path("../../results/MG_results/Taxonomics_results", "MG_based_both_level_tax_profile.pdf")
 # ggsave(figure_file, combined_MG, width = 12, height = 12)
-# figure_file <- file.path("../../tmp_figures/Taxonomics_Plot", "MG_based_both_level_tax_profile.svg")
+# figure_file <- file.path("../../results/MG_results/Taxonomics_results", "MG_based_both_level_tax_profile.svg")
 # ggsave(figure_file,combined_MG, width = 12, height = 12)
 ```
 
@@ -1282,10 +1280,7 @@ combined_MG
 library(ggplot2)
 
 ###### Read in 16S-based taxonomic profilings
-#S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "16S_Family_Profiling.tsv")
-S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Family_Profiling.tsv")
-
-# S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+S16_family_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Family_Profiling.tsv")
 
 S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
 head(S16_family_taxa_profile)
@@ -1360,8 +1355,8 @@ final_all_S16_plot_df <- final_all_S16_plot_df %>%
 
 
 # ###### Save into Six Different Figures
-n_per_page <- 8   # 改成 8 或 10
-out_dir <- "../../tmp_figures/16S_Plot"
+n_per_page <- 8
+out_dir <- "../../results/MG_results/Taxonomics_results"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 # # 1)（可选）让 Sample 在每个 Individual 内按编号排序，避免 NW001-10 排在 NW001-2 前面
@@ -1406,10 +1401,10 @@ for (pg in seq_len(n_pages)) {
 
   print(p)
 
-  ggsave(
-    filename = file.path(out_dir, sprintf("S16_tax_profile_page_%02d.jpg", pg)),
-    plot = p, width = 14, height = 8, dpi = 300
-  )
+  # ggsave(
+  #   filename = file.path(out_dir, sprintf("S16_tax_profile_page_%02d.jpg", pg)),
+  #   plot = p, width = 14, height = 8, dpi = 300
+  # )
 }
 
 
@@ -1499,7 +1494,7 @@ final_combined_plot
 
 
 
-out_dir <- "../../tmp_figures/16S_Plot"
+out_dir <- "../../results/MG_results/Taxonomics_results"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 ggsave(
@@ -1510,31 +1505,31 @@ ggsave(
   dpi = 300
 )
 
-ggsave(
-  filename = file.path(out_dir, "All_S16_tax_profile_combined.pdf"),
-  plot = final_combined_plot,
-  width = 16,
-  height = 20,
-)
-
-ggsave(
-  filename = file.path(out_dir, "All_S16_tax_profile_combined.svg"),
-  plot = final_combined_plot,
-  width = 16,
-  height = 20,
-)
+# ggsave(
+#   filename = file.path(out_dir, "All_S16_tax_profile_combined.pdf"),
+#   plot = final_combined_plot,
+#   width = 16,
+#   height = 20,
+# )
+# 
+# ggsave(
+#   filename = file.path(out_dir, "All_S16_tax_profile_combined.svg"),
+#   plot = final_combined_plot,
+#   width = 16,
+#   height = 20,
+# )
 
 ```
 
 
 
-### 16S Taxonomic Profiling for All Samples (Genus Level)
+### 16S Taxonomic Profiling for All Samples (Genus Level, not shown in the manuscripts)
 ```{r}
 library(ggplot2)
 library(ggtext)
 
 ###### Read in 16S-based taxonomic profilings
-S16_family_taxa_file <- file.path("../../tmp_figures/16S_MaAsLin3_data", "all_samples_16S_Genus_Profiling.tsv")
+S16_family_taxa_file <- file.path("../../data/Metagenomics/16S_related", "all_samples_16S_Genus_Profiling.tsv")
 
 S16_family_taxa_profile <- read.table(S16_family_taxa_file, header = TRUE, sep = "\t", check.names = FALSE)
 head(S16_family_taxa_profile)
@@ -1595,14 +1590,15 @@ final_all_S16_plot_df <- all_S16_plot_df %>%
   )
 
 
-final_fam_pal <- fam_pal
-names(final_fam_pal)[names(final_fam_pal) == "[Ruminococcus]_torques_group"] <- "[Ruminococcus] torques group" %<%
-names(final_fam_pal)[names(final_fam_pal) == "Tannerellaceae"] <- "Unclassified Tannerellaceae"
+final_genus_pal <- genus_pal
+names(final_genus_pal)[names(final_genus_pal) == "[Ruminococcus]_torques_group"] <- "[Ruminococcus] torques group"
+
+names(final_genus_pal)[names(final_genus_pal) == "Tannerellaceae"] <- "Unclassified Tannerellaceae"
 
 
 ### Set Family Orders
 fam_order <- c(
-  setdiff(names(final_fam_pal), "Other"),
+  setdiff(names(final_genus_pal), "Other"),
   "Other"
 )
 
@@ -1617,7 +1613,7 @@ final_all_S16_plot_df <- final_all_S16_plot_df %>%
 
 # ###### Save into Six Different Figures
 n_per_page <- 8   # 改成 8 或 10
-out_dir <- "../../tmp_figures/16S_Plot"
+out_dir <- "../../results/MG_results/Taxonomics_results"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 # # 1)（可选）让 Sample 在每个 Individual 内按编号排序，避免 NW001-10 排在 NW001-2 前面
@@ -1673,7 +1669,7 @@ for (pg in seq_len(n_pages)) {
   p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
     geom_col(width = 0.9) +
     facet_wrap(~ Individual, ncol = 4, scales = "free_x") +  # ncol可调，比如 2/3/4
-    scale_fill_manual(values = final_fam_pal, labels = S16_genus_labels) +
+    scale_fill_manual(values = final_genus_pal, labels = S16_genus_labels) +
     labs(
       title = paste0("Taxonomic profiling (Individuals ", (pg-1)*n_per_page + 1, "–", min(pg*n_per_page, length(ind_levels)), ")"),
       x = "Sample", y = "Relative abundance (%)", fill = "Genus"
@@ -1689,10 +1685,10 @@ for (pg in seq_len(n_pages)) {
 
   print(p)
 
-  ggsave(
-    filename = file.path(out_dir, sprintf("S16_tax_genus_profile_page_%02d.jpg", pg)),
-    plot = p, width = 14, height = 8, dpi = 300
-  )
+  # ggsave(
+  #   filename = file.path(out_dir, sprintf("S16_tax_genus_profile_page_%02d.jpg", pg)),
+  #   plot = p, width = 14, height = 8, dpi = 300
+  # )
 }
 
 
@@ -1738,7 +1734,7 @@ pub_theme <- theme_bw(base_size = 12) +
 legend_plot <- ggplot(plot_df, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
   geom_col(width = 0.9) +
   facet_wrap(~ Individual, ncol = 3, scales = "free_x") +
-  scale_fill_manual(values = final_fam_pal, labels = S16_genus_labels) +
+  scale_fill_manual(values = final_genus_pal, labels = S16_genus_labels) +
   labs(x = "Sample", y = "Relative abundance (%)", fill = "Genus") +
   pub_theme +
   theme(legend.position = "right", legend.text = ggtext::element_markdown())
@@ -1753,7 +1749,7 @@ for (pg in seq_len(n_pages)) {
   p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance * 100, fill = Family_plot)) +
     geom_col(width = 0.9) +
     facet_wrap(~ Individual, ncol = 4, scales = "free_x") +
-    scale_fill_manual(values = final_fam_pal) +
+    scale_fill_manual(values = final_genus_pal) +
     labs(
       x = "Sample",
       y = "Relative abundance (%)",
@@ -1782,7 +1778,8 @@ final_combined_plot
 
 
 
-out_dir <- "../../tmp_figures/16S_Plot"
+# Saving the figure
+out_dir <- "../../results/MG_results/Taxonomics_results"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 ggsave(
@@ -1793,19 +1790,19 @@ ggsave(
   dpi = 300
 )
 
-ggsave(
-  filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.pdf"),
-  plot = final_combined_plot,
-  width = 16,
-  height = 20,
-)
-
-ggsave(
-  filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.svg"),
-  plot = final_combined_plot,
-  width = 16,
-  height = 20,
-)
+# ggsave(
+#   filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.pdf"),
+#   plot = final_combined_plot,
+#   width = 16,
+#   height = 20,
+# )
+# 
+# ggsave(
+#   filename = file.path(out_dir, "All_S16_tax_genus_profile_combined.svg"),
+#   plot = final_combined_plot,
+#   width = 16,
+#   height = 20,
+# )
 
 ```
 
@@ -1815,18 +1812,11 @@ ggsave(
 
 ### Aitchison and Bray-Curtis distance between metagenomics and 16S-based family level taxonomic profiling
 ```{r}
+#16S taxonomic profile from previous section (Family level)
 S16_plot_df
 
+#MG taxonomic profile from previous section (Family level)
 MG_plot_df
-
-### Calculate Family-level Aitchison distance between matched samples
-
-### Calculate Family-level Bray-Curtis distance between matched samples
-
-
-### Scatter plot for Bray-Curtis distance against Aitchison distance and boxplot plot for each axis
-
-# Report average value and standard error for Aitchison distance
 
 
 
@@ -2007,8 +1997,8 @@ combined_plot <- plot_grid(
 
 print(combined_plot)
 
-# ### Step 10. Save
-figure_file <- file.path("../../tmp_figures", "Family_level_Bray_vs_Aitchison_distance.jpg")
+### Step 10. Save the figure
+figure_file <- file.path("../../results/MG_results/Taxonomics_results", "Family_level_Bray_vs_Aitchison_distance.jpg")
 ggsave(figure_file, combined_plot, width = 8, height = 7, dpi = 300)
 # write.table(dist_df, "Family_level_matched_sample_distances.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
