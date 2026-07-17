@@ -42,13 +42,13 @@ print(amr_files)
 read_one_amr <- function(f) {
   dt <- fread(f, sep = "\t", header = TRUE, data.table = FALSE)
 
-  # 样品名提取：NW001_3（允许 NWxxx_x 或 NWxxx_x_x 这种）
+  # Extract sample names
   base <- basename(f)
   sample <- str_replace(base, "\\.allele_mapping_data\\.txt$", "")
   sample <- str_replace(sample, "_all$", "")
   print(sample)
 
-  # 必要列检查（允许列名轻微变化时你可以在这里扩展）
+  # Check column names
   required <- c("ARO Accession", "ARO Term", "Completely Mapped Reads")
   missing <- setdiff(required, colnames(dt))
   if (length(missing) > 0) {
@@ -160,20 +160,20 @@ top_terms <- amr_term_by_sample %>%
 
 # Barplot for all samples of Drug Class contriutions (relative), Colored with "Drug Class"
 #-----------------------------
-# 6) 其它 class 合并为 Other（便于图更清晰）
+# Combine other clasees into "Other"
 #-----------------------------
 plot_df <- amr_term_by_sample %>%
   mutate(Drug_Class_plot = if_else(Drug_Class %in% top_terms, Drug_Class, "Other")) %>%
   group_by(Sample, Drug_Class_plot) %>%
   summarise(rel_reads = sum(rel_reads, na.rm = TRUE), .groups = "drop")
 
-# 固定 factor 顺序：Top classes + Other
+# Set the order of factors: Top classes + Other
 levels_all <- c(top_terms, "Other")
 plot_df <- plot_df %>%
   mutate(Drug_Class_plot = factor(Drug_Class_plot, levels = levels_all))
 
 #-----------------------------
-# 7) 颜色：Top classes 用区分度更强的 HCL，Other 灰色
+# Set colors
 #-----------------------------
 cols <- colorRampPalette(brewer.pal(12, "Set3"))(length(top_terms))
 term_colors <- setNames(c(cols, "grey70"), levels_all)
@@ -184,7 +184,7 @@ label_map <- setNames(
 )
 
 #-----------------------------
-# 8) 堆叠柱状图：所有样品（相对贡献）
+# 8) Stacked barchart
 #-----------------------------
 # Set sample order as cluster results
 plot_df <- plot_df %>%
@@ -304,23 +304,6 @@ plot_df <- plot_df %>%
     Drug_Class_plot = factor(Drug_Class_plot, levels = levels_all)
   )
 
-# # 3. 再基于更新后的 levels_all 生成颜色
-# cols <- colorRampPalette(brewer.pal(12, "Set3"))(length(top_terms))
-# 
-# term_colors <- setNames(
-#   c(cols, "grey70"),
-#   levels_all
-# )
-# 
-# # 4. 再基于更新后的 levels_all 生成 label_map
-# label_map <- setNames(
-#   ifelse(
-#     nchar(levels_all) > 40,
-#     paste0(substr(levels_all, 1, 40), "..."),
-#     levels_all
-#   ),
-#   levels_all
-# )
 
 
 ### New set of colors to keep consistent with taxa figures
@@ -383,7 +366,7 @@ filtered_card_result <- filtered_card_result %>%
 
 
 
-# 主图：Drug class composition
+# Main Plot：Drug class composition
 p_bar <- ggplot(filtered_plot_df, aes(x = Sample, y = rel_reads, fill = Drug_Class_plot)) +
   geom_col(width = 0.9) +
   labs(
@@ -408,7 +391,7 @@ p_bar <- ggplot(filtered_plot_df, aes(x = Sample, y = rel_reads, fill = Drug_Cla
 p_bar
 
 
-# 下方图：sample-level AMR rel_reads
+# Bottom Plot：sample-level AMR rel_reads
 p_sample_rel <- ggplot(filtered_card_result, aes(x = Sample, y = mapped_reads_percentage)) +
   geom_col(width = 0.9, fill = "grey40") +
   labs(
@@ -423,7 +406,7 @@ p_sample_rel <- ggplot(filtered_card_result, aes(x = Sample, y = mapped_reads_pe
 p_sample_rel
 
 
-# 拼接
+# Combine two plots
 p_combined <- p_bar / p_sample_rel +
   plot_layout(heights = c(4, 1))
 
@@ -718,7 +701,7 @@ head(meta_data)
 # Extract Individual Name from Sample Name
 meta_data <- meta_data %>%
   mutate(
-    individual = str_extract(`#SampleID`, "^[^-]+")  # 取第一个 "-" 前的部分，如 NW001
+    individual = str_extract(`#SampleID`, "^[^-]+")  # Extract the part before "-"，such as NW001
   )
 head(meta_data)
 
@@ -753,7 +736,7 @@ AMR_boxplot <- ggplot(meta_card_result, aes(x = "", y = mapped_reads_percentage)
       filter(mapped_reads_percentage > 0.002),
     aes(label = individual),
     size = 3,
-    nudge_x = 0.15,   # 固定横向偏移
+    nudge_x = 0.15,
     hjust = 0,
     vjust = 0.5
   )
@@ -762,7 +745,7 @@ AMR_boxplot
 
 
 ### Scatter Plot for Total reads number and AMR mapped reads number
-# 1) 先拟合线性回归，提取斜率/截距/R2/p
+# 1) Fit a linear regression and extract slope/intercept/R2/p
 fit <- lm(Mapped_reads ~ Total_reads, data = meta_card_result)
 coefs <- coef(fit)
 slope <- coefs[["Total_reads"]]
@@ -773,14 +756,13 @@ pval <- summary(fit)$coefficients["Total_reads", "Pr(>|t|)"]
 label_lm <- sprintf("y = %.3g x %+.3g\nR² = %.3f, p = %.2g",
                     slope, intercept, r2, pval)
 
-# 2) 画图
+# 2) Plot
 AMR_scatter_plot <- ggplot(meta_card_result, aes(x = Total_reads, y = Mapped_reads)) + 
   geom_point(alpha = 0.85, size = 2) +
   
-  # 回归直线 + 置信区间
   geom_smooth(method = "lm", se = TRUE, linewidth = 0.8) +
   
-  # 只给阈值以上点加标签
+  # Add labels for points above the threshold
   geom_text_repel(
     data = meta_card_result %>% filter(Mapped_reads > 5000),
     aes(label = individual),
@@ -791,7 +773,7 @@ AMR_scatter_plot <- ggplot(meta_card_result, aes(x = Total_reads, y = Mapped_rea
     segment.alpha = 0.5
   ) +
   
-  # 斜率/方程标注（放在左上角）
+  # Slope annotation
   annotate(
     "text",
     x = max(meta_card_result$Total_reads) * 0.95,
@@ -802,7 +784,6 @@ AMR_scatter_plot <- ggplot(meta_card_result, aes(x = Total_reads, y = Mapped_rea
     size = 4
   ) +
   
-  # 轴从 0 起点（常用于 reads 这种非负数据）
   scale_x_continuous(
     limits = c(0, NA),
     labels = label_number(big.mark = ",")
@@ -911,12 +892,12 @@ plot_scatter_pub <- function(df, xvar,
                              label_thr = 0.002,   # 0.2% = 0.002
                              point_size = 2.2) {
 
-  # 1) 取出用于拟合的数据（去掉 NA）
+  # 1) Remove data with NA
   df_fit <- df %>%
     select(all_of(c(xvar, yvar, label_var))) %>%
     filter(!is.na(.data[[xvar]]), !is.na(.data[[yvar]]))
 
-  # # 2) 线性回归 & 提取统计量
+  # # 2) Linear regression
   # m <- lm(reformulate(xvar, response = yvar), data = df_fit)
   # sm <- summary(m)
   # 
@@ -925,7 +906,7 @@ plot_scatter_pub <- function(df, xvar,
   # r2 <- sm$r.squared
   # pval <- sm$coefficients[2, 4]
   # 
-  # # 3) 注释文本（斜率、p、R2）
+  # # 3) Slope annotation
   # info_txt <- paste0(
   #   "Slope = ", signif(slope, 3),
   #   "\nR² = ", signif(r2, 3),
@@ -946,10 +927,10 @@ plot_scatter_pub <- function(df, xvar,
   )
   
   
-  # 4) 需要标注的点（AMR% > 0.2%）
+  # 4) Points for AMR% > 0.2%
   df_lab <- df_fit %>% filter(.data[[yvar]] > label_thr)
 
-  # 5) 画图
+  # 5) Plot
   x_rng <- range(df_fit[[xvar]], na.rm = TRUE)
   y_rng <- range(df_fit[[yvar]], na.rm = TRUE)
   
@@ -959,10 +940,8 @@ plot_scatter_pub <- function(df, xvar,
   ggplot(df_fit, aes(x = .data[[xvar]], y = .data[[yvar]])) +
     geom_point(alpha = 0.85, size = point_size) +
     
-    # 回归线（更“干净”的线条）
     geom_smooth(method = "lm", se = TRUE, linewidth = 0.8) +
 
-    # 高于阈值点加标签
     geom_text_repel(
       data = df_lab,
       aes(label = .data[[label_var]]),
@@ -973,10 +952,8 @@ plot_scatter_pub <- function(df, xvar,
       segment.alpha = 0.4
     ) +
 
-    # 纵轴转百分比
     scale_y_continuous(labels = percent_format(accuracy = 0.01)) +
 
-    # 回归信息写到图右上角
     annotate("text",
       x = x_anno, y = y_anno,
       label = info_txt,
@@ -990,7 +967,7 @@ plot_scatter_pub <- function(df, xvar,
       y = "AMR Relative Abundance"
     ) +
 
-    # 更整洁的出版风格
+    # Set the theme
     theme_bw(base_size = 14) +
     theme(
       plot.title = element_text(hjust = 0.5, face = "bold"),
@@ -1113,80 +1090,79 @@ nrow(meta_card_result)
 MG_tax_file <- file.path("../../data/Metagenomics/MetaPhlAn_taxa", "merged_abundance_table.txt")
 df <- read.delim(MG_tax_file, comment.char = "#", check.names = FALSE)
 
-# 确认第一列名（通常是 clade_name）
 stopifnot("clade_name" %in% colnames(df))
 head(df)
 nrow(df)
 
 
-# # # 2) 只保留 Phylum level：clade_name 里包含 "|p__" 且不再有 "|c__"（避免 species 行）
+# # # 2) Phylum level
 # df_spec_taxa <- df %>%
 #    filter(str_detect(clade_name, "\\|p__")) %>%
 #    filter(!str_detect(clade_name, "\\|c__"))
 #  nrow(df_spec_taxa)
 # 
-# # # 从 clade 提取 Phylum 名称（p__ 后面的部分）
+# # # Extract Phylum from clade
 # df_spec_taxa <- df_spec_taxa %>%
 #    mutate(Taxa_Name = str_replace(clade_name, ".*\\|p__", "")) %>%
 #    select(Taxa_Name, everything(), -clade_name)
 
 
-# # # 2) 只保留 Class level：clade_name 里包含 "|c__" 且不再有 "|o__"（避免 species 行）
+# # # 2) Class level
 # df_spec_taxa <- df %>%
 #    filter(str_detect(clade_name, "\\|c__")) %>%
 #    filter(!str_detect(clade_name, "\\|o__"))
 #  nrow(df_spec_taxa)
 # 
-# # # 从 clade 提取 Class 名称（c__ 后面的部分）
+# # # Extract Class from clade
 # df_spec_taxa <- df_spec_taxa %>%
 #    mutate(Taxa_Name = str_replace(clade_name, ".*\\|c__", "")) %>%
 #    select(Taxa_Name, everything(), -clade_name)
 
 
-# # # 2) 只保留 Order level：clade_name 里包含 "|o__" 且不再有 "|f__"（避免 species 行）
+# # # Order level
 # df_spec_taxa <- df %>%
 #    filter(str_detect(clade_name, "\\|o__")) %>%
 #    filter(!str_detect(clade_name, "\\|f__"))
 #  nrow(df_spec_taxa)
 # 
-# # # 从 clade 提取 Order 名称（o__ 后面的部分）
+# # # Extract Order from clade
 # df_spec_taxa <- df_spec_taxa %>%
 #    mutate(Taxa_Name = str_replace(clade_name, ".*\\|o__", "")) %>%
 #    select(Taxa_Name, everything(), -clade_name)
 
 
-# # # 2) 只保留 Family level：clade_name 里包含 "|f__" 且不再有 "|g__"（避免 species 行）
+# # # Family level
 # df_spec_taxa <- df %>%
 #    filter(str_detect(clade_name, "\\|f__")) %>%
 #    filter(!str_detect(clade_name, "\\|g__"))
 #  nrow(df_spec_taxa)
 # 
-# # # 从 clade 提取 Family 名称（f__ 后面的部分）
+# # # Extract Family from clade
 # df_spec_taxa <- df_spec_taxa %>%
 #    mutate(Taxa_Name = str_replace(clade_name, ".*\\|f__", "")) %>%
 #    select(Taxa_Name, everything(), -clade_name)
 
 
 
-# # # 2) 只保留 Genus level：clade_name 里包含 "|g__" 且不再有 "|s__"（避免 species 行）
+# # # Genus level
 # df_spec_taxa <- df %>%
 #    filter(str_detect(clade_name, "\\|g__")) %>%
 #    filter(!str_detect(clade_name, "\\|s__"))
 #  nrow(df_spec_taxa)
 # 
-# # # 从 clade 提取 Genus 名称（f__ 后面的部分）
+# # # Extract Genus from clade
 # df_spec_taxa <- df_spec_taxa %>%
 #    mutate(Taxa_Name = str_replace(clade_name, ".*\\|g__", "")) %>%
 #    select(Taxa_Name, everything(), -clade_name)
 
 
-# 2) 只保留 Species level：clade_name 里包含 "|s__"
+# Species level
 df_spec_taxa <- df %>%
   filter(str_detect(clade_name, "\\|s__")) %>%
   filter(!str_detect(clade_name, "\\|t__"))
 nrow(df_spec_taxa)
 
-# 从 clade 提取 Genus 名称（f__ 后面的部分）
+# Extract Genus from clade
 df_spec_taxa <- df_spec_taxa %>%
   mutate(Taxa_Name = str_replace(clade_name, ".*\\|s__", "")) %>%
   select(Taxa_Name, everything(), -clade_name)
@@ -1196,7 +1172,7 @@ head(df_spec_taxa)
 tail(df_spec_taxa)
 
 
-# 3) 转 long 格式：sample, abundance
+# 3) Convert into long table
 long_spec_taxa <- df_spec_taxa %>%
   pivot_longer(
     cols = -Taxa_Name,
@@ -1222,13 +1198,13 @@ long_spec_taxa <- long_spec_taxa %>%
 taxa_stats <- long_spec_taxa %>%
   group_by(Taxa_Name) %>%
   summarise(
-    prevalence = mean(RelAbund > 0, na.rm = TRUE),  # 出现比例
-    mean_rel = mean(RelAbund, na.rm = TRUE),        # 平均相对丰度
+    prevalence = mean(RelAbund > 0, na.rm = TRUE),
+    mean_rel = mean(RelAbund, na.rm = TRUE),
     .groups = "drop"
   )
 
 
-# 3) 只保留：prevalence > 30% 且 mean_rel > 0.1%（0.005）
+# 3) Filter prevalence > 30% and mean_rel > 0.1%（0.005）
 keep_taxa <- taxa_stats %>%
   filter(prevalence > 0.30, mean_rel > 0.001) %>%
   pull(Taxa_Name)
@@ -1237,7 +1213,6 @@ length(keep_taxa)
 filtered_long_spec_taxa <- long_spec_taxa %>%
   filter(Taxa_Name %in% keep_taxa)
 
-# 看一下结果
 n_distinct(long_spec_taxa$Taxa_Name)
 n_distinct(filtered_long_spec_taxa$Taxa_Name)
 head(filtered_long_spec_taxa)
@@ -1246,21 +1221,21 @@ head(filtered_long_spec_taxa)
 
 ###### Study correlations between taxa relative abundance and AMR relative abundances
 ### Combine Input Tables
-# 1) 给两个表都生成统一的 Sample_key
+# 1) Gnerate Sample_key
 taxa_abun2 <- filtered_long_spec_taxa %>%
-  mutate(Sample_key = Sample)  # 已经是 NW001_3_all
+  mutate(Sample_key = Sample)
 
 meta_card2 <- meta_card_result %>%
-  mutate(Sample_key = str_remove(sample, "\\.txt$"))  # 去掉末尾 .txt
+  mutate(Sample_key = str_remove(sample, "\\.txt$"))
 
-# 2) 检查两边是否一一对应（哪些缺失）
+# 2) Check matching between the table
 taxa_abun_only <- setdiff(unique(taxa_abun2$Sample_key), unique(meta_card2$Sample_key))
 meta_card_only <- setdiff(unique(meta_card2$Sample_key), unique(taxa_abun2$Sample_key))
 taxa_abun_only
 meta_card_only
 
 
-# 4) 之后就可以按 Sample_key 合并（每个样品的每个Taxa一行，带上meta信息）
+# 3) Combine by Sample_key
 taxa_meta_card <- taxa_abun2 %>%
   left_join(
     meta_card2, by = "Sample_key"
@@ -1273,14 +1248,14 @@ head(taxa_meta_card)
 
 
 ### Calculate Correlations
-# 相关性表：每个 Taxa_Name 一行
+# Correlation table: Each Taxa_Name in a row
 #taxa_corr_table <- filtered_taxa_meta_card %>%
 taxa_corr_table <- taxa_meta_card %>%
   filter(!is.na(RelAbund), !is.na(mapped_reads_percentage)) %>%
   group_by(Taxa_Name) %>%
   summarise(
-    n = n(),                                    # 用到的样本数（行数）
-    prevalence = mean(RelAbund > 0, na.rm = TRUE),  # 出现比例（RelAbund>0 的样本比例）
+    n = n(),
+    prevalence = mean(RelAbund > 0, na.rm = TRUE),
     ct = list(if (n() >= 3) cor.test(RelAbund, mapped_reads_percentage, method = "spearman") else NULL),
     .groups = "drop"
   ) %>%
@@ -1299,7 +1274,6 @@ head(taxa_corr_table)
 
 
 ### Plot Figures
-# 画图函数：一个 taxa 一张图
 plot_taxa_corr <- function(dat, taxa, out_dir = "../../results/MG_results/AMR_results/AMR_Taxa_association") {
   taxa_safe_name <- taxa %>%
   str_replace_all("[^A-Za-z0-9_\\-]+", "_") %>%
@@ -1312,10 +1286,10 @@ plot_taxa_corr <- function(dat, taxa, out_dir = "../../results/MG_results/AMR_re
 
   if (nrow(df) < 3) return(NULL)
 
-  # Spearman（与表格一致）
+  # Spearman
   ct <- cor.test(df$RelAbund, df$mapped_reads_percentage, method = "spearman")
 
-  # # 线性回归用于画趋势线（展示用）
+  # # Linear correlation
   # fit <- lm(mapped_reads_percentage ~ RelAbund, data = df)
   # slope <- coef(fit)[2]
   # p_lm  <- summary(fit)$coefficients[2, 4]
@@ -1385,7 +1359,7 @@ taxa_to_plot <- taxa_corr_table %>%
 # Choose whether to remove samples with extreme values (Outliers)
 # filtered_taxa_meta_card <- taxa_meta_card %>% filter(!Sample %in% c("NW050_3_all", "NW053_3_all"))
 
-# 批量作图并保存
+# Batch plot and saving figures
 # With Outliers
 plots <- purrr::map(taxa_to_plot, ~ plot_taxa_corr(taxa_meta_card, .x))
 # write.table(taxa_corr_table, "Taxa_AMR_correlation.out", quote = FALSE, sep = "\t", row.names = FALSE)
@@ -1413,7 +1387,7 @@ plots <- purrr::map(taxa_to_plot, ~ plot_taxa_corr(taxa_meta_card, .x))
 #   selected_taxa_meta_card <- selected_taxa_meta_card %>% filter(!Sample %in% c("NW050_3_all", "NW053_3_all"))
 # 
 #   # Correlation calculation
-#   # cor_method <- "pearson"  # 或 "spearman"
+#   # cor_method <- "pearson"  # Or "spearman"
 #   cor_method <- "spearman"
 #   ct <- cor.test(selected_taxa_meta_card$RelAbund, selected_taxa_meta_card$mapped_reads_percentage, method = cor_method)
 #   

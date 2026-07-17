@@ -24,7 +24,6 @@ library(maaslin3)
 ### Read in 16S ASV feature table
 # Read in updated 16S ASV feature table
 # data_table_name <- file.path("../../tmp_figures/16S_MaAsLin3_data/update_16S_0421", "feature-table.tsv")
-
 data_table_name <- file.path("../../data/16S/feature_tables", "table_bleed_decon.tsv")
 org_data_table <- read.csv(data_table_name, sep = '\t', row.names = 1, skip = 1, check.names = FALSE)
 nrow(org_data_table)
@@ -171,7 +170,7 @@ nrow(metadata)
 
 final_metadata <- metadata %>%
   mutate(
-    Individual = str_extract(SampleID, "^[^-]+")  # 提取到第一个 '-' 之前
+    Individual = str_extract(SampleID, "^[^-]+")
   ) %>%
   column_to_rownames("SampleID")
 final_metadata[1:5, ]
@@ -249,7 +248,7 @@ nrow(metadata)
 
 final_metadata <- metadata %>%
   mutate(
-    Individual = str_extract(SampleID, "^[^-]+")  # 提取到第一个 '-' 之前
+    Individual = str_extract(SampleID, "^[^-]+")
   ) %>%
   column_to_rownames("SampleID")
 final_metadata[1:5, ]
@@ -261,7 +260,7 @@ nrow(metadata)
 
 final_metadata <- metadata %>%
   mutate(
-    Individual = str_extract(SampleID, "^[^-]+")  # 提取到第一个 '-' 之前
+    Individual = str_extract(SampleID, "^[^-]+")
   ) %>%
   column_to_rownames("SampleID")
 final_metadata[1:5, ]
@@ -696,7 +695,7 @@ fam_pal <- pal
 # MG_plot_ready <- update_MG_plot_df %>%
 #   mutate(
 #     Method = "Metagenomics",
-#     Abundance_pct = Abundance   # 推荐这样；如果你现在只有百分比原值，再相应替换
+#     Abundance_pct = Abundance
 #   ) %>%
 #   select(Sample, Family_plot, Method, Abundance_pct)
 # 
@@ -1054,7 +1053,7 @@ genus_pal <- pal
 # MG_plot_ready <- update_MG_plot_df %>%
 #   mutate(
 #     Method = "Metagenomics",
-#     Abundance_pct = Abundance   # 推荐这样；如果你现在只有百分比原值，再相应替换
+#     Abundance_pct = Abundance
 #   ) %>%
 #   select(Sample, Family_plot, Method, Abundance_pct)
 # 
@@ -1362,7 +1361,7 @@ n_per_page <- 8
 out_dir <- "../../results/MG_results/Taxonomics_results"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
-# # 1)（可选）让 Sample 在每个 Individual 内按编号排序，避免 NW001-10 排在 NW001-2 前面
+# # 1) Oder Samples from Each Individual
 plot_df <- final_all_S16_plot_df %>%
   mutate(
     Sample_num = as.integer(str_extract(Sample, "(?<=-)\\d+$"))
@@ -1370,7 +1369,7 @@ plot_df <- final_all_S16_plot_df %>%
   arrange(Individual, Sample_num) %>%
   mutate(Sample = factor(Sample, levels = unique(Sample)))
 #
-# # 2) 给 Individual 分页编号：每 n_per_page 个为一组
+# # 2) Individual Page Number Assign: n_per_page
 ind_levels <- sort(unique(plot_df$Individual))
 ind_page_map <- tibble(
   Individual = ind_levels,
@@ -1382,13 +1381,13 @@ plot_df <- plot_df %>%
 
 n_pages <- max(plot_df$Page)
 
-# # 3) 循环画图 + 保存
+# # 3) Plotting and Saving
 for (pg in seq_len(n_pages)) {
   df_pg <- plot_df %>% filter(Page == pg)
 
   p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
     geom_col(width = 0.9) +
-    facet_wrap(~ Individual, ncol = 4, scales = "free_x") +  # ncol可调，比如 2/3/4
+    facet_wrap(~ Individual, ncol = 4, scales = "free_x") + 
     scale_fill_manual(values = final_fam_pal) +
     labs(
       title = paste0("Taxonomic profiling (Individuals ", (pg-1)*n_per_page + 1, "–", min(pg*n_per_page, length(ind_levels)), ")"),
@@ -1615,11 +1614,11 @@ final_all_S16_plot_df <- final_all_S16_plot_df %>%
 
 
 # ###### Save into Six Different Figures
-n_per_page <- 8   # 改成 8 或 10
+n_per_page <- 8   
 out_dir <- "../../results/MG_results/Taxonomics_results"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
-# # 1)（可选）让 Sample 在每个 Individual 内按编号排序，避免 NW001-10 排在 NW001-2 前面
+# # 1) Order Samples from Each Individual
 plot_df <- final_all_S16_plot_df %>%
   mutate(
     Sample_num1 = as.integer(str_extract(Sample, "(?<=-)\\d+")),
@@ -1630,7 +1629,7 @@ plot_df <- final_all_S16_plot_df %>%
   mutate(Sample = factor(Sample, levels = unique(Sample)))
 
 #
-# # 2) 给 Individual 分页编号：每 n_per_page 个为一组
+# # 2) Assign Individuals to Each Page: n_per_page
 ind_levels <- sort(unique(plot_df$Individual))
 ind_page_map <- tibble(
   Individual = ind_levels,
@@ -1665,13 +1664,13 @@ S16_genus_labels <- c(
   "Other" = "Other"
 )
 
-# # 3) 循环画图 + 保存
+# # Plotting and Saving
 for (pg in seq_len(n_pages)) {
   df_pg <- plot_df %>% filter(Page == pg)
 
   p <- ggplot(df_pg, aes(x = Sample, y = Rel_Abundance*100, fill = Family_plot)) +
     geom_col(width = 0.9) +
-    facet_wrap(~ Individual, ncol = 4, scales = "free_x") +  # ncol可调，比如 2/3/4
+    facet_wrap(~ Individual, ncol = 4, scales = "free_x") + 
     scale_fill_manual(values = final_genus_pal, labels = S16_genus_labels) +
     labs(
       title = paste0("Taxonomic profiling (Individuals ", (pg-1)*n_per_page + 1, "–", min(pg*n_per_page, length(ind_levels)), ")"),
