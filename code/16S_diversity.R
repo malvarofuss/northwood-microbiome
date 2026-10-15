@@ -11,6 +11,7 @@ library(scales)
 library(interactions)
 library(lme4)
 library(lmerTest)
+library(glmnet)
 
 ## Load data ----
 
@@ -367,6 +368,18 @@ composite_plot <- plot_grid(p_a, bottom_row, ncol = 1, labels = c("A", ""), rel_
 
 ggsave("results/Main2_Alpha_Beta_Diversity.pdf", composite_plot, width = 5, height = 7)
 
+disease_cols <- c(
+  "anemia", "arthritis", "atherosclerosis", "copd", "dementia", "depression",
+  "diabetes", "dyslipidemia", "hypertension", "hypothyroidism", "osteoporosis", "renal_disease"
+)
+
+med_cols <- c(
+  "ace_inhibitors", "acetaminophen", "aaps", "benzodiazepines", "beta_blockers",
+  "antiplatelets", "ccbs", "diuretics", "insulin", "iron_supplements", "laxatives",
+  "levothyroxine", "metformin", "nitrates", "opioids", "ppis", "ssris", "statins",
+  "tcas", "vitb12", "vitd"
+)
+
 # PERMANOVA for diseases and medications
 covariates <- c(disease_cols, med_cols)
 formula_str <- paste("as.dist(dm_matrix) ~", paste(covariates, collapse = " + "))
@@ -391,45 +404,44 @@ write_tsv(beta_covariate_results, "results/beta_covariates_permanova_results.tsv
 
 ## Group comparisons: Diseases and Medications ----
 
-disease_cols <- c(
-  "anemia", "arthritis", "atherosclerosis", "copd", "dementia", "depression",
-  "diabetes", "dyslipidemia", "hypertension", "hypothyroidism", "osteoporosis", "renal_disease"
-)
-
-med_cols <- c(
-  "ace_inhibitors", "acetaminophen", "aaps", "benzodiazepines", "beta_blockers",
-  "antiplatelets", "ccbs", "diuretics", "insulin", "iron_supplements", "laxatives",
-  "levothyroxine", "metformin", "nitrates", "opioids", "ppis", "ssris", "statins",
-  "tcas", "vitb12", "vitd"
-)
-
 metrics <- c(
   grep("^alpha_diversity_", names(participants), value = TRUE)
 )
 
-run_diversity_glm <- function(data, alpha_metric) {
+# Elastic net (alpha = 0.5, gaussian); lambda chosen by 10-fold CV (lambda.min).
+run_diversity_enet <- function(data, alpha_metric, enet_alpha = 0.5, nfolds = 10) {
   covariates <- names(data)[which(names(data) == "anemia"):which(names(data) == "vitd")]
-  formula_str <- paste(alpha_metric, "~", paste(covariates, collapse = " + "))
+  data <- data[complete.cases(data[, c(alpha_metric, covariates)]), ]
 
-  model <- glm(as.formula(formula_str), data = data)
+  x <- as.matrix(data[, covariates])
+  y <- data[[alpha_metric]]
 
-  # Extract coefficients
-  summary_res <- as.data.frame(summary(model)$coefficients)
-  colnames(summary_res) <- c("estimate", "std_error", "statistic", "p_value")
-  summary_res$term <- rownames(summary_res)
-  summary_res$alpha_metric <- alpha_metric # Add the alpha metric to the results
+  foldid <- sample(rep(seq_len(nfolds), length.out = nrow(x)))
+  cv_fit <- cv.glmnet(x, y,
+    family = "gaussian", alpha = enet_alpha,
+    foldid = foldid, standardize = TRUE
+  )
 
-  return(summary_res)
+  coefs <- coef(cv_fit, s = "lambda.min")
+
+  tibble(
+    term = rownames(coefs),
+    estimate = as.numeric(coefs),
+    lambda = cv_fit$lambda.min,
+    alpha = enet_alpha,
+    alpha_metric = alpha_metric
+  ) %>%
+    filter(term != "(Intercept)")
 }
 
-alpha_metrics_for_glm <- grep("^alpha_diversity_", names(participants), value = TRUE)
+alpha_metrics_for_enet <- grep("^alpha_diversity_", names(participants), value = TRUE)
 
-diversity_results <- map_dfr(alpha_metrics_for_glm, function(metric_name) {
-  run_diversity_glm(participants, metric_name)
+diversity_results <- map_dfr(alpha_metrics_for_enet, function(metric_name) {
+  run_diversity_enet(participants, metric_name)
 }) %>%
   filter(term != "(Intercept)")
 
-write_tsv(diversity_results, "results/diversity_glm_results.tsv")
+write_tsv(diversity_results, "results/diversity_enet_results.tsv")
 
 # Bar chart of associations
 diseases <- c(
@@ -477,24 +489,15 @@ diversity_associations_figure <- diversity_results %>%
     TRUE ~ term # Default to original term if no match
   )) %>%
   mutate(type = ifelse(term %in% diseases, "Comorbidity", "Medication")) %>%
-  mutate(p_signif = case_when(
-    p_value < 0.001 ~ "***",
-    p_value < 0.01 ~ "**",
-    p_value < 0.05 ~ "*",
-    # p_value < 0.1 ~ "•",
-    TRUE ~ ""
-  )) %>%
   # Order by estimate descending
   mutate(term_clean = fct_reorder(term_clean, estimate, .desc = TRUE)) %>%
-  # Position labels slightly above or below the bars
-  mutate(
-    label_pos = ifelse(estimate >= 0, estimate + 0.25, estimate - 0.25),
-    v_just = ifelse(estimate >= 0, 0.5, 1)
-  ) %>%
+
+
   ggplot(aes(x = term_clean, y = estimate, fill = type)) +
   geom_bar(stat = "identity", color = "black", linewidth = 0.1) +
   scale_fill_manual(values = c("Comorbidity" = "#FFF68F", "Medication" = "#BC8F8F")) +
-  geom_text(aes(y = label_pos, label = p_signif, vjust = v_just), size = 3) +
+
+
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
@@ -508,7 +511,7 @@ diversity_associations_figure <- diversity_results %>%
     title = NULL,
     subtitle = NULL,
     x = NULL,
-    y = "Estimate (PD)",
+    y = "Elastic net coefficient (PD)",
     fill = NULL
   )
 
