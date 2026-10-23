@@ -166,6 +166,27 @@ participants <- participants %>%
   left_join(mean_alpha_diversity) %>%
   left_join(mean_beta_stability)
 
+# Check whether mean beta stability depends on samples per participant
+samples_per_participant <- alpha_diversity %>%
+  distinct(SubjectID, sample) %>%
+  count(SubjectID, name = "n_samples")
+
+participants <- participants %>%
+  left_join(samples_per_participant, by = "SubjectID")
+
+n_samples_cor_results <- map_dfr(
+  grep("^beta_stability_", names(participants), value = TRUE),
+  function(metric_name) {
+    cor.test(participants[[metric_name]], participants$n_samples,
+      method = "spearman", exact = FALSE
+    ) %>%
+      broom::tidy() %>%
+      mutate(metric = metric_name, n_participants = sum(!is.na(participants[[metric_name]])), .before = 1)
+  }
+)
+print(n_samples_cor_results)
+write_tsv(n_samples_cor_results, "results/diversity_n_samples_correlations.tsv")
+
 # Find extremes for mean Faith's PD and mean RPCA stability
 participants %>%
   select(SubjectID, alpha_diversity_faith_pd, beta_stability_rpca) %>%
@@ -217,6 +238,66 @@ cor_results <-
   unnest(cor_test_res)
 
 write_tsv(cor_results, "results/diversity_stability_correlations.tsv")
+
+## Weighted UniFrac analyses adjusted for number of samples ----
+# Weighted UniFrac stability was the only beta stability metric associated with
+# n_samples, so every downstream analysis using it is repeated with n_samples as a
+# covariate. Rank-based models (ranked outcome, predictor and n_samples) are used so
+# the adjusted tests are the partial-Spearman analogue of the unadjusted ones.
+wu_metric <- "beta_stability_weighted_unifrac"
+
+adjust_for_n_samples <- function(data, y, x, covariate = "n_samples") {
+  d <- data %>%
+    select(all_of(c(y, x, covariate))) %>%
+    drop_na()
+  x_is_numeric <- is.numeric(d[[x]])
+
+  # Unadjusted test
+  p_unadj <- if (x_is_numeric) {
+    cor.test(d[[y]], d[[x]], method = "spearman", exact = FALSE)$p.value
+  } else {
+    wilcox.test(d[[y]] ~ factor(d[[x]]), exact = FALSE)$p.value
+  }
+
+  # Adjusted test
+  d <- d %>% mutate(
+    !!y := rank(.data[[y]]),
+    !!covariate := rank(.data[[covariate]]),
+    !!x := if (x_is_numeric) rank(.data[[x]]) else factor(.data[[x]])
+  )
+  fit <- lm(reformulate(c(x, covariate), response = y), data = d)
+  coef_row <- broom::tidy(fit) %>%
+    filter(str_starts(term, fixed(x)))
+
+  tibble(
+    n_participants = nrow(d),
+    p.unadjusted = p_unadj,
+    estimate_adjusted = coef_row$estimate,
+    # partial correlation on ranks (partial Spearman rho for numeric predictors)
+    partial_r = coef_row$statistic / sqrt(coef_row$statistic^2 + fit$df.residual),
+    statistic_adjusted = coef_row$statistic,
+    p.adjusted_for_n_samples = coef_row$p.value
+  )
+}
+
+# Weighted UniFrac stability vs participant metadata
+wu_metadata_adjusted <- map_dfr(c("Sex", "Location", "Age", "FIScore", "TimeNW"), function(var_name) {
+  adjust_for_n_samples(participants, wu_metric, var_name) %>%
+    mutate(variable = var_name, .before = 1)
+})
+print(wu_metadata_adjusted)
+write_tsv(wu_metadata_adjusted, "results/wu_stability_metadata_adjusted_n_samples.tsv")
+
+# Alpha diversity vs weighted UniFrac stability
+wu_alpha_adjusted <- map_dfr(
+  grep("^alpha_diversity_", names(participants), value = TRUE),
+  function(alpha_name) {
+    adjust_for_n_samples(participants, wu_metric, alpha_name) %>%
+      mutate(alpha = alpha_name, beta = wu_metric, .before = 1)
+  }
+)
+print(wu_alpha_adjusted)
+write_tsv(wu_alpha_adjusted, "results/diversity_stability_correlations_wu_adjusted_n_samples.tsv")
 
 ## Beta diversity analysis for Panel C and results ----
 
@@ -325,6 +406,19 @@ interaction_results <- expand.grid(
   unnest(model_res)
 
 write_tsv(interaction_results, "results/frailty_interaction_models.tsv")
+
+# Weighted UniFrac interaction models adjusted for number of samples
+interaction_results_wu_adjusted <- map_dfr(
+  grep("^alpha_diversity_", names(participants), value = TRUE),
+  function(alpha_name) {
+    form <- as.formula(paste0("FIScore ~ ", alpha_name, " * ", wu_metric, " + n_samples"))
+    glm(form, data = participants, family = quasibinomial) %>%
+      broom::tidy() %>%
+      mutate(alpha = alpha_name, beta = wu_metric, .before = 1)
+  }
+)
+print(interaction_results_wu_adjusted)
+write_tsv(interaction_results_wu_adjusted, "results/frailty_interaction_models_wu_adjusted_n_samples.tsv")
 
 # Panel C: RPCA PCoA colored by Location
 p_c_permanova <- permanova_results %>%
