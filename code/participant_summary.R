@@ -254,7 +254,7 @@ frailty_associations_figure <- frailty_results %>%
     title = NULL,
     subtitle = NULL,
     x = NULL,
-    y = "Elastic net coefficient (FI, logit scale)",
+    y = "Coefficient FI",
     fill = NULL
   )
 
