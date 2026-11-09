@@ -1,0 +1,4 @@
+metric	n_participants	estimate	statistic	p.value	method	alternative
+beta_stability_aitchison	43	-0.2455289192152002	16495.785006086113	0.1125129915279895	Spearman's rank correlation rho	two.sided
+beta_stability_rpca	43	-0.09121995692115813	14452.117109463818	0.5607296832331456	Spearman's rank correlation rho	two.sided
+beta_stability_weighted_unifrac	43	-0.31108555191688014	17364.01704958716	0.04230535211050694	Spearman's rank correlation rho	two.sided

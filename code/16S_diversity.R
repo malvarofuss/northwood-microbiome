@@ -11,6 +11,7 @@ library(scales)
 library(interactions)
 library(lme4)
 library(lmerTest)
+library(glmnet)
 
 ## Load data ----
 
@@ -165,6 +166,27 @@ participants <- participants %>%
   left_join(mean_alpha_diversity) %>%
   left_join(mean_beta_stability)
 
+# Check whether mean beta stability depends on samples per participant
+samples_per_participant <- alpha_diversity %>%
+  distinct(SubjectID, sample) %>%
+  count(SubjectID, name = "n_samples")
+
+participants <- participants %>%
+  left_join(samples_per_participant, by = "SubjectID")
+
+n_samples_cor_results <- map_dfr(
+  grep("^beta_stability_", names(participants), value = TRUE),
+  function(metric_name) {
+    cor.test(participants[[metric_name]], participants$n_samples,
+      method = "spearman", exact = FALSE
+    ) %>%
+      broom::tidy() %>%
+      mutate(metric = metric_name, n_participants = sum(!is.na(participants[[metric_name]])), .before = 1)
+  }
+)
+print(n_samples_cor_results)
+write_tsv(n_samples_cor_results, "results/diversity_n_samples_correlations.tsv")
+
 # Find extremes for mean Faith's PD and mean RPCA stability
 participants %>%
   select(SubjectID, alpha_diversity_faith_pd, beta_stability_rpca) %>%
@@ -216,6 +238,66 @@ cor_results <-
   unnest(cor_test_res)
 
 write_tsv(cor_results, "results/diversity_stability_correlations.tsv")
+
+## Weighted UniFrac analyses adjusted for number of samples ----
+# Weighted UniFrac stability was the only beta stability metric associated with
+# n_samples, so every downstream analysis using it is repeated with n_samples as a
+# covariate. Rank-based models (ranked outcome, predictor and n_samples) are used so
+# the adjusted tests are the partial-Spearman analogue of the unadjusted ones.
+wu_metric <- "beta_stability_weighted_unifrac"
+
+adjust_for_n_samples <- function(data, y, x, covariate = "n_samples") {
+  d <- data %>%
+    select(all_of(c(y, x, covariate))) %>%
+    drop_na()
+  x_is_numeric <- is.numeric(d[[x]])
+
+  # Unadjusted test
+  p_unadj <- if (x_is_numeric) {
+    cor.test(d[[y]], d[[x]], method = "spearman", exact = FALSE)$p.value
+  } else {
+    wilcox.test(d[[y]] ~ factor(d[[x]]), exact = FALSE)$p.value
+  }
+
+  # Adjusted test
+  d <- d %>% mutate(
+    !!y := rank(.data[[y]]),
+    !!covariate := rank(.data[[covariate]]),
+    !!x := if (x_is_numeric) rank(.data[[x]]) else factor(.data[[x]])
+  )
+  fit <- lm(reformulate(c(x, covariate), response = y), data = d)
+  coef_row <- broom::tidy(fit) %>%
+    filter(str_starts(term, fixed(x)))
+
+  tibble(
+    n_participants = nrow(d),
+    p.unadjusted = p_unadj,
+    estimate_adjusted = coef_row$estimate,
+    # partial correlation on ranks (partial Spearman rho for numeric predictors)
+    partial_r = coef_row$statistic / sqrt(coef_row$statistic^2 + fit$df.residual),
+    statistic_adjusted = coef_row$statistic,
+    p.adjusted_for_n_samples = coef_row$p.value
+  )
+}
+
+# Weighted UniFrac stability vs participant metadata
+wu_metadata_adjusted <- map_dfr(c("Sex", "Location", "Age", "FIScore", "TimeNW"), function(var_name) {
+  adjust_for_n_samples(participants, wu_metric, var_name) %>%
+    mutate(variable = var_name, .before = 1)
+})
+print(wu_metadata_adjusted)
+write_tsv(wu_metadata_adjusted, "results/wu_stability_metadata_adjusted_n_samples.tsv")
+
+# Alpha diversity vs weighted UniFrac stability
+wu_alpha_adjusted <- map_dfr(
+  grep("^alpha_diversity_", names(participants), value = TRUE),
+  function(alpha_name) {
+    adjust_for_n_samples(participants, wu_metric, alpha_name) %>%
+      mutate(alpha = alpha_name, beta = wu_metric, .before = 1)
+  }
+)
+print(wu_alpha_adjusted)
+write_tsv(wu_alpha_adjusted, "results/diversity_stability_correlations_wu_adjusted_n_samples.tsv")
 
 ## Beta diversity analysis for Panel C and results ----
 
@@ -325,6 +407,19 @@ interaction_results <- expand.grid(
 
 write_tsv(interaction_results, "results/frailty_interaction_models.tsv")
 
+# Weighted UniFrac interaction models adjusted for number of samples
+interaction_results_wu_adjusted <- map_dfr(
+  grep("^alpha_diversity_", names(participants), value = TRUE),
+  function(alpha_name) {
+    form <- as.formula(paste0("FIScore ~ ", alpha_name, " * ", wu_metric, " + n_samples"))
+    glm(form, data = participants, family = quasibinomial) %>%
+      broom::tidy() %>%
+      mutate(alpha = alpha_name, beta = wu_metric, .before = 1)
+  }
+)
+print(interaction_results_wu_adjusted)
+write_tsv(interaction_results_wu_adjusted, "results/frailty_interaction_models_wu_adjusted_n_samples.tsv")
+
 # Panel C: RPCA PCoA colored by Location
 p_c_permanova <- permanova_results %>%
   filter(metric == "rpca", term == "Location") %>%
@@ -367,6 +462,18 @@ composite_plot <- plot_grid(p_a, bottom_row, ncol = 1, labels = c("A", ""), rel_
 
 ggsave("results/Main2_Alpha_Beta_Diversity.pdf", composite_plot, width = 5, height = 7)
 
+disease_cols <- c(
+  "anemia", "arthritis", "atherosclerosis", "copd", "dementia", "depression",
+  "diabetes", "dyslipidemia", "hypertension", "hypothyroidism", "osteoporosis", "renal_disease"
+)
+
+med_cols <- c(
+  "ace_inhibitors", "acetaminophen", "aaps", "benzodiazepines", "beta_blockers",
+  "antiplatelets", "ccbs", "diuretics", "insulin", "iron_supplements", "laxatives",
+  "levothyroxine", "metformin", "nitrates", "opioids", "ppis", "ssris", "statins",
+  "tcas", "vitb12", "vitd"
+)
+
 # PERMANOVA for diseases and medications
 covariates <- c(disease_cols, med_cols)
 formula_str <- paste("as.dist(dm_matrix) ~", paste(covariates, collapse = " + "))
@@ -391,45 +498,44 @@ write_tsv(beta_covariate_results, "results/beta_covariates_permanova_results.tsv
 
 ## Group comparisons: Diseases and Medications ----
 
-disease_cols <- c(
-  "anemia", "arthritis", "atherosclerosis", "copd", "dementia", "depression",
-  "diabetes", "dyslipidemia", "hypertension", "hypothyroidism", "osteoporosis", "renal_disease"
-)
-
-med_cols <- c(
-  "ace_inhibitors", "acetaminophen", "aaps", "benzodiazepines", "beta_blockers",
-  "antiplatelets", "ccbs", "diuretics", "insulin", "iron_supplements", "laxatives",
-  "levothyroxine", "metformin", "nitrates", "opioids", "ppis", "ssris", "statins",
-  "tcas", "vitb12", "vitd"
-)
-
 metrics <- c(
   grep("^alpha_diversity_", names(participants), value = TRUE)
 )
 
-run_diversity_glm <- function(data, alpha_metric) {
+# Elastic net (alpha = 0.5, gaussian); lambda chosen by 10-fold CV (lambda.min).
+run_diversity_enet <- function(data, alpha_metric, enet_alpha = 0.5, nfolds = 10) {
   covariates <- names(data)[which(names(data) == "anemia"):which(names(data) == "vitd")]
-  formula_str <- paste(alpha_metric, "~", paste(covariates, collapse = " + "))
+  data <- data[complete.cases(data[, c(alpha_metric, covariates)]), ]
 
-  model <- glm(as.formula(formula_str), data = data)
+  x <- as.matrix(data[, covariates])
+  y <- data[[alpha_metric]]
 
-  # Extract coefficients
-  summary_res <- as.data.frame(summary(model)$coefficients)
-  colnames(summary_res) <- c("estimate", "std_error", "statistic", "p_value")
-  summary_res$term <- rownames(summary_res)
-  summary_res$alpha_metric <- alpha_metric # Add the alpha metric to the results
+  foldid <- sample(rep(seq_len(nfolds), length.out = nrow(x)))
+  cv_fit <- cv.glmnet(x, y,
+    family = "gaussian", alpha = enet_alpha,
+    foldid = foldid, standardize = TRUE
+  )
 
-  return(summary_res)
+  coefs <- coef(cv_fit, s = "lambda.min")
+
+  tibble(
+    term = rownames(coefs),
+    estimate = as.numeric(coefs),
+    lambda = cv_fit$lambda.min,
+    alpha = enet_alpha,
+    alpha_metric = alpha_metric
+  ) %>%
+    filter(term != "(Intercept)")
 }
 
-alpha_metrics_for_glm <- grep("^alpha_diversity_", names(participants), value = TRUE)
+alpha_metrics_for_enet <- grep("^alpha_diversity_", names(participants), value = TRUE)
 
-diversity_results <- map_dfr(alpha_metrics_for_glm, function(metric_name) {
-  run_diversity_glm(participants, metric_name)
+diversity_results <- map_dfr(alpha_metrics_for_enet, function(metric_name) {
+  run_diversity_enet(participants, metric_name)
 }) %>%
   filter(term != "(Intercept)")
 
-write_tsv(diversity_results, "results/diversity_glm_results.tsv")
+write_tsv(diversity_results, "results/diversity_enet_results.tsv")
 
 # Bar chart of associations
 diseases <- c(
@@ -477,24 +583,15 @@ diversity_associations_figure <- diversity_results %>%
     TRUE ~ term # Default to original term if no match
   )) %>%
   mutate(type = ifelse(term %in% diseases, "Comorbidity", "Medication")) %>%
-  mutate(p_signif = case_when(
-    p_value < 0.001 ~ "***",
-    p_value < 0.01 ~ "**",
-    p_value < 0.05 ~ "*",
-    # p_value < 0.1 ~ "•",
-    TRUE ~ ""
-  )) %>%
   # Order by estimate descending
   mutate(term_clean = fct_reorder(term_clean, estimate, .desc = TRUE)) %>%
-  # Position labels slightly above or below the bars
-  mutate(
-    label_pos = ifelse(estimate >= 0, estimate + 0.25, estimate - 0.25),
-    v_just = ifelse(estimate >= 0, 0.5, 1)
-  ) %>%
+
+
   ggplot(aes(x = term_clean, y = estimate, fill = type)) +
   geom_bar(stat = "identity", color = "black", linewidth = 0.1) +
   scale_fill_manual(values = c("Comorbidity" = "#FFF68F", "Medication" = "#BC8F8F")) +
-  geom_text(aes(y = label_pos, label = p_signif, vjust = v_just), size = 3) +
+
+
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
@@ -508,7 +605,7 @@ diversity_associations_figure <- diversity_results %>%
     title = NULL,
     subtitle = NULL,
     x = NULL,
-    y = "Estimate (PD)",
+    y = "Elastic net coefficient (PD)",
     fill = NULL
   )
 

@@ -102,9 +102,6 @@ qiime feature-table filter-samples \
   --o-filtered-table feature_tables/table_filtered.qza \
   --p-min-frequency 3000
 
-## Additional code by MAF
-qiime feature-table filter-samples --i-table table_bleed_decon.qza --o-filtered-table table_filtered.qza --p-min-frequency 2500
-
 # Calculate alpha diversity with rarefaction
 for metric in "observed_features" "shannon" "pielou_e" "faith_pd"; do
   qiime boots alpha \

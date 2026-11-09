@@ -135,8 +135,7 @@ replacements$renal_disease <- c(
   "Chronic renal disease" = "renal_disease",
   "chronic kidney disorder" = "renal_disease",
   "chronic renal failure" = "renal_disease",
-  "renal disease" = "renal_disease",
-  "horse shoe kidney" = "renal_disease"
+  "renal disease" = "renal_disease"
 )
 
 ## Medication group definitions ----

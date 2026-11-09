@@ -7,6 +7,7 @@ library(tidyverse)
 library(rstatix)
 library(GGally)
 library(patchwork)
+library(glmnet)
 
 participants <- read_tsv("data/metadata/patient_data.tsv") %>%
   filter(SubjectID != "NW046") # Missing metadata
@@ -153,24 +154,37 @@ ggsave("results/Supp1_participants_baseline_vars.pdf", fig_1_composite, width = 
 
 
 # Frailty associations (FIScore only)
-run_frailty_glm <- function(data) {
+# Elastic net (alpha = 0.5) on FI as a proportion (binomial family, logit link,
+# equivalent in mean structure to the previous quasibinomial GLM);
+# lambda chosen by 10-fold CV (lambda.min).
+run_frailty_enet <- function(data, enet_alpha = 0.5, nfolds = 10) {
   covariates <- names(data)[which(names(data) == "anemia"):which(names(data) == "vitd")]
-  formula_str <- paste("FIScore ~", paste(covariates, collapse = " + "))
+  data <- data[complete.cases(data[, c("FIScore", covariates)]), ]
 
-  model <- glm(as.formula(formula_str), data = data, family = quasibinomial)
+  x <- as.matrix(data[, covariates])
+  y <- cbind(1 - data$FIScore, data$FIScore) # proportion response
 
-  # Extract coefficients
-  summary_res <- as.data.frame(summary(model)$coefficients)
-  colnames(summary_res) <- c("estimate", "std_error", "statistic", "p_value")
-  summary_res$term <- rownames(summary_res)
+  foldid <- sample(rep(seq_len(nfolds), length.out = nrow(x)))
+  cv_fit <- cv.glmnet(x, y,
+    family = "binomial", alpha = enet_alpha,
+    foldid = foldid, standardize = TRUE
+  )
 
-  return(summary_res)
+  coefs <- coef(cv_fit, s = "lambda.min")
+
+  tibble(
+    term = rownames(coefs),
+    estimate = as.numeric(coefs),
+    lambda = cv_fit$lambda.min,
+    alpha = enet_alpha
+  ) %>%
+    filter(term != "(Intercept)")
 }
 
-frailty_results <- run_frailty_glm(participants) %>%
+frailty_results <- run_frailty_enet(participants) %>%
   filter(term != "(Intercept)")
 
-write_tsv(frailty_results, "results/frailty_glm.tsv")
+write_tsv(frailty_results, "results/frailty_enet.tsv")
 
 ## Figures ----
 
@@ -219,23 +233,14 @@ frailty_associations_figure <- frailty_results %>%
     TRUE ~ term
   )) %>%
   mutate(type = ifelse(term %in% diseases, "Comorbidity", "Medication")) %>%
-  mutate(p_signif = case_when(
-    p_value < 0.001 ~ "***",
-    p_value < 0.01 ~ "**",
-    p_value < 0.05 ~ "*",
-    TRUE ~ ""
-  )) %>%
   # Order by estimate descending
   mutate(term_clean = fct_reorder(term_clean, estimate, .desc = TRUE)) %>%
-  # Position labels slightly above or below the bars
-  mutate(
-    label_pos = ifelse(estimate >= 0, estimate + 0.02, estimate - 0.02),
-    v_just = ifelse(estimate >= 0, 0.5, 1)
-  ) %>%
+
   ggplot(aes(x = term_clean, y = estimate, fill = type)) +
   geom_bar(stat = "identity", color = "black", linewidth = 0.1) +
   scale_fill_manual(values = c("Comorbidity" = "#FFF68F", "Medication" = "#BC8F8F")) +
-  geom_text(aes(y = label_pos, label = p_signif, vjust = v_just), size = 3) +
+
+
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
@@ -249,7 +254,7 @@ frailty_associations_figure <- frailty_results %>%
     title = NULL,
     subtitle = NULL,
     x = NULL,
-    y = "Estimate (FI)",
+    y = "Coefficient FI",
     fill = NULL
   )
 
